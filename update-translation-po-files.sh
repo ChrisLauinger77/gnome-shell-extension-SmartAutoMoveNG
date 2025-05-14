@@ -1,8 +1,8 @@
 #!/bin/bash
 
-reffile=HeadsetControl.pot
+reffile=SmartAutoMove.pot
 
-xgettext --from-code=UTF-8 --output=po/"$reffile" HeadsetControl\@lauinger-clan.de/*.js HeadsetControl\@lauinger-clan.de/schemas/*.xml
+xgettext --from-code=UTF-8 --output=po/"$reffile" SmartAutoMove\@lauinger-clan.de/*.js SmartAutoMove\@lauinger-clan.de/schemas/*.xml
 
 cd po
 

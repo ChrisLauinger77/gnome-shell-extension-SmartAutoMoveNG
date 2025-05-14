@@ -2,15 +2,15 @@
 
 # glib-compile-schemas HeadsetControl\@lauinger-clan.de/schemas/
 
-cd HeadsetControl\@lauinger-clan.de
+cd SmartAutoMove\@lauinger-clan.de
 gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=../LICENSE
 cd ..
-mv HeadsetControl@lauinger-clan.de.shell-extension.zip HeadsetControl@lauinger-clan.de.zip
+mv SmartAutoMove@lauinger-clan.de.shell-extension.zip SmartAutoMove@lauinger-clan.de.zip
 
 if [ "$1" = "zip" ]; then
    echo "Extension zip created ..."
 else
-    gnome-extensions install HeadsetControl\@lauinger-clan.de.zip --force
-    gnome-extensions enable HeadsetControl\@lauinger-clan.de
+    gnome-extensions install SmartAutoMove\@lauinger-clan.de.zip --force
+    gnome-extensions enable SmartAutoMove\@lauinger-clan.de
 fi
 
