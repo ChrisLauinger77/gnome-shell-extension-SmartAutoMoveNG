@@ -2,7 +2,7 @@
 
 reffile=SmartAutoMove.pot
 
-xgettext --from-code=UTF-8 --output=po/"$reffile" SmartAutoMove\@lauinger-clan.de/*.js SmartAutoMove\@lauinger-clan.de/schemas/*.xml
+xgettext --from-code=UTF-8 --output=po/"$reffile" SmartAutoMove\@lauinger-clan.de/*.js SmartAutoMove\@lauinger-clan.de/schemas/*.xml SmartAutoMove\@lauinger-clan.de/ui/*.ui
 
 cd po
 
