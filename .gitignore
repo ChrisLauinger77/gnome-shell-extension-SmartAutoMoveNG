@@ -1,3 +1,5 @@
-smart-auto-move@khimaros.com.shell-extension.zip
 smart-auto-move.dconf
-**/*.ui~
+*.po~
+*.mo
+*.zip
+SmartAutoMove\@lauinger-clan.de/schemas/gschemas.compiled
