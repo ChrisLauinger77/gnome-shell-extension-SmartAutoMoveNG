@@ -1,16 +1,26 @@
-# smart-auto-move
+# gnome-shell-extension-SmartAutoMove
 
-smart-auto-move is a Gnome Shell extension which keeps track of all application windows and restores them to the previous position, size, and workspace on restart. Supports Wayland.
+SmartAutoMove
+is a Gnome Shell extension which keeps track of all application windows and restores them to the previous position, size, and workspace on restart. Supports Wayland.
 
 <p align="left">
-  <a href="https://extensions.gnome.org/extension/4736/smart-auto-move/">
+  <a href="https://extensions.gnome.org/extension/4736/SmartAutoMove
+/">
     <img alt="Get it on GNOME Extensions" width="228" src="https://raw.githubusercontent.com/andyholmes/gnome-shell-extensions-badge/master/get-it-on-ego.svg?sanitize=true"/>
   </a>
 </p>
 
 ## screenshots
 
+#### General
+
+![screenshot: saved windows preferences](docs/screenshot-general.png)
+
+#### Saved Windows
+
 ![screenshot: saved windows preferences](docs/screenshot-saved-windows.png)
+
+#### Overrides
 
 ![screenshot: overrides preferences](docs/screenshot-overrides.png)
 
@@ -53,16 +63,20 @@ LIMITATION: multi-monitor is not well supported and may result in windows becomi
 if everything is horribly broken, clear your Saved Windows:
 
 ```
-$ gnome-extensions disable smart-auto-move@khimaros.com
+$ gnome-extensions disable SmartAutoMove
+@khimaros.com
 
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/saved-windows '{}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/saved-windows '{}'
 
-$ gnome-extensions enable smart-auto-move@khimaros.com
+$ gnome-extensions enable SmartAutoMove
+@khimaros.com
 ```
 
 ## behavior
 
-because there is no way to uniquely distinguish individual windows from an application across restarts, smart-auto-move uses a heuristic to uniquely identify them. this is primarily based on startup order and title. in cases where there are multiple windows with the same title, they are restored based on relative startup sequence.
+because there is no way to uniquely distinguish individual windows from an application across restarts, SmartAutoMove
+uses a heuristic to uniquely identify them. this is primarily based on startup order and title. in cases where there are multiple windows with the same title, they are restored based on relative startup sequence.
 
 titles are matched using Levenstein distance. the match bonus for title is calculated based on `(title length - distance) / title length`.
 
@@ -73,55 +87,69 @@ most settings can be modified from the preferences GUI. this section documents a
 enable debug logging:
 
 ```
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/debug-logging true
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/debug-logging true
 ```
 
 set the minimum window/title match threshold to 50%:
 
 ```
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/match-threshold 0.5
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/match-threshold 0.5
 ```
 
 set the window synchronization (update/restore) frequency to 50ms:
 
 ```
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/sync-frequency 50
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/sync-frequency 50
 ```
 
 default to ignoring windows unless explicitly defined. restore all windows of the gnome-calculator app, all firefox windows except for the profile chooser, and Nautilus only if the window title is "Downloads":
 /
+
 ```
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/sync-mode "'IGNORE'"
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/overrides '{"gnome-calculator": [{"action":1}], "firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}, {"action": 1}],"org.gnome.Nautilus":[{"query":{"title":"Downloads"},"action":1}]}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/sync-mode "'IGNORE'"
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/overrides '{"gnome-calculator": [{"action":1}], "firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}, {"action": 1}],"org.gnome.Nautilus":[{"query":{"title":"Downloads"},"action":1}]}'
 ```
 
 default to restoring all windows, but ignore the firefox profile chooser and any nautilus windows:
 
 ```
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/sync-mode "'RESTORE'"
-$ dconf write /org/gnome/shell/extensions/smart-auto-move/overrides '{"firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}], "org.gnome.Nautilus": [{"action":0}]}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/sync-mode "'RESTORE'"
+$ dconf write /org/gnome/shell/extensions/SmartAutoMove
+/overrides '{"firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}], "org.gnome.Nautilus": [{"action":0}]}'
 ```
 
 show all saved firefox windows (N.B. `jq` will fail if window title contains `\`):
 
 ```
-$ dconf read /org/gnome/shell/extensions/smart-auto-move/saved-windows | sed "s/^'//; s/'$//" | jq -C .Firefox | less -SR
+$ dconf read /org/gnome/shell/extensions/SmartAutoMove
+/saved-windows | sed "s/^'//; s/'$//" | jq -C .Firefox | less -SR
 ```
 
 there are example configs in the `examples/` dir which can be loaded (N.B. while extension is disabled) with:
 
 ```
-$ dconf load /org/gnome/shell/extensions/smart-auto-move/ < ./examples/default-restore.dconf
+$ dconf load /org/gnome/shell/extensions/SmartAutoMove
+/ < ./examples/default-restore.dconf
 ```
 
 you can backup your config (restore is the same as above):
 
 ```
-$ dconf dump /org/gnome/shell/extensions/smart-auto-move/ > smart-auto-move.dconf
+$ dconf dump /org/gnome/shell/extensions/SmartAutoMove
+/ > SmartAutoMove
+.dconf
 ```
 
 the gsettings tool can also be used to manipulate these values:
 
 ```
-$ gsettings --schemadir ./smart-auto-move@khimaros.com/schemas/ set org.gnome.shell.extensions.smart-auto-move sync-mode 'RESTORE'
+$ gsettings --schemadir ./SmartAutoMove
+@khimaros.com/schemas/ set org.gnome.shell.extensions.SmartAutoMove
+ sync-mode 'RESTORE'
 ```
