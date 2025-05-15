@@ -225,7 +225,8 @@ export default class SAMPreferences extends ExtensionPreferences {
                     let overrides = JSON.parse(
                         settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
                     );
-                    if (!overrides.hasOwnProperty(wsh)) overrides[wsh] = [];
+                    if (!Object.prototype.hasOwnProperty.call(overrides, wsh))
+                        overrides[wsh] = [];
                     overrides[wsh].push(o);
                     settings.set_string(
                         Common.SETTINGS_KEY_OVERRIDES,
@@ -427,7 +428,8 @@ export default class SAMPreferences extends ExtensionPreferences {
                     let overrides = JSON.parse(
                         settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
                     );
-                    if (!overrides.hasOwnProperty(wsh)) overrides[wsh] = [];
+                    if (!Object.prototype.hasOwnProperty.call(overrides, wsh))
+                        overrides[wsh] = [];
                     overrides[wsh].unshift(o);
                     settings.set_string(
                         Common.SETTINGS_KEY_OVERRIDES,
@@ -455,7 +457,13 @@ export default class SAMPreferences extends ExtensionPreferences {
                         let overrides = JSON.parse(
                             settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
                         );
-                        if (!overrides.hasOwnProperty(wsh)) overrides[wsh] = [];
+                        if (
+                            !Object.prototype.hasOwnProperty.call(
+                                overrides,
+                                wsh
+                            )
+                        )
+                            overrides[wsh] = [];
                         overrides[wsh].push(o);
                         settings.set_string(
                             Common.SETTINGS_KEY_OVERRIDES,

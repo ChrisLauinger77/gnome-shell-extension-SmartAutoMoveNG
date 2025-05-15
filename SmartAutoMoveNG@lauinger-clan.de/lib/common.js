@@ -1,7 +1,6 @@
 "use strict";
 
 // setting constants
-export const SETTINGS_SCHEMA = "org.gnome.shell.extensions.smart-auto-move";
 export const SETTINGS_KEY_SAVED_WINDOWS = "saved-windows";
 export const SETTINGS_KEY_DEBUG_LOGGING = "debug-logging";
 export const SETTINGS_KEY_STARTUP_DELAY = "startup-delay";
@@ -31,8 +30,8 @@ export const DEFAULT_ACTIVATE_WORKSPACE = true;
 export const DEFAULT_IGNORE_POSITION = false;
 export const DEFAULT_IGNORE_WORKSPACE = false;
 
-export function levensteinDistance(a, b) {
-    var m = [],
+function levensteinDistance(a, b) {
+    let m = [],
         i,
         j,
         min = Math.min;
@@ -45,7 +44,7 @@ export function levensteinDistance(a, b) {
     for (i = 1; i <= b.length; i++) {
         for (j = 1; j <= a.length; j++) {
             m[i][j] =
-                b.charAt(i - 1) == a.charAt(j - 1)
+                b.charAt(i - 1) === a.charAt(j - 1)
                     ? m[i - 1][j - 1]
                     : (m[i][j] = min(
                           m[i - 1][j - 1] + 1,
@@ -58,8 +57,8 @@ export function levensteinDistance(a, b) {
 }
 
 export function scoreWindow(sw, query) {
-    //debug('scoreWindow() - search: ' + JSON.stringify(sw) + ' ?= ' + JSON.stringify(query));
-    if (query.occupied !== undefined && sw.occupied != query.occupied) return 0;
+    if (query.occupied !== undefined && sw.occupied !== query.occupied)
+        return 0;
     let match_parts = 0;
     let query_parts = 0;
     Object.keys(query).forEach(function (key) {
@@ -80,8 +79,7 @@ export function scoreWindow(sw, query) {
 }
 
 export function findSavedWindow(saved_windows, wsh, query, threshold) {
-    if (!saved_windows.hasOwnProperty(wsh)) {
-        //debug('findSavedWindow() - no such window section: ' + wsh)
+    if (!Object.hasOwn(saved_windows, wsh)) {
         return [undefined, undefined];
     }
 
@@ -95,15 +93,11 @@ export function findSavedWindow(saved_windows, wsh, query, threshold) {
         [...scores.entries()].sort((a, b) => b[1] - a[1])
     );
 
-    //debug('findSavedWindow() - sorted_scores: ' + JSON.stringify(Array.from(sorted_scores.entries())));
-
     let best_swi = sorted_scores.keys().next().value;
     let best_score = sorted_scores.get(best_swi);
 
     let found = undefined;
     if (best_score >= threshold) found = best_swi;
-
-    //debug('findSavedWindow() - found: ' + found + ' ' + ' ' + best_score + JSON.stringify(savedWindows[wsh][found]));
 
     return [found, best_score];
 }
@@ -112,13 +106,12 @@ export function findOverride(overrides, wsh, sw, threshold) {
     let override = {};
     let matched = false;
 
-    if (!overrides.hasOwnProperty(wsh)) {
-        //debug('findOverrideAction(): no overrides for section ' + wsh);
+    if (!Object.hasOwn(overrides, wsh)) {
         return override;
     }
-    overrides[wsh].forEach(function (o, oi) {
+    overrides[wsh].forEach(function (o) {
         if (matched) return;
-        if (!o.hasOwnProperty("query")) {
+        if (!Object.hasOwn(o, "query")) {
             override.action = o.action;
             override.threshold = o.threshold;
             matched = true;
@@ -133,7 +126,6 @@ export function findOverride(overrides, wsh, sw, threshold) {
         }
     });
 
-    //debug('findOverrideAction(): ' + wsh + ' ' + JSON.stringify(sw) + ' ' + action);
     return override;
 }
 

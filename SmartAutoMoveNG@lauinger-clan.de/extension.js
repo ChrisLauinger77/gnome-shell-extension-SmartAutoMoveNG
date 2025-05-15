@@ -1,655 +1,700 @@
 "use strict";
 
 // imports
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import Meta from "gi://Meta";
 import GLib from "gi://GLib";
+import Gio from "gi://Gio";
+import GObject from "gi://GObject";
+
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
+import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
+
 import * as Common from "./lib/common.js";
 
-// settings backed state
-let debugLogging;
-let startupDelayMs;
-let syncFrequencyMs;
-let saveFrequencyMs;
-let matchThreshold;
-let syncMode;
-let freezeSaves;
-let activateWorkspace;
-let ignorePosition;
-let ignoreWorkspace;
-let overrides;
-let savedWindows;
+const QuickSettingsMenu = Main.panel.statusArea.quickSettings;
 
-// mutable runtime state
-let activeWindows;
-let settings;
+//quick settings
+const SmartAutoMoveNGMenuToggle = GObject.registerClass(
+    class SmartAutoMoveNGMenuToggle extends QuickSettings.QuickMenuToggle {
+        constructor(Me) {
+            const { _settings } = Me;
+            super({
+                title: "Smart Auto Move NG",
+                iconName: "preferences-other-symbolic",
+                toggleMode: true,
+            });
 
-// signal descriptors
-let timeoutSyncSignal;
-let timeoutSaveSignal;
-let changedDebugLoggingSignal;
-let changedStartupDelaySignal;
-let changedSyncFrequencySignal;
-let changedSaveFrequencySignal;
-let changedMatchThresholdSignal;
-let changedSyncModeSignal;
-let changedFreezeSavesSignal;
-let changedActivateWorkspaceSignal;
-let changedIgnorePositionSignal;
-let changedIgnoreWorkspaceSignal;
-let changedOverridesSignal;
-let changedSavedWindowsSignal;
+            this.menu.setHeader(
+                "preferences-other-symbolic",
+                "Smart Auto Move NG",
+                ""
+            );
+
+            _settings.bind(
+                "freeze-saves",
+                this,
+                "checked",
+                Gio.SettingsBindFlags.DEFAULT
+            );
+
+            try {
+                const settingsItem = this.menu.addAction(_("Settings"), () =>
+                    Me._openPreferences()
+                );
+
+                settingsItem.visible = Main.sessionMode.allowSettings;
+                this.menu._settingsActions[Me.uuid] = settingsItem;
+            } catch (error) {
+                console.error(
+                    `Error in SmartAutoMoveNGMenuToggle constructor: ${error}`
+                );
+            }
+        }
+    }
+);
+
+const SmartAutoMoveNGIndicator = GObject.registerClass(
+    class SmartAutoMoveNGIndicator extends QuickSettings.SystemIndicator {
+        constructor(Me) {
+            super();
+
+            // Create the toggle menu and associate it with the indicator, being
+            // sure to destroy it along with the indicator
+            this.quickSettingsItems.push(new SmartAutoMoveNGMenuToggle(Me));
+
+            this.connect("destroy", () => {
+                this.quickSettingsItems.forEach((item) => item.destroy());
+            });
+
+            // Add the indicator to the panel and the toggle to the menu
+            QuickSettingsMenu._indicators.add_child(this);
+            QuickSettingsMenu.addExternalIndicator(this);
+        }
+    }
+);
 
 //// EXTENSION CLASS
-
-export default class SmartAutoMove extends Extension {
-    constructor(metadata) {
-        super(metadata);
-
-        debug("init()");
-    }
-
+export default class SmartAutoMoveNG extends Extension {
     enable() {
-        activeWindows = new Map();
+        this._activeWindows = new Map();
+        this._settings = this.getSettings();
+        this._initializeSettings();
 
-        initializeSettings(this);
+        this._debug("enable()");
 
-        debug("enable()");
+        this._restoreSettings();
+        // timeout sync & save
 
-        restoreSettings();
+        this._timeoutSyncSignal = null;
+        this._handleTimeoutSync();
+        this._timeoutSaveSignal = null;
+        this._handleTimeoutSave();
 
-        // maybe Meta.prefs_get_dynamic_workspaces()
-        // maybe Meta.prefs_set_num_workspaces()
+        this._indicator = new SmartAutoMoveNGIndicator(this);
+        this._settingSignals = [];
 
-        connectSignals();
+        const signalMap = [
+            [
+                Common.SETTINGS_KEY_DEBUG_LOGGING,
+                this._handleChangedDebugLogging.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_STARTUP_DELAY,
+                this._handleChangedStartupDelay.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_SYNC_FREQUENCY,
+                this._handleChangedSyncFrequency.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_SAVE_FREQUENCY,
+                this._handleChangedSaveFrequency.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_MATCH_THRESHOLD,
+                this._handleChangedMatchThreshold.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_SYNC_MODE,
+                this._handleChangedSyncMode.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_FREEZE_SAVES,
+                this._handleChangedFreezeSaves.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
+                this._handleChangedActivateWorkspace.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_IGNORE_POSITION,
+                this._handleChangedIgnorePosition.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_IGNORE_WORKSPACE,
+                this._handleChangedIgnoreWorkspace.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_OVERRIDES,
+                this._handleChangedOverrides.bind(this),
+            ],
+            [
+                Common.SETTINGS_KEY_SAVED_WINDOWS,
+                this._handleChangedSavedWindows.bind(this),
+            ],
+        ];
+        for (const [key, handler] of signalMap) {
+            const id = this._settings.connect("changed::" + key, handler);
+            this._settingSignals.push(id);
+        }
     }
 
     disable() {
-        debug("disable()");
+        this._debug("disable()");
+        //remove timeout signals
+        GLib.Source.remove(this._timeoutSyncSignal);
+        this._timeoutSyncSignal = null;
+        GLib.Source.remove(this._timeoutSaveSignal);
+        this._timeoutSaveSignal = null;
+        // remove setting Signals
+        this._settingSignals.forEach(function (signal) {
+            this._settings.disconnect(signal);
+        }, this);
+        this._settingSignals = null;
 
-        disconnectSignals();
-
-        saveSettings();
-
-        cleanupSettings();
-
-        activeWindows = null;
-    }
-}
-
-//// SETTINGS
-
-function initializeSettings(extension) {
-    settings = extension.getSettings();
-
-    debugLogging = Common.DEFAULT_DEBUG_LOGGING;
-    startupDelayMs = Common.DEFAULT_STARTUP_DELAY_MS;
-    syncFrequencyMs = Common.DEFAULT_SYNC_FREQUENCY_MS;
-    saveFrequencyMs = Common.DEFAULT_SAVE_FREQUENCY_MS;
-    matchThreshold = Common.DEFAULT_MATCH_THRESHOLD;
-    syncMode = Common.DEFAULT_SYNC_MODE;
-    freezeSaves = Common.DEFAULT_FREEZE_SAVES;
-    activateWorkspace = Common.DEFAULT_ACTIVATE_WORKSPACE;
-    ignorePosition = Common.DEFAULT_IGNORE_POSITION;
-    ignoreWorkspace = Common.DEFAULT_IGNORE_WORKSPACE;
-    overrides = new Object();
-    savedWindows = new Object();
-
-    handleChangedDebugLogging();
-}
-
-function cleanupSettings() {
-    settings = null;
-    debugLogging = null;
-    startupDelayMs = null;
-    syncFrequencyMs = null;
-    saveFrequencyMs = null;
-    matchThreshold = null;
-    syncMode = null;
-    freezeSaves = null;
-    activateWorkspace = null;
-    ignorePosition = null;
-    ignoreWorkspace = null;
-    overrides = null;
-    savedWindows = null;
-}
-
-function restoreSettings() {
-    debug("restoreSettings()");
-    handleChangedDebugLogging();
-    handleChangedStartupDelay();
-    handleChangedSyncFrequency();
-    handleChangedSaveFrequency();
-    handleChangedMatchThreshold();
-    handleChangedSyncMode();
-    handleChangedFreezeSaves();
-    handleChangedActivateWorkspace();
-    handleChangedIgnorePosition();
-    handleChangedIgnoreWorkspace();
-    handleChangedOverrides();
-    handleChangedSavedWindows();
-    dumpSavedWindows();
-}
-
-function saveSettings() {
-    settings.set_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING, debugLogging);
-    settings.set_int(Common.SETTINGS_KEY_STARTUP_DELAY, startupDelayMs);
-    settings.set_int(Common.SETTINGS_KEY_SYNC_FREQUENCY, syncFrequencyMs);
-    settings.set_int(Common.SETTINGS_KEY_SAVE_FREQUENCY, saveFrequencyMs);
-    settings.set_double(Common.SETTINGS_KEY_MATCH_THRESHOLD, matchThreshold);
-    settings.set_enum(Common.SETTINGS_KEY_SYNC_MODE, syncMode);
-    settings.set_boolean(Common.SETTINGS_KEY_FREEZE_SAVES, freezeSaves);
-    settings.set_boolean(
-        Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
-        activateWorkspace
-    );
-    settings.set_boolean(Common.SETTINGS_KEY_IGNORE_POSITION, ignorePosition);
-    settings.set_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE, ignoreWorkspace);
-
-    let newOverrides = JSON.stringify(overrides);
-    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
-
-    let oldSavedWindows = settings.get_string(
-        Common.SETTINGS_KEY_SAVED_WINDOWS
-    );
-    let newSavedWindows = JSON.stringify(savedWindows);
-    if (oldSavedWindows === newSavedWindows) return;
-    debug("saveSettings()");
-    dumpSavedWindows();
-    settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
-}
-
-//// WINDOW UTILITIES
-
-function windowReady(win) {
-    let win_rect = win.get_frame_rect();
-    //if (win.get_title() === 'Loading…') return false;
-    if (win_rect.width === 0 && win_rect.height === 0) return false;
-    if (win_rect.x === 0 && win_rect.y === 0) return false;
-    return true;
-}
-
-// https://gjs-docs-experimental.web.app/meta-10/Window/
-function windowData(win) {
-    let win_rect = win.get_frame_rect();
-    return {
-        id: win.get_id(),
-        hash: windowHash(win),
-        sequence: win.get_stable_sequence(),
-        title: win.get_title(),
-        //sandboxed_app_id: win.get_sandboxed_app_id(),
-        //pid: win.get_pid(),
-        //user_time: win.get_user_time(),
-        workspace: win.get_workspace().index(),
-        maximized: win.get_maximized(),
-        fullscreen: win.is_fullscreen(),
-        above: win.is_above(),
-        monitor: win.get_monitor(),
-        //on_all_workspaces: win.is_on_all_workspaces(),
-        x: win_rect.x,
-        y: win_rect.y,
-        width: win_rect.width,
-        height: win_rect.height,
-        occupied: true,
-    };
-}
-
-function windowRepr(win) {
-    return JSON.stringify(windowData(win));
-}
-
-function windowSectionHash(win) {
-    return win.get_wm_class();
-}
-
-function windowHash(win) {
-    return win.get_id();
-}
-
-function windowDataEqual(sw1, sw2) {
-    return JSON.stringify(sw1) === JSON.stringify(sw2);
-}
-
-function windowNewerThan(win, age) {
-    let wh = windowHash(win);
-
-    // TODO: consider using a state machine here: CREATED, MOVED, SAVED, etc.
-    // TODO: win.get_user_time() might also be useful here.
-    if (activeWindows.get(wh) === undefined) {
-        activeWindows.set(wh, Date.now());
+        this._saveSettings();
+        this._cleanupSettings();
+        this._activeWindows = null;
+        this._indicator.destroy();
+        this._indicator = null;
     }
 
-    return Date.now() - activeWindows.get(wh) < age;
-}
-
-//// WINDOW SAVE / RESTORE
-
-function pushSavedWindow(win) {
-    let wsh = windowSectionHash(win);
-    //debug('pushSavedWindow() - start: ' + wsh + ', ' + win.get_title());
-    if (wsh === null) return false;
-    if (!savedWindows.hasOwnProperty(wsh)) savedWindows[wsh] = new Array();
-    let sw = windowData(win);
-    savedWindows[wsh].push(sw);
-    debug("pushSavedWindow() - pushed: " + JSON.stringify(sw));
-    return true;
-}
-
-function updateSavedWindow(win) {
-    let wsh = windowSectionHash(win);
-    //debug('updateSavedWindow() - start: ' + wsh + ', ' + win.get_title());
-    let [swi, _] = Common.findSavedWindow(
-        savedWindows,
-        wsh,
-        { hash: windowHash(win) },
-        1.0
-    );
-    if (swi === undefined) return false;
-    let sw = windowData(win);
-    if (windowDataEqual(savedWindows[wsh][swi], sw)) return true;
-    savedWindows[wsh][swi] = sw;
-    debug("updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw));
-    return true;
-}
-
-function ensureSavedWindow(win) {
-    let wh = windowHash(win);
-
-    if (windowNewerThan(win, startupDelayMs)) return;
-
-    if (freezeSaves) return;
-
-    //debug('saveWindow(): ' + windowHash(win);
-    if (!updateSavedWindow(win)) {
-        pushSavedWindow(win);
-    }
-}
-
-function findOverrideAction(win, threshold) {
-    let wsh = windowSectionHash(win);
-    let sw = windowData(win);
-
-    let action = syncMode;
-
-    let override = Common.findOverride(overrides, wsh, sw, threshold);
-
-    if (override !== undefined && override.action !== undefined)
-        action = override.action;
-
-    return action;
-}
-
-function moveWindow(win, sw) {
-    //debug('moveWindow(): ' + JSON.stringify(sw));
-
-    win.move_to_monitor(sw.monitor);
-
-    let ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
-    if (!ignoreWorkspace) {
-        win.change_workspace(ws);
+    _openPreferences() {
+        this.openPreferences();
+        QuickSettingsMenu.menu.close(PopupAnimation.FADE);
     }
 
-    if (ignorePosition) {
-        let cw = windowData(win);
-        sw.x = cw.x;
-        sw.y = cw.y;
+    //// DEBUG UTILITIES
+
+    _info(message) {
+        console.log("[smart-auto-move] " + message);
     }
 
-    win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-    if (sw.maximized) win.maximize(sw.maximized);
-    // NOTE: these additional move/maximize operations were needed in order
-    // to convince Firefox to stay where we put it.
-    win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-    if (sw.maximized) win.maximize(sw.maximized);
-    win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-
-    if (sw.fullscreen) win.make_fullscreen();
-
-    if (sw.above) win.make_above();
-
-    //if (sw.on_all_workspaces) ...
-
-    if (activateWorkspace && !ws.active && !ignoreWorkspace) ws.activate(true);
-
-    let nsw = windowData(win);
-
-    return nsw;
-}
-
-function restoreWindow(win) {
-    let wsh = windowSectionHash(win);
-
-    let sw;
-
-    let [swi, _] = Common.findSavedWindow(
-        savedWindows,
-        wsh,
-        { hash: windowHash(win), occupied: true },
-        1.0
-    );
-
-    if (swi !== undefined) return false;
-
-    if (!windowReady(win)) return true; // try again later
-
-    [swi, sw] = Common.matchedWindow(
-        savedWindows,
-        overrides,
-        wsh,
-        win.get_title(),
-        matchThreshold
-    );
-
-    if (swi === undefined) return false;
-
-    if (windowDataEqual(sw, windowData(win))) return true;
-
-    let action = findOverrideAction(win, 1.0);
-    if (action !== Common.SYNC_MODE_RESTORE) return true;
-
-    //debug('restoreWindow() - found: ' + JSON.stringify(sw));
-
-    let pWinRepr = windowRepr(win);
-
-    let nsw = moveWindow(win, sw);
-
-    if (!ignorePosition) {
-        if (!(sw.x === nsw.x && sw.y === nsw.y)) return true;
+    _debug(message) {
+        if (this._debugLogging) {
+            this._info(message);
+        }
     }
 
-    debug(
-        "restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw)
-    );
-
-    savedWindows[wsh][swi] = nsw;
-
-    return true;
-}
-
-function cleanupWindows() {
-    let found = new Map();
-
-    global.get_window_actors().forEach(function (actor) {
-        let win = actor.get_meta_window();
-        found.set(windowHash(win), true);
-    });
-
-    Object.keys(savedWindows).forEach(function (wsh) {
-        let sws = savedWindows[wsh];
-        sws.forEach(function (sw) {
-            if (sw.occupied && !found.has(sw.hash)) {
-                sw.occupied = false;
-                debug("cleanupWindows() - deoccupy: " + JSON.stringify(sw));
-            }
+    _dumpSavedWindows() {
+        Object.keys(this._savedWindows).forEach((wsh) => {
+            let sws = this._savedWindows[wsh];
+            this._debug(
+                "dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws)
+            );
         });
-    });
-}
-
-function shouldSkipWindow(win) {
-    debug(
-        "shouldSkipWindow() " +
-            win.get_title() +
-            " " +
-            win.is_skip_taskbar() +
-            " " +
-            win.get_window_type()
-    );
-
-    if (win.is_skip_taskbar()) return true;
-
-    if (win.get_window_type() !== Meta.WindowType.NORMAL) return true;
-
-    return false;
-}
-
-function syncWindows() {
-    cleanupWindows();
-    global.get_window_actors().forEach(function (actor) {
-        let win = actor.get_meta_window();
-
-        if (shouldSkipWindow(win)) return;
-
-        if (!restoreWindow(win)) ensureSavedWindow(win);
-    });
-}
-
-//// SIGNAL HANDLERS
-
-function handleTimeoutSave() {
-    //debug('handleTimeoutSave(): ' + JSON.stringify(savedWindows));
-    GLib.Source.remove(timeoutSaveSignal);
-    timeoutSaveSignal = null;
-    saveSettings();
-    timeoutSaveSignal = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        saveFrequencyMs,
-        handleTimeoutSave
-    );
-    return GLib.SOURCE_CONTINUE;
-}
-
-function handleTimeoutSync() {
-    //debug('handleTimeoutSync()');
-    GLib.Source.remove(timeoutSyncSignal);
-    timeoutSyncSignal = null;
-    syncWindows();
-    timeoutSyncSignal = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        syncFrequencyMs,
-        handleTimeoutSync
-    );
-    return GLib.SOURCE_CONTINUE;
-}
-
-function handleChangedDebugLogging() {
-    debugLogging = settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
-    console.log(
-        "[smart-auto-move] handleChangedDebugLogging(): " + debugLogging
-    );
-}
-
-function handleChangedStartupDelay() {
-    startupDelayMs = settings.get_int(Common.SETTINGS_KEY_STARTUP_DELAY);
-    debug("handleChangedStartupDelay(): " + startupDelayMs);
-}
-
-function handleChangedSyncFrequency() {
-    syncFrequencyMs = settings.get_int(Common.SETTINGS_KEY_SYNC_FREQUENCY);
-    debug("handleChangedSyncFrequency(): " + syncFrequencyMs);
-}
-
-function handleChangedSaveFrequency() {
-    saveFrequencyMs = settings.get_int(Common.SETTINGS_KEY_SAVE_FREQUENCY);
-    debug("handleChangedSaveFrequency(): " + saveFrequencyMs);
-}
-
-function handleChangedMatchThreshold() {
-    matchThreshold = settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD);
-    debug("handleChangedMatchThreshold(): " + matchThreshold);
-}
-
-function handleChangedSyncMode() {
-    syncMode = settings.get_enum(Common.SETTINGS_KEY_SYNC_MODE);
-    debug("handleChangedSyncMode(): " + syncMode);
-}
-
-function handleChangedFreezeSaves() {
-    freezeSaves = settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
-    debug("[smart-auto-move] handleChangedFreezeSaves(): " + freezeSaves);
-}
-
-function handleChangedActivateWorkspace() {
-    activateWorkspace = settings.get_boolean(
-        Common.SETTINGS_KEY_ACTIVATE_WORKSPACE
-    );
-    debug(
-        "[smart-auto-move] handleChangedActivateWorkspace(): " +
-            activateWorkspace
-    );
-}
-
-function handleChangedIgnorePosition() {
-    ignorePosition = settings.get_boolean(Common.SETTINGS_KEY_IGNORE_POSITION);
-    debug("[smart-auto-move] handleChangedIgnorePosition(): " + ignorePosition);
-}
-
-function handleChangedIgnoreWorkspace() {
-    ignoreWorkspace = settings.get_boolean(
-        Common.SETTINGS_KEY_IGNORE_WORKSPACE
-    );
-    debug(
-        "[smart-auto-move] handleChangedIgnoreWorkspace(): " + ignoreWorkspace
-    );
-}
-
-function handleChangedOverrides() {
-    overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
-    debug("handleChangedOverrides(): " + JSON.stringify(overrides));
-}
-
-function handleChangedSavedWindows() {
-    savedWindows = JSON.parse(
-        settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
-    );
-    debug("handleChangedSavedWindows(): " + JSON.stringify(savedWindows));
-}
-
-//// SIGNAL HELPERS
-
-function connectSignals() {
-    addTimeouts();
-    connectSettingChangedSignals();
-}
-
-function disconnectSignals() {
-    debug("disconnectingSignals()");
-    removeTimeouts();
-    disconnectSettingChangedSignals();
-}
-
-function addTimeouts() {
-    timeoutSyncSignal = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        syncFrequencyMs,
-        handleTimeoutSync
-    );
-    timeoutSaveSignal = GLib.timeout_add(
-        GLib.PRIORITY_DEFAULT,
-        saveFrequencyMs,
-        handleTimeoutSave
-    );
-}
-
-function removeTimeouts() {
-    GLib.Source.remove(timeoutSyncSignal);
-    timeoutSyncSignal = null;
-
-    GLib.Source.remove(timeoutSaveSignal);
-    timeoutSaveSignal = null;
-}
-
-function connectSettingChangedSignals() {
-    changedDebugLoggingSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_DEBUG_LOGGING,
-        handleChangedDebugLogging
-    );
-    changedStartupDelaySignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_STARTUP_DELAY,
-        handleChangedStartupDelay
-    );
-    changedSyncFrequencySignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_SYNC_FREQUENCY,
-        handleChangedSyncFrequency
-    );
-    changedSaveFrequencySignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_SAVE_FREQUENCY,
-        handleChangedSaveFrequency
-    );
-    changedMatchThresholdSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_MATCH_THRESHOLD,
-        handleChangedMatchThreshold
-    );
-    changedSyncModeSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_SYNC_MODE,
-        handleChangedSyncMode
-    );
-    changedFreezeSavesSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_FREEZE_SAVES,
-        handleChangedFreezeSaves
-    );
-    changedActivateWorkspaceSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
-        handleChangedActivateWorkspace
-    );
-    changedIgnorePositionSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_IGNORE_POSITION,
-        handleChangedIgnorePosition
-    );
-    changedIgnoreWorkspaceSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_IGNORE_WORKSPACE,
-        handleChangedIgnoreWorkspace
-    );
-    changedOverridesSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_OVERRIDES,
-        handleChangedOverrides
-    );
-    changedSavedWindowsSignal = settings.connect(
-        "changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS,
-        handleChangedSavedWindows
-    );
-}
-
-function disconnectSettingChangedSignals() {
-    settings.disconnect(changedDebugLoggingSignal);
-    settings.disconnect(changedStartupDelaySignal);
-    settings.disconnect(changedSyncFrequencySignal);
-    settings.disconnect(changedSaveFrequencySignal);
-    settings.disconnect(changedMatchThresholdSignal);
-    settings.disconnect(changedSyncModeSignal);
-    settings.disconnect(changedOverridesSignal);
-    settings.disconnect(changedSavedWindowsSignal);
-
-    changedDebugLoggingSignal = null;
-    changedStartupDelaySignal = null;
-    changedSyncFrequencySignal = null;
-    changedSaveFrequencySignal = null;
-    changedMatchThresholdSignal = null;
-    changedSyncModeSignal = null;
-    changedOverridesSignal = null;
-    changedSavedWindowsSignal = null;
-}
-
-//// DEBUG UTILITIES
-
-function info(message) {
-    console.log("[smart-auto-move] " + message);
-}
-
-function debug(message) {
-    if (debugLogging) {
-        info(message);
     }
-}
 
-function dumpSavedWindows() {
-    Object.keys(savedWindows).forEach(function (wsh) {
-        let sws = savedWindows[wsh];
-        debug("dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws));
-    });
-}
+    _dumpCurrentWindows() {
+        global.get_window_actors().forEach((actor) => {
+            let win = actor.get_meta_window();
+            this._dumpWindow(win);
+        });
+    }
 
-function dumpCurrentWindows() {
-    global.get_window_actors().forEach(function (actor) {
-        let win = actor.get_meta_window();
-        dumpWindow(win);
-    });
-}
+    _dumpWindow(win) {
+        this._debug("dumpWindow(): " + this._windowRepr(win));
+    }
 
-function dumpWindow(win) {
-    debug("dumpWindow(): " + windowRepr(win));
-}
+    _dumpState() {
+        this._dumpSavedWindows();
+        this._dumpCurrentWindows();
+    }
 
-function dumpState() {
-    dumpSavedWindows();
-    dumpCurrentWindows();
+    //// SETTINGS
+
+    _initializeSettings() {
+        this._debugLogging = Common.DEFAULT_DEBUG_LOGGING;
+        this._startupDelayMs = Common.DEFAULT_STARTUP_DELAY_MS;
+        this._syncFrequencyMs = Common.DEFAULT_SYNC_FREQUENCY_MS;
+        this._saveFrequencyMs = Common.DEFAULT_SAVE_FREQUENCY_MS;
+        this._matchThreshold = Common.DEFAULT_MATCH_THRESHOLD;
+        this._syncMode = Common.DEFAULT_SYNC_MODE;
+        this._freezeSaves = Common.DEFAULT_FREEZE_SAVES;
+        this._activateWorkspace = Common.DEFAULT_ACTIVATE_WORKSPACE;
+        this._ignorePosition = Common.DEFAULT_IGNORE_POSITION;
+        this._ignoreWorkspace = Common.DEFAULT_IGNORE_WORKSPACE;
+        this._overrides = new Object();
+        this._savedWindows = new Object();
+
+        this._handleChangedDebugLogging();
+    }
+
+    _cleanupSettings() {
+        this._settings = null;
+        this._debugLogging = null;
+        this._startupDelayMs = null;
+        this._syncFrequencyMs = null;
+        this._saveFrequencyMs = null;
+        this._matchThreshold = null;
+        this._syncMode = null;
+        this._freezeSaves = null;
+        this._activateWorkspace = null;
+        this._ignorePosition = null;
+        this._ignoreWorkspace = null;
+        this._overrides = null;
+        this._savedWindows = null;
+    }
+
+    _restoreSettings() {
+        this._debug("restoreSettings()");
+        this._handleChangedDebugLogging();
+        this._handleChangedStartupDelay();
+        this._handleChangedSyncFrequency();
+        this._handleChangedSaveFrequency();
+        this._handleChangedMatchThreshold();
+        this._handleChangedSyncMode();
+        this._handleChangedFreezeSaves();
+        this._handleChangedActivateWorkspace();
+        this._handleChangedIgnorePosition();
+        this._handleChangedIgnoreWorkspace();
+        this._handleChangedOverrides();
+        this._handleChangedSavedWindows();
+        this._dumpSavedWindows();
+    }
+
+    _saveSettings() {
+        this._settings.set_boolean(
+            Common.SETTINGS_KEY_DEBUG_LOGGING,
+            this._debugLogging
+        );
+        this._settings.set_int(
+            Common.SETTINGS_KEY_STARTUP_DELAY,
+            this._startupDelayMs
+        );
+        this._settings.set_int(
+            Common.SETTINGS_KEY_SYNC_FREQUENCY,
+            this._syncFrequencyMs
+        );
+        this._settings.set_int(
+            Common.SETTINGS_KEY_SAVE_FREQUENCY,
+            this._saveFrequencyMs
+        );
+        this._settings.set_double(
+            Common.SETTINGS_KEY_MATCH_THRESHOLD,
+            this._matchThreshold
+        );
+        this._settings.set_enum(Common.SETTINGS_KEY_SYNC_MODE, this._syncMode);
+        this._settings.set_boolean(
+            Common.SETTINGS_KEY_FREEZE_SAVES,
+            this._freezeSaves
+        );
+        this._settings.set_boolean(
+            Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
+            this._activateWorkspace
+        );
+        this._settings.set_boolean(
+            Common.SETTINGS_KEY_IGNORE_POSITION,
+            this._ignorePosition
+        );
+        this._settings.set_boolean(
+            Common.SETTINGS_KEY_IGNORE_WORKSPACE,
+            this._ignoreWorkspace
+        );
+
+        let newOverrides = JSON.stringify(this._overrides);
+        this._settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
+
+        let oldSavedWindows = this._settings.get_string(
+            Common.SETTINGS_KEY_SAVED_WINDOWS
+        );
+        let newSavedWindows = JSON.stringify(this._savedWindows);
+        if (oldSavedWindows === newSavedWindows) return;
+        this._debug("saveSettings()");
+        this._dumpSavedWindows();
+        this._settings.set_string(
+            Common.SETTINGS_KEY_SAVED_WINDOWS,
+            newSavedWindows
+        );
+    }
+
+    //// WINDOW UTILITIES
+
+    _windowReady(win) {
+        let win_rect = win.get_frame_rect();
+        return (
+            !(win_rect.width === 0 && win_rect.height === 0) &&
+            !(win_rect.x === 0 && win_rect.y === 0)
+        );
+    }
+
+    // https://gjs-docs-experimental.web.app/meta-10/Window/
+    _windowData(win) {
+        let win_rect = win.get_frame_rect();
+        return {
+            id: win.get_id(),
+            hash: this._windowHash(win),
+            sequence: win.get_stable_sequence(),
+            title: win.get_title(),
+            //sandboxed_app_id: win.get_sandboxed_app_id(),
+            //pid: win.get_pid(),
+            //user_time: win.get_user_time(),
+            workspace: win.get_workspace().index(),
+            maximized: win.get_maximized(),
+            fullscreen: win.is_fullscreen(),
+            above: win.is_above(),
+            monitor: win.get_monitor(),
+            //on_all_workspaces: win.is_on_all_workspaces(),
+            x: win_rect.x,
+            y: win_rect.y,
+            width: win_rect.width,
+            height: win_rect.height,
+            occupied: true,
+        };
+    }
+
+    _windowRepr(win) {
+        return JSON.stringify(this._windowData(win));
+    }
+
+    _windowSectionHash(win) {
+        return win.get_wm_class();
+    }
+
+    _windowHash(win) {
+        return win.get_id();
+    }
+
+    _windowDataEqual(sw1, sw2) {
+        return JSON.stringify(sw1) === JSON.stringify(sw2);
+    }
+
+    _windowNewerThan(win, age) {
+        let wh = this._windowHash(win);
+
+        if (this._activeWindows.get(wh) === undefined) {
+            this._activeWindows.set(wh, Date.now());
+        }
+
+        return Date.now() - this._activeWindows.get(wh) < age;
+    }
+
+    //// WINDOW SAVE / RESTORE
+
+    _pushSavedWindow(win) {
+        let wsh = this._windowSectionHash(win);
+        if (wsh === null) return false;
+        if (!this._savedWindows.hasOwn(wsh)) this._savedWindows[wsh] = [];
+        let sw = this._windowData(win);
+        this._savedWindows[wsh].push(sw);
+        this._debug("pushSavedWindow() - pushed: " + JSON.stringify(sw));
+        return true;
+    }
+
+    _updateSavedWindow(win) {
+        let wsh = this._windowSectionHash(win);
+        let [swi, _] = Common.findSavedWindow(
+            this._savedWindows,
+            wsh,
+            { hash: this._windowHash(win) },
+            1.0
+        );
+        if (swi === undefined) return false;
+        let sw = this._windowData(win);
+        if (this._windowDataEqual(this._savedWindows[wsh][swi], sw))
+            return true;
+        this._savedWindows[wsh][swi] = sw;
+        this._debug(
+            "updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw)
+        );
+        return true;
+    }
+
+    _ensureSavedWindow(win) {
+        if (this._windowNewerThan(win, this._startupDelayMs)) return;
+
+        if (this._freezeSaves) return;
+
+        if (!this._updateSavedWindow(win)) {
+            this._pushSavedWindow(win);
+        }
+    }
+
+    _findOverrideAction(win, threshold) {
+        let wsh = this._windowSectionHash(win);
+        let sw = this._windowData(win);
+
+        let action = this._syncMode;
+
+        let override = Common.findOverride(this._overrides, wsh, sw, threshold);
+
+        if (override !== undefined && override.action !== undefined)
+            action = override.action;
+
+        return action;
+    }
+
+    _moveWindow(win, sw) {
+        win.move_to_monitor(sw.monitor);
+
+        let ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
+        if (!this._ignoreWorkspace) {
+            win.change_workspace(ws);
+        }
+
+        if (this._ignorePosition) {
+            let cw = this._windowData(win);
+            sw.x = cw.x;
+            sw.y = cw.y;
+        }
+
+        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
+        if (sw.maximized) win.maximize(sw.maximized);
+        // NOTE: these additional move/maximize operations were needed in order
+        // to convince Firefox to stay where we put it.
+        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
+        if (sw.maximized) win.maximize(sw.maximized);
+        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
+
+        if (sw.fullscreen) win.make_fullscreen();
+
+        if (sw.above) win.make_above();
+
+        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace)
+            ws.activate(true);
+
+        let nsw = this._windowData(win);
+
+        return nsw;
+    }
+
+    _restoreWindow(win) {
+        let wsh = this._windowSectionHash(win);
+
+        let sw;
+
+        let [swi, _] = Common.findSavedWindow(
+            this._savedWindows,
+            wsh,
+            { hash: this._windowHash(win), occupied: true },
+            1.0
+        );
+
+        if (swi !== undefined) return false;
+
+        if (!this._windowReady(win)) return true; // try again later
+
+        [swi, sw] = Common.matchedWindow(
+            this._savedWindows,
+            this._overrides,
+            wsh,
+            win.get_title(),
+            this._matchThreshold
+        );
+
+        if (swi === undefined) return false;
+
+        if (this._windowDataEqual(sw, this._windowData(win))) return true;
+
+        let action = this._findOverrideAction(win, 1.0);
+        if (action !== Common.SYNC_MODE_RESTORE) return true;
+
+        let pWinRepr = this._windowRepr(win);
+
+        let nsw = this._moveWindow(win, sw);
+
+        if (!this._ignorePosition) {
+            if (!(sw.x === nsw.x && sw.y === nsw.y)) return true;
+        }
+
+        this._debug(
+            "restoreWindow() - moved: " +
+                pWinRepr +
+                " => " +
+                JSON.stringify(nsw)
+        );
+
+        this._savedWindows[wsh][swi] = nsw;
+
+        return true;
+    }
+
+    _cleanupWindows() {
+        let found = new Map();
+
+        global.get_window_actors().forEach((actor) => {
+            let win = actor.get_meta_window();
+            found.set(this._windowHash(win), true);
+        });
+
+        Object.keys(this._savedWindows).forEach((wsh) => {
+            let sws = this._savedWindows[wsh];
+            sws.forEach((sw) => {
+                if (sw.occupied && !found.has(sw.hash)) {
+                    sw.occupied = false;
+                    this._debug(
+                        "cleanupWindows() - deoccupy: " + JSON.stringify(sw)
+                    );
+                }
+            });
+        });
+    }
+
+    _shouldSkipWindow(win) {
+        this._debug(
+            "shouldSkipWindow() " +
+                win.get_title() +
+                " " +
+                win.is_skip_taskbar() +
+                " " +
+                win.get_window_type()
+        );
+
+        if (win.is_skip_taskbar()) return true;
+
+        if (win.get_window_type() !== Meta.WindowType.NORMAL) return true;
+
+        return false;
+    }
+
+    _syncWindows() {
+        this._cleanupWindows();
+        global.get_window_actors().forEach((actor) => {
+            let win = actor.get_meta_window();
+
+            if (this._shouldSkipWindow(win)) return;
+
+            if (!this._restoreWindow(win)) this._ensureSavedWindow(win);
+        });
+    }
+
+    //// SIGNAL HANDLERS
+
+    _handleTimeoutSave() {
+        if (this._timeoutSaveSignal !== null)
+            GLib.Source.remove(this._timeoutSaveSignal);
+        this._timeoutSaveSignal = null;
+        this._saveSettings();
+        this._timeoutSaveSignal = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT,
+            this._saveFrequencyMs,
+            this._handleTimeoutSave.bind(this)
+        );
+        return GLib.SOURCE_CONTINUE;
+    }
+
+    _handleTimeoutSync() {
+        if (this._timeoutSyncSignal !== null)
+            GLib.Source.remove(this._timeoutSyncSignal);
+        this._timeoutSyncSignal = null;
+        this._syncWindows();
+        this._timeoutSyncSignal = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT,
+            this._syncFrequencyMs,
+            this._handleTimeoutSync.bind(this)
+        );
+        return GLib.SOURCE_CONTINUE;
+    }
+
+    _handleChangedDebugLogging() {
+        this._debugLogging = this._settings.get_boolean(
+            Common.SETTINGS_KEY_DEBUG_LOGGING
+        );
+        console.log(
+            "[smart-auto-move] handleChangedDebugLogging(): " +
+                this._debugLogging
+        );
+    }
+
+    _handleChangedStartupDelay() {
+        this._startupDelayMs = this._settings.get_int(
+            Common.SETTINGS_KEY_STARTUP_DELAY
+        );
+        this._debug("handleChangedStartupDelay(): " + this._startupDelayMs);
+    }
+
+    _handleChangedSyncFrequency() {
+        this._syncFrequencyMs = this._settings.get_int(
+            Common.SETTINGS_KEY_SYNC_FREQUENCY
+        );
+        this._debug("handleChangedSyncFrequency(): " + this._syncFrequencyMs);
+    }
+
+    _handleChangedSaveFrequency() {
+        this._saveFrequencyMs = this._settings.get_int(
+            Common.SETTINGS_KEY_SAVE_FREQUENCY
+        );
+        this._debug("handleChangedSaveFrequency(): " + this._saveFrequencyMs);
+    }
+
+    _handleChangedMatchThreshold() {
+        this._matchThreshold = this._settings.get_double(
+            Common.SETTINGS_KEY_MATCH_THRESHOLD
+        );
+        this._debug("handleChangedMatchThreshold(): " + this._matchThreshold);
+    }
+
+    _handleChangedSyncMode() {
+        this._syncMode = this._settings.get_enum(Common.SETTINGS_KEY_SYNC_MODE);
+        this._debug("handleChangedSyncMode(): " + this._syncMode);
+    }
+
+    _handleChangedFreezeSaves() {
+        this._freezeSaves = this._settings.get_boolean(
+            Common.SETTINGS_KEY_FREEZE_SAVES
+        );
+        this._debug(
+            "[smart-auto-move] handleChangedFreezeSaves(): " + this._freezeSaves
+        );
+    }
+
+    _handleChangedActivateWorkspace() {
+        this._activateWorkspace = this._settings.get_boolean(
+            Common.SETTINGS_KEY_ACTIVATE_WORKSPACE
+        );
+        this._debug(
+            "[smart-auto-move] handleChangedActivateWorkspace(): " +
+                this._activateWorkspace
+        );
+    }
+
+    _handleChangedIgnorePosition() {
+        this._ignorePosition = this._settings.get_boolean(
+            Common.SETTINGS_KEY_IGNORE_POSITION
+        );
+        this._debug(
+            "[smart-auto-move] handleChangedIgnorePosition(): " +
+                this._ignorePosition
+        );
+    }
+
+    _handleChangedIgnoreWorkspace() {
+        this._ignoreWorkspace = this._settings.get_boolean(
+            Common.SETTINGS_KEY_IGNORE_WORKSPACE
+        );
+        this._debug(
+            "[smart-auto-move] handleChangedIgnoreWorkspace(): " +
+                this._ignoreWorkspace
+        );
+    }
+
+    _handleChangedOverrides() {
+        this._overrides = JSON.parse(
+            this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
+        );
+        this._debug(
+            "handleChangedOverrides(): " + JSON.stringify(this._overrides)
+        );
+    }
+
+    _handleChangedSavedWindows() {
+        this._savedWindows = JSON.parse(
+            this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
+        );
+        this._debug(
+            "handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows)
+        );
+    }
 }
