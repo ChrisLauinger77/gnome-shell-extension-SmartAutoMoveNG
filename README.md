@@ -1,11 +1,12 @@
-# gnome-shell-extension-SmartAutoMove
+# gnome-shell-extension-SmartAutoMoveNG
 
-SmartAutoMove
+Forked from https://github.com/khimaros/smart-auto-move
+
+SmartAutoMoveNG
 is a Gnome Shell extension which keeps track of all application windows and restores them to the previous position, size, and workspace on restart. Supports Wayland.
 
 <p align="left">
-  <a href="https://extensions.gnome.org/extension/8147/smart-auto-move/
-/">
+  <a href="https://extensions.gnome.org/extension/8149/smart-auto-move-ng/">
     <img alt="Get it on GNOME Extensions" width="228" src="https://raw.githubusercontent.com/andyholmes/gnome-shell-extensions-badge/master/get-it-on-ego.svg?sanitize=true"/>
   </a>
 </p>

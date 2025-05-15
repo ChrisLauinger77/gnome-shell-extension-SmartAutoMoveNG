@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="SmartAutoMove">
+<interface domain="SmartAutoMoveNG">
   <object class="AdwPreferencesPage" id="smartautomove_page1">
     <property name="name">smartautomove_page1</property>
     <property name="title" translatable="yes">General</property>
