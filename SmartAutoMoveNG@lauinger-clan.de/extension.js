@@ -5,6 +5,7 @@ import Meta from "gi://Meta";
 import GLib from "gi://GLib";
 import Gio from "gi://Gio";
 import GObject from "gi://GObject";
+import St from "gi://St";
 
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
@@ -22,15 +23,21 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             const { _settings } = Me;
             super({
                 title: "Smart Auto Move NG",
-                iconName: "preferences-other-symbolic",
                 toggleMode: true,
             });
-
-            this.menu.setHeader(
-                "preferences-other-symbolic",
-                "Smart Auto Move NG",
-                ""
-            );
+            this._path = Me.path;
+            // Icon
+            const SmartAutoMoveNGIcon = "smartautomoveng-symbolic";
+            this._finalMenuIcon = SmartAutoMoveNGIcon;
+            this._iconTheme = new St.IconTheme();
+            if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
+                const IconPath = "/icons/";
+                this._finalMenuIcon = Gio.icon_new_for_string(
+                    `${this._path}${IconPath}${SmartAutoMoveNGIcon}.svg`
+                );
+            }
+            this.gicon = this._finalMenuIcon;
+            this.menu.setHeader(this._finalMenuIcon, "Smart Auto Move NG", "");
 
             _settings.bind(
                 "freeze-saves",
@@ -386,7 +393,7 @@ export default class SmartAutoMoveNG extends Extension {
     _pushSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
         if (wsh === null) return false;
-        if (!this._savedWindows.hasOwnProperty(wsh))
+        if (!Object.prototype.hasOwnProperty.call(this._savedWindows, wsh))
             this._savedWindows[wsh] = [];
         let sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);

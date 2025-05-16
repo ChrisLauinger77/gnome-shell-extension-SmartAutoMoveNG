@@ -13,9 +13,15 @@ is a Gnome Shell extension which keeps track of all application windows and rest
 
 ## screenshots
 
+#### QuickSettings
+
+![screenshot: quick settings](docs/screenshot-quicksettings.png)
+
+The toggle in quicksettings is connected to the "Freeze saves" switch of settings.
+
 #### General
 
-![screenshot: saved windows preferences](docs/screenshot-general.png)
+![screenshot: general preferences](docs/screenshot-general.png)
 
 #### Saved Windows
 

@@ -3,7 +3,7 @@
 # glib-compile-schemas HeadsetControl\@lauinger-clan.de/schemas/
 
 cd SmartAutoMoveNG\@lauinger-clan.de
-gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=../LICENSE
+gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=./icons/ --extra-source=../LICENSE
 cd ..
 mv SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip SmartAutoMoveNG@lauinger-clan.de.zip
 
