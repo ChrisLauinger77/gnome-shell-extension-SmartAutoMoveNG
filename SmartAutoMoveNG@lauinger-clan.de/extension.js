@@ -386,7 +386,8 @@ export default class SmartAutoMoveNG extends Extension {
     _pushSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
         if (wsh === null) return false;
-        if (!this._savedWindows.hasOwn(wsh)) this._savedWindows[wsh] = [];
+        if (!this._savedWindows.hasOwnProperty(wsh))
+            this._savedWindows[wsh] = [];
         let sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);
         this._debug("pushSavedWindow() - pushed: " + JSON.stringify(sw));

@@ -174,6 +174,19 @@ export default class SAMPreferences extends ExtensionPreferences {
         const saved_windows_cleanup_widget = builder.get_object(
             "saved-windows-cleanup-button"
         );
+        const saved_windows_cleanup_widgetBtn = new Gtk.Button({
+            label: _("..."),
+            valign: Gtk.Align.CENTER,
+        });
+        saved_windows_cleanup_widgetBtn.set_tooltip_text(
+            _("Cleanup Non-occupied Windows")
+        );
+
+        saved_windows_cleanup_widget.add_suffix(
+            saved_windows_cleanup_widgetBtn
+        );
+        saved_windows_cleanup_widget.activatable_widget =
+            saved_windows_cleanup_widgetBtn;
         saved_windows_cleanup_widget.connect("activated", () => {
             this._deleteNonOccupiedWindows(settings);
         });
@@ -202,6 +215,21 @@ export default class SAMPreferences extends ExtensionPreferences {
         const overrides_add_application_widget = builder.get_object(
             "overrides-add-application-button"
         );
+
+        const overrides_add_application_widgetBtn = new Gtk.Button({
+            label: _("..."),
+            valign: Gtk.Align.CENTER,
+        });
+        overrides_add_application_widgetBtn.set_tooltip_text(
+            _("Add Application")
+        );
+
+        overrides_add_application_widget.add_suffix(
+            overrides_add_application_widgetBtn
+        );
+        overrides_add_application_widget.activatable_widget =
+            overrides_add_application_widgetBtn;
+
         let myAppChooser = new AppChooser({
             title: _("Select app"),
             modal: true,

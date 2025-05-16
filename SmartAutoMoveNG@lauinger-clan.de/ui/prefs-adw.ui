@@ -116,7 +116,7 @@
         <object class="AdwPreferencesGroup" id="saved-windows-listbox">
           <property name="title" translatable="yes"></property>
           <child>
-          <object class="AdwButtonRow" id="saved-windows-cleanup-button">
+          <object class="AdwActionRow" id="saved-windows-cleanup-button">
             <property name="title" translatable="yes">Cleanup Non-occupied Windows</property>
           </object>
         </child>
@@ -131,7 +131,7 @@
         <object class="AdwPreferencesGroup" id="overrides-listbox">
           <property name="title" translatable="yes"></property>
           <child>
-          <object class="AdwButtonRow" id="overrides-add-application-button">
+          <object class="AdwActionRow" id="overrides-add-application-button">
             <property name="title" translatable="yes">Add Application</property>
           </object>
         </child>
