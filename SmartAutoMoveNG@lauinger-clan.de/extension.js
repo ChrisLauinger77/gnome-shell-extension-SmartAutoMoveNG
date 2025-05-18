@@ -233,9 +233,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._activateWorkspace = Common.DEFAULT_ACTIVATE_WORKSPACE;
         this._ignorePosition = Common.DEFAULT_IGNORE_POSITION;
         this._ignoreWorkspace = Common.DEFAULT_IGNORE_WORKSPACE;
-        this._overrides = new Object();
-        this._savedWindows = new Object();
-
+        this._overrides = {};
+        this._savedWindows = {};
         this._handleChangedDebugLogging();
     }
 
@@ -393,7 +392,7 @@ export default class SmartAutoMoveNG extends Extension {
     _pushSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
         if (wsh === null) return false;
-        if (!Object.prototype.hasOwnProperty.call(this._savedWindows, wsh))
+        if (!Object.hasOwn(this._savedWindows, wsh))
             this._savedWindows[wsh] = [];
         let sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);
@@ -403,7 +402,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _updateSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
-        let [swi, _] = Common.findSavedWindow(
+        let [swi] = Common.findSavedWindow(
             this._savedWindows,
             wsh,
             { hash: this._windowHash(win) },
@@ -483,7 +482,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         let sw;
 
-        let [swi, _] = Common.findSavedWindow(
+        let [swi] = Common.findSavedWindow(
             this._savedWindows,
             wsh,
             { hash: this._windowHash(win), occupied: true },
@@ -560,11 +559,10 @@ export default class SmartAutoMoveNG extends Extension {
                 win.get_window_type()
         );
 
-        if (win.is_skip_taskbar()) return true;
-
-        if (win.get_window_type() !== Meta.WindowType.NORMAL) return true;
-
-        return false;
+        return (
+            win.is_skip_taskbar() ||
+            win.get_window_type() !== Meta.WindowType.NORMAL
+        );
     }
 
     _syncWindows() {

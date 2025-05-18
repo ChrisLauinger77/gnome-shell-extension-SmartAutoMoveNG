@@ -43,13 +43,14 @@ function levensteinDistance(a, b) {
 
     for (i = 1; i <= b.length; i++) {
         for (j = 1; j <= a.length; j++) {
-            m[i][j] =
-                b.charAt(i - 1) === a.charAt(j - 1)
-                    ? m[i - 1][j - 1]
-                    : (m[i][j] = min(
-                          m[i - 1][j - 1] + 1,
-                          min(m[i][j - 1] + 1, m[i - 1][j] + 1)
-                      ));
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                m[i][j] = m[i - 1][j - 1];
+            } else {
+                m[i][j] = min(
+                    m[i - 1][j - 1] + 1,
+                    min(m[i][j - 1] + 1, m[i - 1][j] + 1)
+                );
+            }
         }
     }
 
@@ -96,8 +97,12 @@ export function findSavedWindow(saved_windows, wsh, query, threshold) {
     let best_swi = sorted_scores.keys().next().value;
     let best_score = sorted_scores.get(best_swi);
 
-    let found = undefined;
-    if (best_score >= threshold) found = best_swi;
+    let found;
+    if (best_score >= threshold) {
+        found = best_swi;
+    } else {
+        found = undefined;
+    }
 
     return [found, best_score];
 }
@@ -122,7 +127,6 @@ export function findOverride(overrides, wsh, sw, threshold) {
             override.action = o.action;
             override.threshold = o.threshold;
             matched = true;
-            return;
         }
     });
 
@@ -141,7 +145,7 @@ export function matchedWindow(
     let threshold = default_match_threshold;
     if (o !== undefined && o.threshold !== undefined) threshold = o.threshold;
 
-    let [swi, _] = findSavedWindow(
+    let [swi] = findSavedWindow(
         saved_windows,
         wsh,
         { title: title, occupied: false },
