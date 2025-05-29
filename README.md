@@ -70,14 +70,11 @@ LIMITATION: multi-monitor is not well supported and may result in windows becomi
 if everything is horribly broken, clear your Saved Windows:
 
 ```
-$ gnome-extensions disable SmartAutoMoveNG
-@lauinger-clan.de
+$ gnome-extensions disable SmartAutoMoveNG@lauinger-clan.de
 
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/saved-windows '{}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/saved-windows '{}'
 
-$ gnome-extensions enable SmartAutoMoveNG
-@lauinger-clan.de
+$ gnome-extensions enable SmartAutoMoveNG@lauinger-clan.de
 ```
 
 ## behavior
@@ -94,69 +91,56 @@ most settings can be modified from the preferences GUI. this section documents a
 enable debug logging:
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/debug-logging true
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/debug-logging true
 ```
 
 set the minimum window/title match threshold to 50%:
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/match-threshold 0.5
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/match-threshold 0.5
 ```
 
 set the window synchronization (update/restore) frequency to 50ms:
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/sync-frequency 50
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-frequency 50
 ```
 
 default to ignoring windows unless explicitly defined. restore all windows of the gnome-calculator app, all firefox windows except for the profile chooser, and Nautilus only if the window title is "Downloads":
 /
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/sync-mode "'IGNORE'"
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/overrides '{"gnome-calculator": [{"action":1}], "firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}, {"action": 1}],"org.gnome.Nautilus":[{"query":{"title":"Downloads"},"action":1}]}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-mode "'IGNORE'"
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/overrides '{"gnome-calculator": [{"action":1}], "firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}, {"action": 1}],"org.gnome.Nautilus":[{"query":{"title":"Downloads"},"action":1}]}'
 ```
 
 default to restoring all windows, but ignore the firefox profile chooser and any nautilus windows:
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/sync-mode "'RESTORE'"
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG
-/overrides '{"firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}], "org.gnome.Nautilus": [{"action":0}]}'
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-mode "'RESTORE'"
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/overrides '{"firefox": [{"query": {"title": "Firefox - Choose User Profile"}, "action": 0}], "org.gnome.Nautilus": [{"action":0}]}'
 ```
 
 show all saved firefox windows (N.B. `jq` will fail if window title contains `\`):
 
 ```
-$ dconf read /org/gnome/shell/extensions/SmartAutoMoveNG
-/saved-windows | sed "s/^'//; s/'$//" | jq -C .Firefox | less -SR
+$ dconf read /org/gnome/shell/extensions/SmartAutoMoveNG/saved-windows | sed "s/^'//; s/'$//" | jq -C .Firefox | less -SR
 ```
 
 there are example configs in the `examples/` dir which can be loaded (N.B. while extension is disabled) with:
 
 ```
-$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG
-/ < ./examples/default-restore.dconf
+$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < ./examples/default-restore.dconf
 ```
 
 you can backup your config (restore is the same as above):
 
 ```
-$ dconf dump /org/gnome/shell/extensions/SmartAutoMoveNG
-/ > SmartAutoMoveNG
-.dconf
+$ dconf dump /org/gnome/shell/extensions/SmartAutoMoveNG/ > SmartAutoMoveNG.dconf
 ```
 
 the gsettings tool can also be used to manipulate these values:
 
 ```
-$ gsettings --schemadir ./SmartAutoMoveNG
-@lauinger-clan.de/schemas/ set org.gnome.shell.extensions.SmartAutoMoveNG
- sync-mode 'RESTORE'
+$ gsettings --schemadir ./SmartAutoMoveNG@lauinger-clan.de/schemas/ set org.gnome.shell.extensions.SmartAutoMoveNG sync-mode 'RESTORE'
 ```
