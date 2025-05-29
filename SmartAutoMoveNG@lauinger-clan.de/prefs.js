@@ -94,6 +94,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const savefrequencyspin = builder.get_object("save-frequency-spin");
         savefrequencyspin.set_climb_rate(50);
         savefrequencyspin.set_numeric(true);
+        this._rebuildOverrides = true; // do we need to rebuild the overrides list?
 
         this._general(this.getSettings(), builder);
         const savedwindowsRows = [];
@@ -270,6 +271,10 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _loadOverridesSetting(settings, list_widget, list_objects, list_rows) {
+        if (!this._rebuildOverrides) {
+            this._rebuildOverrides = true;
+            return;
+        }
         const overrides = JSON.parse(
             settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
         );
@@ -309,6 +314,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                     "value-changed",
                     (spin) => {
                         let threshold = spin.get_value();
+                        this._rebuildOverrides = false;
                         if (threshold <= 0.01) threshold = undefined;
                         wshos[oi].threshold = threshold;
                         settings.set_string(
@@ -330,6 +336,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                     "changed",
                     (combo) => {
                         let action = combo.get_active();
+                        this._rebuildOverrides = false;
                         if (action === 2) action = undefined;
                         wshos[oi].action = action;
                         settings.set_string(
