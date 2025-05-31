@@ -352,7 +352,7 @@ export default class SmartAutoMoveNG extends Extension {
             fullscreen: win.is_fullscreen(),
             above: win.is_above(),
             monitor: win.get_monitor(),
-            //on_all_workspaces: win.is_on_all_workspaces(),
+            on_all_workspaces: win.is_on_all_workspaces(),
             x: win_rect.x,
             y: win_rect.y,
             width: win_rect.width,
@@ -471,6 +471,8 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace)
             ws.activate(true);
+
+        if (sw.on_all_workspaces) win.stick();
 
         let nsw = this._windowData(win);
 
