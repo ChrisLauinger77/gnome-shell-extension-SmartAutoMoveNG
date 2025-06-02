@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 19:01+0200\n"
+"POT-Creation-Date: 2025-06-02 17:55+0200\n"
 "PO-Revision-Date: 2025-05-14 18:57+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -18,79 +18,90 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: SmartAutoMove@lauinger-clan.de/prefs.js:37
-msgid "Select"
-msgstr "Auswählen"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:40
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:206
-msgid "Select app"
-msgstr "App auswählen"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:287
-#: SmartAutoMove@lauinger-clan.de/prefs.js:439
-msgid "ANY"
-msgstr "Beliebig"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:322
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:25
-msgid "IGNORE"
-msgstr "Ignorieren"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:323
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:26
-msgid "RESTORE"
-msgstr "Wiederherstellen"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:324
-msgid "DEFAULT"
-msgstr "Standard"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:346
-#: SmartAutoMove@lauinger-clan.de/prefs.js:407
-msgid "Delete"
-msgstr "Löschen"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:402
-msgid "Not occupied"
-msgstr "Nicht besetzt"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:422
-msgid "OVERRIDE"
-msgstr "Überschreiben"
-
-#: SmartAutoMove@lauinger-clan.de/prefs.js:443
-msgid "OVERRIDE (ANY)"
-msgstr "Überschreiben (beliebig)"
-
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:9
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:113
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:50
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Saved Windows"
 msgstr "Gespeicherte Fenster"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:10
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:54
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:120
+msgid "Cleanup Non-occupied Windows"
+msgstr "Nicht besetzte Fenster aufräumen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:63
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:9
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:37
+msgid "Select"
+msgstr "Auswählen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:40
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:207
+msgid "Select app"
+msgstr "App auswählen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:292
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:429
+msgid "ANY"
+msgstr "Beliebig"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:328
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
+msgid "IGNORE"
+msgstr "Ignorieren"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:329
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
+msgid "RESTORE"
+msgstr "Wiederherstellen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:330
+msgid "DEFAULT"
+msgstr "Standard"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:353
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:397
+msgid "Delete"
+msgstr "Löschen"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:392
+msgid "Not occupied"
+msgstr "Nicht besetzt"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:412
+msgid "OVERRIDE"
+msgstr "Überschreiben"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:433
+msgid "OVERRIDE (ANY)"
+msgstr "Überschreiben (beliebig)"
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:10
 msgid "Persisted window data serialized to JSON."
 msgstr "Persistierte Fensterdaten, die in JSON serialisiert wurden."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:14
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:12
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:14
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
 msgid "Debug Logging"
 msgstr "Debug-Logging"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:15
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:13
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:14
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:15
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
 msgid "Write detailed logs about extension behavior."
 msgstr "Detaillierte Protokolle über das Verhalten der Erweiterung schreiben."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:19
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:19
 msgid "Startup Delay (ms)"
 msgstr "Startverzögerung (ms)"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:20
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:20
 msgid ""
 "Period of time in milliseconds to wait between seeing a window and writing "
 "it to the in-memory store."
@@ -98,13 +109,13 @@ msgstr ""
 "Zeitraum in Millisekunden, der zwischen dem Erkennen eines Fensters und dem "
 "Schreiben in den In-Memory-Speicher gewartet wird."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:24
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24
 msgid "Sync Frequency (ms)"
 msgstr "Synchronisationsfrequenz (ms)"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:25
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:51
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:52
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:25
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:51
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:52
 msgid ""
 "Frequency in milliseconds to synchronize changes to active windows into the "
 "in-memory store."
@@ -112,124 +123,116 @@ msgstr ""
 "Frequenz in Millisekunden, um Änderungen an aktiven Fenstern in den In-"
 "Memory-Speicher zu synchronisieren."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:29
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:29
 msgid "Save Frequency (ms)"
 msgstr "Speicherfrequenz (ms)"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:30
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:67
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:68
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:30
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:67
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:68
 msgid "Frequency in milliseconds to persist the in-memory store to disk."
 msgstr ""
 "Frequenz in Millisekunden, um den In-Memory-Speicher auf die Festplatte zu "
 "persistieren."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:34
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:34
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:34
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:34
 msgid "Match Threshold"
 msgstr "Übereinstimmungsschwelle"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:35
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:35
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:36
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:35
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:35
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:36
 msgid "Minimum threshold for matching restored windows."
 msgstr "Mindestschwelle für die Übereinstimmung wiederhergestellter Fenster."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:39
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:39
 msgid "Sync Mode"
 msgstr "Synchronisationsmodus"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:40
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:20
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:21
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:40
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
 msgid "Default mode when synchronizing windows."
 msgstr "Standardmodus beim Synchronisieren von Fenstern."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:44
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:128
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:45
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:45
 msgid "Overrides for restored window data."
 msgstr "Überschreibungen für wiederhergestellte Fensterdaten."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:49
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:82
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:49
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:82
 msgid "Freeze Saves"
 msgstr "Speichern einfrieren"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:50
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:83
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:84
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:50
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:83
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:84
 msgid "Do not update saved window data."
 msgstr "Gespeicherte Fensterdaten nicht aktualisieren."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:54
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:89
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:54
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:89
 msgid "Activate Workspace"
 msgstr "Arbeitsbereich aktivieren"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:55
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:90
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:91
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:55
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:90
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:91
 msgid "Follow apps when they are moved to another workspace."
 msgstr ""
 "Apps folgen, wenn sie in einen anderen Arbeitsbereich verschoben werden."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:59
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
 msgid "Ignore position"
 msgstr "Position ignorieren"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:60
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:97
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:98
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:60
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:98
 msgid "Do not restore windows' position."
 msgstr "Fensterposition nicht wiederherstellen."
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:64
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:64
 msgid "Ignore workspace"
 msgstr "Arbeitsbereich ignorieren"
 
-#: SmartAutoMove@lauinger-clan.de/schemas/org.gnome.shell.extensions.smart-auto-move.gschema.xml:65
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:104
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:105
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:65
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:104
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:105
 msgid "Do not restore windows' workspace."
 msgstr "Arbeitsbereich der Fenster nicht wiederherstellen."
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:5
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:5
 msgid "General"
 msgstr "Allgemein"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:9
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:19
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
 msgid "Default Synchronization Mode"
 msgstr "Standard-Synchronisationsmodus"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:50
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
 msgid "Sync Frequency (milliseconds)"
 msgstr "Synchronisationsfrequenz (Millisekunden)"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:66
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:66
 msgid "Save Frequency (milliseconds)"
 msgstr "Speicherfrequenz (Millisekunden)"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:96
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:96
 msgid "Ignore Position"
 msgstr "Position ignorieren"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:103
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:103
 msgid "Ignore Workspace"
 msgstr "Arbeitsbereich ignorieren"
 
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:120
-msgid "Cleanup Non-occupied Windows"
-msgstr "Nicht besetzte Fenster aufräumen"
-
-#: SmartAutoMove@lauinger-clan.de/ui/prefs-adw.ui:135
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Add Application"
 msgstr "Anwendung hinzufügen"
 
