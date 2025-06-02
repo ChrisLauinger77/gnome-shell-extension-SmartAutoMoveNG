@@ -374,24 +374,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _deleteNonOccupiedWindows(settings) {
-        const saved_windows = JSON.parse(
-            settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
-        );
-
-        Object.keys(saved_windows).forEach((wsh) => {
-            let sws = saved_windows[wsh];
-            sws.forEach((sw, swi) => {
-                if (!sw.occupied) {
-                    sws.splice(swi, 1);
-                    if (sws.length < 1) delete saved_windows[wsh];
-                }
-            });
-        });
-
-        settings.set_string(
-            Common.SETTINGS_KEY_SAVED_WINDOWS,
-            JSON.stringify(saved_windows)
-        );
+        Common.deleteNonOccupiedWindows(settings);
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {

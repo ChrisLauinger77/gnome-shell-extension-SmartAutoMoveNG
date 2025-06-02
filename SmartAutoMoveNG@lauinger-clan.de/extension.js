@@ -11,6 +11,7 @@ import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
+import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
 
 import * as Common from "./lib/common.js";
 
@@ -25,7 +26,6 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 title: "Smart Auto Move NG",
                 toggleMode: true,
             });
-            this._path = Me.path;
             // Icon
             const SmartAutoMoveNGIcon = "smartautomoveng-symbolic";
             this._finalMenuIcon = SmartAutoMoveNGIcon;
@@ -33,7 +33,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
                 const IconPath = "/icons/";
                 this._finalMenuIcon = Gio.icon_new_for_string(
-                    `${this._path}${IconPath}${SmartAutoMoveNGIcon}.svg`
+                    `${Me.path}${IconPath}${SmartAutoMoveNGIcon}.svg`
                 );
             }
             this.gicon = this._finalMenuIcon;
@@ -45,8 +45,21 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 "checked",
                 Gio.SettingsBindFlags.DEFAULT
             );
-
+            // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
+            const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(
+                _("Saved Windows")
+            );
+            this.menu.addMenuItem(popupMenuExpander);
+            const submenu = new PopupMenu.PopupMenuItem(
+                _("Cleanup Non-occupied Windows")
+            );
+            submenu.connect(
+                "activate",
+                Common.deleteNonOccupiedWindows.bind(this, _settings)
+            );
+            popupMenuExpander.menu.addMenuItem(submenu);
             try {
+                this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 const settingsItem = this.menu.addAction(_("Settings"), () =>
                     Me._openPreferences()
                 );

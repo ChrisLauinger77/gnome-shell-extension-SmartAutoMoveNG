@@ -158,3 +158,22 @@ export function matchedWindow(
 
     return [swi, sw];
 }
+
+export function deleteNonOccupiedWindows(settings) {
+    const saved_windows = JSON.parse(
+        settings.get_string(SETTINGS_KEY_SAVED_WINDOWS)
+    );
+
+    Object.keys(saved_windows).forEach((wsh) => {
+        let sws = saved_windows[wsh];
+        saved_windows[wsh] = sws.filter((sw) => sw.occupied);
+        if (saved_windows[wsh].length < 1) {
+            delete saved_windows[wsh];
+        }
+    });
+
+    settings.set_string(
+        SETTINGS_KEY_SAVED_WINDOWS,
+        JSON.stringify(saved_windows)
+    );
+}
