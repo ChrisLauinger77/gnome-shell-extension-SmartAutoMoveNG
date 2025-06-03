@@ -79,7 +79,7 @@ $ gnome-extensions enable SmartAutoMoveNG@lauinger-clan.de
 
 ## behavior
 
-because there is no way to uniquely distinguish individual windows from an application across restarts, SmartAutoMove
+because there is no way to uniquely distinguish individual windows from an application across restarts, SmartAutoMoveNG
 uses a heuristic to uniquely identify them. this is primarily based on startup order and title. in cases where there are multiple windows with the same title, they are restored based on relative startup sequence.
 
 titles are matched using Levenstein distance. the match bonus for title is calculated based on `(title length - distance) / title length`.

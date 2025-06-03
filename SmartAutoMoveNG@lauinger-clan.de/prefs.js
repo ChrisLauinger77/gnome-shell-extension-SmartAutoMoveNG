@@ -11,7 +11,7 @@ import {
 import * as Common from "./lib/common.js";
 
 const errorLog = (...args) => {
-    console.error("[smart-auto-move]", "Error:", ...args);
+    console.error("[SmartAutoMoveNG]", "Error:", ...args);
 };
 
 const handleError = (error) => {
