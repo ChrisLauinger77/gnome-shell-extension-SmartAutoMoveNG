@@ -48,19 +48,48 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 "checked",
                 Gio.SettingsBindFlags.DEFAULT
             );
-            // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
-            const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(
+            // Menu item Saved Windows with submenu Cleanup Non-occupied Windows
+            const popupMenuExpanderSW = new PopupMenu.PopupSubMenuMenuItem(
                 _("Saved Windows")
             );
-            this.menu.addMenuItem(popupMenuExpander);
-            const submenu = new PopupMenu.PopupMenuItem(
+            this.menu.addMenuItem(popupMenuExpanderSW);
+            const submenuSW = new PopupMenu.PopupMenuItem(
                 _("Cleanup Non-occupied Windows")
             );
-            submenu.connect(
+            submenuSW.connect(
                 "activate",
-                Common.deleteNonOccupiedWindows.bind(this, _settings)
+                Common.cleanupNonOccupiedWindows.bind(this, _settings)
             );
-            popupMenuExpander.menu.addMenuItem(submenu);
+            popupMenuExpanderSW.menu.addMenuItem(submenuSW);
+            // Menu item Overrides with submenu Add Application
+            const popupMenuExpanderOR = new PopupMenu.PopupSubMenuMenuItem(
+                _("Overrides")
+            );
+            this.menu.addMenuItem(popupMenuExpanderOR);
+            const submenuOR = new PopupMenu.PopupMenuItem(_("Add Application"));
+            const myAppChooser = new Common.AppChooser(
+                _("Select"),
+                _("Cancel"),
+                {
+                    title: _("Select app"),
+                    modal: true,
+                    transient_for: null,
+                    hide_on_close: true,
+                    width_request: 300,
+                    height_request: 600,
+                    resizable: false,
+                }
+            );
+            submenuOR.connect(
+                "activate",
+                Common.showAddApplicationDialog.bind(
+                    this,
+                    myAppChooser,
+                    _settings
+                )
+            );
+            popupMenuExpanderOR.menu.addMenuItem(submenuOR);
+
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 const settingsItem = this.menu.addAction(_("Settings"), () =>

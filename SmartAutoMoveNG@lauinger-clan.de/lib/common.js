@@ -1,5 +1,10 @@
 "use strict";
 
+import Adw from "gi://Adw";
+import Gtk from "gi://Gtk";
+import Gio from "gi://Gio";
+import GObject from "gi://GObject";
+
 // setting constants
 export const SETTINGS_KEY_SAVED_WINDOWS = "saved-windows";
 export const SETTINGS_KEY_DEBUG_LOGGING = "debug-logging";
@@ -159,7 +164,7 @@ export function matchedWindow(
     return [swi, sw];
 }
 
-export function deleteNonOccupiedWindows(settings) {
+export function cleanupNonOccupiedWindows(settings) {
     const saved_windows = JSON.parse(
         settings.get_string(SETTINGS_KEY_SAVED_WINDOWS)
     );
@@ -176,4 +181,90 @@ export function deleteNonOccupiedWindows(settings) {
         SETTINGS_KEY_SAVED_WINDOWS,
         JSON.stringify(saved_windows)
     );
+}
+
+const errorLog = (...args) => {
+    console.error("[SmartAutoMoveNG]", "Error:", ...args);
+};
+
+const handleError = (error) => {
+    errorLog(error);
+    return null;
+};
+
+export const AppChooser = GObject.registerClass(
+    class AppChooser extends Adw.Window {
+        constructor(labelSelect, labelCancel, params = {}) {
+            super(params);
+            let adwtoolbarview = new Adw.ToolbarView();
+            let adwheaderbar = new Adw.HeaderBar();
+            adwtoolbarview.add_top_bar(adwheaderbar);
+            this.set_content(adwtoolbarview);
+            let scrolledwindow = new Gtk.ScrolledWindow();
+            adwtoolbarview.set_content(scrolledwindow);
+            this.listBox = new Gtk.ListBox({
+                selection_mode: Gtk.SelectionMode.SINGLE,
+            });
+            scrolledwindow.set_child(this.listBox);
+            this.selectBtn = new Gtk.Button({
+                label: labelSelect,
+                css_classes: ["suggested-action"],
+            });
+            this.cancelBtn = new Gtk.Button({ label: labelCancel });
+            adwheaderbar.pack_start(this.cancelBtn);
+            adwheaderbar.pack_end(this.selectBtn);
+            const apps = Gio.AppInfo.get_all();
+
+            for (const app of apps) {
+                if (app.should_show() === false) continue;
+                const row = new Adw.ActionRow();
+                row.title = app.get_display_name();
+                row.subtitle = app.get_id();
+                row.subtitleLines = 1;
+                const icon = new Gtk.Image({ gicon: app.get_icon() });
+                row.add_prefix(icon);
+                this.listBox.append(row);
+            }
+
+            this.cancelBtn.connect("clicked", () => {
+                this.close();
+            });
+        }
+
+        showChooser() {
+            return new Promise((resolve) => {
+                const signalId = this.selectBtn.connect("clicked", () => {
+                    this.close();
+                    this.selectBtn.disconnect(signalId);
+                    const row = this.listBox.get_selected_row();
+                    resolve(row);
+                });
+                this.present();
+            });
+        }
+    }
+);
+
+export async function showAddApplicationDialog(myAppChooser, settings) {
+    try {
+        const appRow = await myAppChooser.showChooser();
+        if (appRow !== null) {
+            let wsh = appRow.subtitle.slice(0, -8);
+            let o = {
+                action: 0,
+                threshold: settings.get_double(SETTINGS_KEY_MATCH_THRESHOLD),
+            };
+            let overrides = JSON.parse(
+                settings.get_string(SETTINGS_KEY_OVERRIDES)
+            );
+            if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
+            overrides[wsh].push(o);
+            settings.set_string(
+                SETTINGS_KEY_OVERRIDES,
+                JSON.stringify(overrides)
+            );
+        }
+    } catch (error) {
+        handleError(error);
+    }
 }

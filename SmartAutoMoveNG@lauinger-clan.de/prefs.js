@@ -2,75 +2,13 @@
 import Adw from "gi://Adw";
 import Gtk from "gi://Gtk";
 import Gio from "gi://Gio";
-import GObject from "gi://GObject";
+
 import {
     ExtensionPreferences,
     gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 import * as Common from "./lib/common.js";
-
-const errorLog = (...args) => {
-    console.error("[smart-auto-move]", "Error:", ...args);
-};
-
-const handleError = (error) => {
-    errorLog(error);
-    return null;
-};
-
-const AppChooser = GObject.registerClass(
-    class AppChooser extends Adw.Window {
-        constructor(params = {}) {
-            super(params);
-            let adwtoolbarview = new Adw.ToolbarView();
-            let adwheaderbar = new Adw.HeaderBar();
-            adwtoolbarview.add_top_bar(adwheaderbar);
-            this.set_content(adwtoolbarview);
-            let scrolledwindow = new Gtk.ScrolledWindow();
-            adwtoolbarview.set_content(scrolledwindow);
-            this.listBox = new Gtk.ListBox({
-                selection_mode: Gtk.SelectionMode.SINGLE,
-            });
-            scrolledwindow.set_child(this.listBox);
-            this.selectBtn = new Gtk.Button({
-                label: _("Select"),
-                css_classes: ["suggested-action"],
-            });
-            this.cancelBtn = new Gtk.Button({ label: _("Cancel") });
-            adwheaderbar.pack_start(this.cancelBtn);
-            adwheaderbar.pack_end(this.selectBtn);
-            const apps = Gio.AppInfo.get_all();
-
-            for (const app of apps) {
-                if (app.should_show() === false) continue;
-                const row = new Adw.ActionRow();
-                row.title = app.get_display_name();
-                row.subtitle = app.get_id();
-                row.subtitleLines = 1;
-                const icon = new Gtk.Image({ gicon: app.get_icon() });
-                row.add_prefix(icon);
-                this.listBox.append(row);
-            }
-
-            this.cancelBtn.connect("clicked", () => {
-                this.close();
-            });
-        }
-
-        showChooser() {
-            return new Promise((resolve) => {
-                const signalId = this.selectBtn.connect("clicked", () => {
-                    this.close();
-                    this.selectBtn.disconnect(signalId);
-                    const row = this.listBox.get_selected_row();
-                    resolve(row);
-                });
-                this.present();
-            });
-        }
-    }
-);
 
 export default class SAMPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
@@ -203,7 +141,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const overrides_add_application_widget = builder.get_object(
             "overrides-add-application-button"
         );
-        let myAppChooser = new AppChooser({
+        const myAppChooser = new Common.AppChooser(_("Select"), _("Cancel"), {
             title: _("Select app"),
             modal: true,
             transient_for: page.get_root(),
@@ -212,31 +150,10 @@ export default class SAMPreferences extends ExtensionPreferences {
             height_request: 600,
             resizable: false,
         });
-        overrides_add_application_widget.connect("activated", async () => {
-            try {
-                const appRow = await myAppChooser.showChooser();
-                if (appRow !== null) {
-                    let wsh = appRow.subtitle.slice(0, -8);
-                    let o = {
-                        action: 0,
-                        threshold: settings.get_double(
-                            Common.SETTINGS_KEY_MATCH_THRESHOLD
-                        ),
-                    };
-                    let overrides = JSON.parse(
-                        settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-                    );
-                    if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
-                    overrides[wsh].push(o);
-                    settings.set_string(
-                        Common.SETTINGS_KEY_OVERRIDES,
-                        JSON.stringify(overrides)
-                    );
-                }
-            } catch (error) {
-                handleError(error);
-            }
-        });
+        overrides_add_application_widget.connect(
+            "activated",
+            Common.showAddApplicationDialog.bind(this, myAppChooser, settings)
+        );
         this._loadOverridesSetting(
             settings,
             overrides_list_widget,
@@ -374,7 +291,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _deleteNonOccupiedWindows(settings) {
-        Common.deleteNonOccupiedWindows(settings);
+        Common.cleanupNonOccupiedWindows(settings);
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
