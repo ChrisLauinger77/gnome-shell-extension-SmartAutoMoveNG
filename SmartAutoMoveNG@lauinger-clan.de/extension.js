@@ -202,7 +202,7 @@ export default class SmartAutoMoveNG extends Extension {
     //// DEBUG UTILITIES
 
     _info(message) {
-        console.log("[smart-auto-move] " + message);
+        console.log("[SmartAutoMoveNG] " + message);
     }
 
     _debug(message) {
@@ -627,7 +627,7 @@ export default class SmartAutoMoveNG extends Extension {
             Common.SETTINGS_KEY_DEBUG_LOGGING
         );
         console.log(
-            "[smart-auto-move] handleChangedDebugLogging(): " +
+            "[SmartAutoMoveNG] handleChangedDebugLogging(): " +
                 this._debugLogging
         );
     }
@@ -670,7 +670,7 @@ export default class SmartAutoMoveNG extends Extension {
             Common.SETTINGS_KEY_FREEZE_SAVES
         );
         this._debug(
-            "[smart-auto-move] handleChangedFreezeSaves(): " + this._freezeSaves
+            "[SmartAutoMoveNG] handleChangedFreezeSaves(): " + this._freezeSaves
         );
     }
 
@@ -679,7 +679,7 @@ export default class SmartAutoMoveNG extends Extension {
             Common.SETTINGS_KEY_ACTIVATE_WORKSPACE
         );
         this._debug(
-            "[smart-auto-move] handleChangedActivateWorkspace(): " +
+            "[SmartAutoMoveNG] handleChangedActivateWorkspace(): " +
                 this._activateWorkspace
         );
     }
@@ -689,7 +689,7 @@ export default class SmartAutoMoveNG extends Extension {
             Common.SETTINGS_KEY_IGNORE_POSITION
         );
         this._debug(
-            "[smart-auto-move] handleChangedIgnorePosition(): " +
+            "[SmartAutoMoveNG] handleChangedIgnorePosition(): " +
                 this._ignorePosition
         );
     }
@@ -699,7 +699,7 @@ export default class SmartAutoMoveNG extends Extension {
             Common.SETTINGS_KEY_IGNORE_WORKSPACE
         );
         this._debug(
-            "[smart-auto-move] handleChangedIgnoreWorkspace(): " +
+            "[SmartAutoMoveNG] handleChangedIgnoreWorkspace(): " +
                 this._ignoreWorkspace
         );
     }
