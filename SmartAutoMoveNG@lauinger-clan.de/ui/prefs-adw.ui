@@ -79,7 +79,7 @@
         </child>
         <child>
           <object class="AdwSpinRow" id="startup-delay-spin">
-            <property name="title" translatable="yes">Startup Delay (ms)</property>
+            <property name="title" translatable="yes">Startup Delay (milliseconds)</property>
             <property name="subtitle" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
             <property name="tooltip-text" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
             <property name="adjustment">
