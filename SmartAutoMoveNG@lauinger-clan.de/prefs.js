@@ -85,7 +85,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const page3 = builder.get_object("smartautomove_page3");
         window.add(page3);
         const matchthresholdspin = builder.get_object("match-threshold-spin");
-        matchthresholdspin.set_climb_rate(0.1);
+        matchthresholdspin.set_climb_rate(0.05);
         matchthresholdspin.set_digits(2);
         matchthresholdspin.set_numeric(true);
         const syncfrequencyspin = builder.get_object("sync-frequency-spin");
@@ -94,6 +94,9 @@ export default class SAMPreferences extends ExtensionPreferences {
         const savefrequencyspin = builder.get_object("save-frequency-spin");
         savefrequencyspin.set_climb_rate(50);
         savefrequencyspin.set_numeric(true);
+        const startupdelayspin = builder.get_object("startup-delay-spin");
+        startupdelayspin.set_climb_rate(100);
+        startupdelayspin.set_numeric(true);
         this._rebuildOverrides = true; // do we need to rebuild the overrides list?
 
         this._general(this.getSettings(), builder);
@@ -126,6 +129,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 "save-frequency-spin",
                 "value",
             ],
+            [Common.SETTINGS_KEY_STARTUP_DELAY, "startup-delay-spin", "value"],
             [Common.SETTINGS_KEY_FREEZE_SAVES, "freeze-saves-switch", "active"],
             [
                 Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
