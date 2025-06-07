@@ -180,7 +180,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             "saved-windows-cleanup-button"
         );
         saved_windows_cleanup_widget.connect("activated", () => {
-            this._deleteNonOccupiedWindows(settings);
+            this._cleanupNonOccupiedWindows(settings);
         });
         this._loadSavedWindowsSetting(
             settings,
@@ -201,13 +201,42 @@ export default class SAMPreferences extends ExtensionPreferences {
         );
     }
 
+    _override(settings, wsh, swtitle) {
+        let o = { query: { title: swtitle }, action: 0 };
+        let overrides = JSON.parse(
+            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
+        );
+        if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
+        overrides[wsh].unshift(o);
+        settings.set_string(
+            Common.SETTINGS_KEY_OVERRIDES,
+            JSON.stringify(overrides)
+        );
+    }
+
+    _override_any(settings, wsh) {
+        let o = {
+            action: 0,
+            threshold: settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD),
+        };
+        let overrides = JSON.parse(
+            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
+        );
+        if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
+        overrides[wsh].push(o);
+        settings.set_string(
+            Common.SETTINGS_KEY_OVERRIDES,
+            JSON.stringify(overrides)
+        );
+    }
+
     _overrides(settings, builder, list_rows, page) {
         const overrides_list_objects = [];
         const overrides_list_widget = builder.get_object("overrides-listbox");
         const overrides_add_application_widget = builder.get_object(
             "overrides-add-application-button"
         );
-        let myAppChooser = new AppChooser({
+        const myAppChooser = new AppChooser({
             title: _("Select app"),
             modal: true,
             transient_for: page.get_root(),
@@ -377,8 +406,8 @@ export default class SAMPreferences extends ExtensionPreferences {
         });
     }
 
-    _deleteNonOccupiedWindows(settings) {
-        Common.deleteNonOccupiedWindows(settings);
+    _cleanupNonOccupiedWindows(settings) {
+        Common.cleanupNonOccupiedWindows(settings);
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
@@ -410,60 +439,36 @@ export default class SAMPreferences extends ExtensionPreferences {
                     );
                 });
 
-                const ignore_widget = new Gtk.Button({
+                const override_widget = new Gtk.Button({
                     valign: Gtk.Align.CENTER,
                 });
-                ignore_widget.set_tooltip_text(_("OVERRIDE"));
-                ignore_widget.set_icon_name("application-add-symbolic");
-                row.add_suffix(ignore_widget);
-                const ignore_signal = ignore_widget.connect("clicked", () => {
-                    let o = { query: { title: sw.title }, action: 0 };
-                    let overrides = JSON.parse(
-                        settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-                    );
-                    if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
-                    overrides[wsh].unshift(o);
-                    settings.set_string(
-                        Common.SETTINGS_KEY_OVERRIDES,
-                        JSON.stringify(overrides)
-                    );
-                });
+                override_widget.set_tooltip_text(_("OVERRIDE"));
+                override_widget.set_icon_name("application-add-symbolic");
+                row.add_suffix(override_widget);
+                const override_signal = override_widget.connect(
+                    "clicked",
+                    this._override.bind(this, settings, wsh, sw.title)
+                );
 
-                const ignore_any_widget = new Gtk.Button({
+                const override_any_widget = new Gtk.Button({
                     label: _("ANY"),
                     valign: Gtk.Align.CENTER,
                     css_classes: ["suggested-action"],
                 });
-                ignore_any_widget.set_tooltip_text(_("OVERRIDE (ANY)"));
-                ignore_any_widget.set_icon_name("application-add-symbolic");
-                row.add_suffix(ignore_any_widget);
-                const ignore_any_signal = ignore_any_widget.connect(
+                override_any_widget.set_tooltip_text(_("OVERRIDE (ANY)"));
+                override_any_widget.set_icon_name("application-add-symbolic");
+                row.add_suffix(override_any_widget);
+                const override_any_signal = override_any_widget.connect(
                     "clicked",
-                    () => {
-                        let o = {
-                            action: 0,
-                            threshold: settings.get_double(
-                                Common.SETTINGS_KEY_MATCH_THRESHOLD
-                            ),
-                        };
-                        let overrides = JSON.parse(
-                            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-                        );
-                        if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
-                        overrides[wsh].push(o);
-                        settings.set_string(
-                            Common.SETTINGS_KEY_OVERRIDES,
-                            JSON.stringify(overrides)
-                        );
-                    }
+                    this._override_any.bind(this, settings, wsh)
                 );
 
                 list_widget.add(row);
 
                 list_objects.push({
                     delete: [delete_signal, delete_widget],
-                    ignore: [ignore_signal, ignore_widget],
-                    ignore_any: [ignore_any_signal, ignore_any_widget],
+                    ignore: [override_signal, override_widget],
+                    ignore_any: [override_any_signal, override_any_widget],
                 });
             });
         });

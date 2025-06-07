@@ -45,7 +45,7 @@ Advanced users can also tune extension resource usage. adjust **Sync Frequency**
 
 After you've dialed in your overrides, the learning apparatus can be paused. enable **Freeze Saves** to prevent changes to Saved Windows. N.B. this lose track of windows if their titles change.
 
-### overrides
+### Overrides
 
 To create an override, visit the **Saved Windows** tab.
 
@@ -94,13 +94,13 @@ Enable debug logging:
 $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/debug-logging true
 ```
 
-set the minimum window/title match threshold to 50%:
+Set the minimum window/title match threshold to 50%:
 
 ```
 $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/match-threshold 0.5
 ```
 
-set the window synchronization (update/restore) frequency to 50ms:
+Set the window synchronization (update/restore) frequency to 50ms:
 
 ```
 $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-frequency 50
