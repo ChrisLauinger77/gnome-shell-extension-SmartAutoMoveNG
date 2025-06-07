@@ -58,7 +58,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             );
             submenu.connect(
                 "activate",
-                Common.deleteNonOccupiedWindows.bind(this, _settings)
+                Common.cleanupNonOccupiedWindows.bind(this, _settings)
             );
             popupMenuExpander.menu.addMenuItem(submenu);
             try {

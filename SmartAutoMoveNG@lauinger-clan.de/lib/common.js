@@ -159,7 +159,7 @@ export function matchedWindow(
     return [swi, sw];
 }
 
-export function deleteNonOccupiedWindows(settings) {
+export function cleanupNonOccupiedWindows(settings) {
     const saved_windows = JSON.parse(
         settings.get_string(SETTINGS_KEY_SAVED_WINDOWS)
     );
