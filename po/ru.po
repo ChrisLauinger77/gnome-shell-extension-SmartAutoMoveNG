@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 17:09+0200\n"
+"POT-Creation-Date: 2025-06-09 16:10+0200\n"
 "PO-Revision-Date: 2025-06-05 17:12+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
@@ -19,6 +19,7 @@ msgstr ""
 "X-Generator: Poedit 3.6\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:53
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:83
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:129
 msgid "Saved Windows"
@@ -34,6 +35,12 @@ msgstr "Очистка незанятых окон"
 msgid "Settings"
 msgstr "Настройки"
 
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:87
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:144
+msgid "Overrides"
+msgstr "Переопределить"
+
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:37
 msgid "Select"
 msgstr "Выбрать"
@@ -42,43 +49,43 @@ msgstr "Выбрать"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:211
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:246
 msgid "Select app"
 msgstr "Приложение"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:296
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:433
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:317
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:446
 msgid "ANY"
 msgstr "ЛЮБОЙ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:332
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:353
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 msgid "IGNORE"
 msgstr "ИГНОРИРОВАТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:333
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:354
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "RESTORE"
 msgstr "ВОССТАНОВИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:334
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:355
 msgid "DEFAULT"
 msgstr "ПО УМОЛЧАНИЮ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:357
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:401
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:378
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:422
 msgid "Delete"
 msgstr "Удалить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:396
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:417
 msgid "Not occupied"
 msgstr "Не занято"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:416
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:437
 msgid "OVERRIDE"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:437
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:450
 msgid "OVERRIDE (ANY)"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ (ЛЮБОЙ)"
 
@@ -155,11 +162,6 @@ msgstr "Режим синхронизации"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
 msgid "Default mode when synchronizing windows."
 msgstr "Режим по умолчанию при синхронизации окон."
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:144
-msgid "Overrides"
-msgstr "Переопределить"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:45
 msgid "Overrides for restored window data."
