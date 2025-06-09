@@ -75,6 +75,25 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 );
             }
         }
+
+        setMenuTitleAndHeader(savedWindowsCount, overridesCount) {
+            const stats =
+                _("Saved Windows") +
+                ":" +
+                savedWindowsCount +
+                "-" +
+                _("Overrides") +
+                ":" +
+                overridesCount;
+            this.set({
+                subtitle: stats,
+            });
+            this.menu.setHeader(
+                this._finalMenuIcon,
+                "Smart Auto Move NG",
+                stats
+            );
+        }
     }
 );
 
@@ -85,7 +104,8 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
 
             // Create the toggle menu and associate it with the indicator, being
             // sure to destroy it along with the indicator
-            this.quickSettingsItems.push(new SmartAutoMoveNGMenuToggle(Me));
+            this._SmartAutoMoveNGMenuToggle = new SmartAutoMoveNGMenuToggle(Me);
+            this.quickSettingsItems.push(this._SmartAutoMoveNGMenuToggle);
 
             this.connect("destroy", () => {
                 this.quickSettingsItems.forEach((item) => item.destroy());
@@ -103,10 +123,10 @@ export default class SmartAutoMoveNG extends Extension {
     enable() {
         this._activeWindows = new Map();
         this._settings = this.getSettings();
+        this._indicator = new SmartAutoMoveNGIndicator(this);
         this._initializeSettings();
 
         this._debug("enable()");
-
         this._restoreSettings();
         // timeout sync & save
 
@@ -115,8 +135,10 @@ export default class SmartAutoMoveNG extends Extension {
         this._timeoutSaveSignal = null;
         this._handleTimeoutSave();
 
-        this._indicator = new SmartAutoMoveNGIndicator(this);
         this._settingSignals = [];
+        this._savedWindowsCount = 0;
+        this._overridesCount = 0;
+        this._updateStats();
 
         const signalMap = [
             [
@@ -186,6 +208,8 @@ export default class SmartAutoMoveNG extends Extension {
             this._settings.disconnect(signal);
         }, this);
         this._settingSignals = null;
+        this._savedWindowsCount = null;
+        this._overridesCount = null;
 
         this._saveSettings();
         this._cleanupSettings();
@@ -704,9 +728,19 @@ export default class SmartAutoMoveNG extends Extension {
         );
     }
 
+    _updateStats() {
+        this._savedWindowsCount = Object.keys(this._savedWindows).length;
+        this._overridesCount = Object.keys(this._overrides).length;
+    }
+
     _handleChangedOverrides() {
         this._overrides = JSON.parse(
             this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
+        );
+        this._updateStats();
+        this._indicator._SmartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
+            this._savedWindowsCount,
+            this._overridesCount
         );
         this._debug(
             "handleChangedOverrides(): " + JSON.stringify(this._overrides)
@@ -716,6 +750,11 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedSavedWindows() {
         this._savedWindows = JSON.parse(
             this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
+        );
+        this._updateStats();
+        this._indicator._SmartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
+            this._savedWindowsCount,
+            this._overridesCount
         );
         this._debug(
             "handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows)
