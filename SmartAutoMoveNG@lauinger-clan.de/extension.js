@@ -104,8 +104,8 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
 
             // Create the toggle menu and associate it with the indicator, being
             // sure to destroy it along with the indicator
-            this._SmartAutoMoveNGMenuToggle = new SmartAutoMoveNGMenuToggle(Me);
-            this.quickSettingsItems.push(this._SmartAutoMoveNGMenuToggle);
+            this._smartAutoMoveNGMenuToggle = new SmartAutoMoveNGMenuToggle(Me);
+            this.quickSettingsItems.push(this._smartAutoMoveNGMenuToggle);
 
             this.connect("destroy", () => {
                 this.quickSettingsItems.forEach((item) => item.destroy());
@@ -114,6 +114,10 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
             // Add the indicator to the panel and the toggle to the menu
             QuickSettingsMenu._indicators.add_child(this);
             QuickSettingsMenu.addExternalIndicator(this);
+        }
+
+        get smartAutoMoveNGMenuToggle() {
+            return this._smartAutoMoveNGMenuToggle;
         }
     }
 );
@@ -738,7 +742,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
         );
         this._updateStats();
-        this._indicator._SmartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
+        this._indicator.smartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
             this._savedWindowsCount,
             this._overridesCount
         );
@@ -752,7 +756,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
         );
         this._updateStats();
-        this._indicator._SmartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
+        this._indicator.smartAutoMoveNGMenuToggle.setMenuTitleAndHeader(
             this._savedWindowsCount,
             this._overridesCount
         );
