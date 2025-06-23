@@ -3,10 +3,7 @@ import Adw from "gi://Adw";
 import Gtk from "gi://Gtk";
 import Gio from "gi://Gio";
 import GObject from "gi://GObject";
-import {
-    ExtensionPreferences,
-    gettext as _,
-} from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
+import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 import * as Common from "./lib/common.js";
 
@@ -114,44 +111,16 @@ export default class SAMPreferences extends ExtensionPreferences {
 
     _general(settings, builder) {
         const generalBindings = [
-            [
-                Common.SETTINGS_KEY_DEBUG_LOGGING,
-                "debug-logging-switch",
-                "active",
-            ],
+            [Common.SETTINGS_KEY_DEBUG_LOGGING, "debug-logging-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
-            [
-                Common.SETTINGS_KEY_MATCH_THRESHOLD,
-                "match-threshold-spin",
-                "value",
-            ],
-            [
-                Common.SETTINGS_KEY_SYNC_FREQUENCY,
-                "sync-frequency-spin",
-                "value",
-            ],
-            [
-                Common.SETTINGS_KEY_SAVE_FREQUENCY,
-                "save-frequency-spin",
-                "value",
-            ],
+            [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],
+            [Common.SETTINGS_KEY_SYNC_FREQUENCY, "sync-frequency-spin", "value"],
+            [Common.SETTINGS_KEY_SAVE_FREQUENCY, "save-frequency-spin", "value"],
             [Common.SETTINGS_KEY_STARTUP_DELAY, "startup-delay-spin", "value"],
             [Common.SETTINGS_KEY_FREEZE_SAVES, "freeze-saves-switch", "active"],
-            [
-                Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
-                "activate-workspace-switch",
-                "active",
-            ],
-            [
-                Common.SETTINGS_KEY_IGNORE_POSITION,
-                "ignore-position-switch",
-                "active",
-            ],
-            [
-                Common.SETTINGS_KEY_IGNORE_WORKSPACE,
-                "ignore-workspace-switch",
-                "active",
-            ],
+            [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, "activate-workspace-switch", "active"],
+            [Common.SETTINGS_KEY_IGNORE_POSITION, "ignore-position-switch", "active"],
+            [Common.SETTINGS_KEY_IGNORE_WORKSPACE, "ignore-workspace-switch", "active"],
         ];
 
         generalBindings.forEach(([key, widgetId, property]) => {
@@ -167,57 +136,30 @@ export default class SAMPreferences extends ExtensionPreferences {
                     widget[property] = settings.get_enum(key);
                 });
             } else {
-                settings.bind(
-                    key,
-                    widget,
-                    property,
-                    Gio.SettingsBindFlags.DEFAULT
-                );
+                settings.bind(key, widget, property, Gio.SettingsBindFlags.DEFAULT);
             }
         });
     }
 
     _savedwindows(settings, builder, list_rows) {
-        const saved_windows_list_widget = builder.get_object(
-            "saved-windows-listbox"
-        );
+        const saved_windows_list_widget = builder.get_object("saved-windows-listbox");
         const saved_windows_list_objects = [];
-        const saved_windows_cleanup_widget = builder.get_object(
-            "saved-windows-cleanup-button"
-        );
+        const saved_windows_cleanup_widget = builder.get_object("saved-windows-cleanup-button");
         saved_windows_cleanup_widget.connect("activated", () => {
             this._cleanupNonOccupiedWindows(settings);
         });
-        this._loadSavedWindowsSetting(
-            settings,
-            saved_windows_list_widget,
-            saved_windows_list_objects,
-            list_rows
-        );
-        this.changedSavedWindowsSignal = settings.connect(
-            "changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS,
-            () => {
-                this._loadSavedWindowsSetting(
-                    settings,
-                    saved_windows_list_widget,
-                    saved_windows_list_objects,
-                    list_rows
-                );
-            }
-        );
+        this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows);
+        this.changedSavedWindowsSignal = settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
+            this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows);
+        });
     }
 
     _override(settings, wsh, swtitle) {
         let o = { query: { title: swtitle }, action: 0 };
-        let overrides = JSON.parse(
-            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-        );
+        let overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].unshift(o);
-        settings.set_string(
-            Common.SETTINGS_KEY_OVERRIDES,
-            JSON.stringify(overrides)
-        );
+        settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
     }
 
     _override_any(settings, wsh) {
@@ -225,23 +167,16 @@ export default class SAMPreferences extends ExtensionPreferences {
             action: 0,
             threshold: settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD),
         };
-        let overrides = JSON.parse(
-            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-        );
+        let overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].push(o);
-        settings.set_string(
-            Common.SETTINGS_KEY_OVERRIDES,
-            JSON.stringify(overrides)
-        );
+        settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
     }
 
     _overrides(settings, builder, list_rows, page) {
         const overrides_list_objects = [];
         const overrides_list_widget = builder.get_object("overrides-listbox");
-        const overrides_add_application_widget = builder.get_object(
-            "overrides-add-application-button"
-        );
+        const overrides_add_application_widget = builder.get_object("overrides-add-application-button");
         const myAppChooser = new AppChooser({
             title: _("Select app"),
             modal: true,
@@ -262,23 +197,10 @@ export default class SAMPreferences extends ExtensionPreferences {
                 handleError(error);
             }
         });
-        this._loadOverridesSetting(
-            settings,
-            overrides_list_widget,
-            overrides_list_objects,
-            list_rows
-        );
-        this.changedOverridesSignal = settings.connect(
-            "changed::" + Common.SETTINGS_KEY_OVERRIDES,
-            () => {
-                this._loadOverridesSetting(
-                    settings,
-                    overrides_list_widget,
-                    overrides_list_objects,
-                    list_rows
-                );
-            }
-        );
+        this._loadOverridesSetting(settings, overrides_list_widget, overrides_list_objects, list_rows);
+        this.changedOverridesSignal = settings.connect("changed::" + Common.SETTINGS_KEY_OVERRIDES, () => {
+            this._loadOverridesSetting(settings, overrides_list_widget, overrides_list_objects, list_rows);
+        });
     }
 
     _clearListWidget(list_widget, list_objects, list_rows) {
@@ -300,9 +222,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             this._rebuildOverrides = true;
             return;
         }
-        const overrides = JSON.parse(
-            settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-        );
+        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         this._clearListWidget(list_widget, list_objects, list_rows);
         Object.keys(overrides).forEach((wsh) => {
             const adwexprow = new Adw.ExpanderRow();
@@ -321,33 +241,21 @@ export default class SAMPreferences extends ExtensionPreferences {
                 row.set_title(query);
                 adwexprow.add_row(row);
 
-                const threshold_widget = Gtk.SpinButton.new_with_range(
-                    0,
-                    1,
-                    0.01
-                );
+                const threshold_widget = Gtk.SpinButton.new_with_range(0, 1, 0.01);
                 threshold_widget.set_numeric(true);
                 threshold_widget.set_digits(2);
                 threshold_widget.set_climb_rate(0.1);
                 threshold_widget.set_valign(Gtk.Align.CENTER);
                 row.add_suffix(threshold_widget);
-                if (o.query !== undefined)
-                    threshold_widget.set_sensitive(false);
-                if (o.threshold !== undefined)
-                    threshold_widget.set_value(o.threshold);
-                const threshold_signal = threshold_widget.connect(
-                    "value-changed",
-                    (spin) => {
-                        let threshold = spin.get_value();
-                        this._rebuildOverrides = false;
-                        if (threshold <= 0.01) threshold = undefined;
-                        wshos[oi].threshold = threshold;
-                        settings.set_string(
-                            Common.SETTINGS_KEY_OVERRIDES,
-                            JSON.stringify(overrides)
-                        );
-                    }
-                );
+                if (o.query !== undefined) threshold_widget.set_sensitive(false);
+                if (o.threshold !== undefined) threshold_widget.set_value(o.threshold);
+                const threshold_signal = threshold_widget.connect("value-changed", (spin) => {
+                    let threshold = spin.get_value();
+                    this._rebuildOverrides = false;
+                    if (threshold <= 0.01) threshold = undefined;
+                    wshos[oi].threshold = threshold;
+                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
+                });
 
                 const action_widget = new Gtk.ComboBoxText();
                 action_widget.append_text(_("IGNORE"));
@@ -357,19 +265,13 @@ export default class SAMPreferences extends ExtensionPreferences {
                 row.add_suffix(action_widget);
                 if (o.action !== undefined) action_widget.set_active(o.action);
                 else action_widget.set_active(2);
-                let action_signal = action_widget.connect(
-                    "changed",
-                    (combo) => {
-                        let action = combo.get_active();
-                        this._rebuildOverrides = false;
-                        if (action === 2) action = undefined;
-                        wshos[oi].action = action;
-                        settings.set_string(
-                            Common.SETTINGS_KEY_OVERRIDES,
-                            JSON.stringify(overrides)
-                        );
-                    }
-                );
+                let action_signal = action_widget.connect("changed", (combo) => {
+                    let action = combo.get_active();
+                    this._rebuildOverrides = false;
+                    if (action === 2) action = undefined;
+                    wshos[oi].action = action;
+                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
+                });
 
                 const delete_widget = new Gtk.Button({
                     valign: Gtk.Align.CENTER,
@@ -381,10 +283,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 let delete_signal = delete_widget.connect("clicked", () => {
                     wshos.splice(oi, 1);
                     if (wshos.length < 1) delete overrides[wsh];
-                    settings.set_string(
-                        Common.SETTINGS_KEY_OVERRIDES,
-                        JSON.stringify(overrides)
-                    );
+                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
                 });
 
                 list_widget.add(row);
@@ -403,9 +302,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
-        const saved_windows = JSON.parse(
-            settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
-        );
+        const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
         Object.keys(saved_windows).forEach((wsh) => {
             let sws = saved_windows[wsh];
@@ -425,10 +322,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 const delete_signal = delete_widget.connect("clicked", () => {
                     sws.splice(swi, 1);
                     if (sws.length < 1) delete saved_windows[wsh];
-                    settings.set_string(
-                        Common.SETTINGS_KEY_SAVED_WINDOWS,
-                        JSON.stringify(saved_windows)
-                    );
+                    settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
                 });
 
                 const override_widget = new Gtk.Button({
