@@ -7,15 +7,6 @@ import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/
 
 import * as Common from "./lib/common.js";
 
-const errorLog = (...args) => {
-    console.error("[SmartAutoMoveNG]", "Error:", ...args);
-};
-
-const handleError = (error) => {
-    errorLog(error);
-    return null;
-};
-
 const AppChooser = GObject.registerClass(
     class AppChooser extends Adw.Window {
         constructor(params = {}) {
@@ -187,14 +178,17 @@ export default class SAMPreferences extends ExtensionPreferences {
             resizable: false,
         });
         overrides_add_application_widget.connect("activated", async () => {
-            try {
-                const appRow = await myAppChooser.showChooser();
-                if (appRow !== null) {
-                    let wsh = appRow.subtitle.slice(0, -8);
-                    this._override_any(settings, wsh);
-                }
-            } catch (error) {
-                handleError(error);
+            const errorLog = (...args) => {
+                this.getLogger().error("Error:", ...args);
+            };
+            const handleError = (error) => {
+                errorLog(error);
+                return null;
+            };
+            const appRow = await myAppChooser.showChooser().catch(handleError);
+            if (appRow !== null) {
+                let wsh = appRow.subtitle.slice(0, -8);
+                this._override_any(settings, wsh);
             }
         });
         this._loadOverridesSetting(settings, overrides_list_widget, overrides_list_objects, list_rows);

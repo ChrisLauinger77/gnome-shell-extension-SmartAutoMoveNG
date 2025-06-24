@@ -51,7 +51,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 settingsItem.visible = Main.sessionMode.allowSettings;
                 this.menu._settingsActions[Me.uuid] = settingsItem;
             } catch (error) {
-                console.error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
+                this.getLogger().error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
             }
         }
 
@@ -162,7 +162,7 @@ export default class SmartAutoMoveNG extends Extension {
     //// DEBUG UTILITIES
 
     _info(message) {
-        console.log("[SmartAutoMoveNG] " + message);
+        this.getLogger().log(message);
     }
 
     _debug(message) {
@@ -519,7 +519,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _handleChangedDebugLogging() {
         this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
-        console.log("[SmartAutoMoveNG] handleChangedDebugLogging(): " + this._debugLogging);
+        this.getLogger().log("[SmartAutoMoveNG] handleChangedDebugLogging(): " + this._debugLogging);
     }
 
     _handleChangedStartupDelay() {
