@@ -92,6 +92,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         startupdelayspin.set_climb_rate(100);
         startupdelayspin.set_numeric(true);
         this._rebuildOverrides = true; // do we need to rebuild the overrides list?
+        this._addResetButton(window, this.getSettings());
 
         this._general(this.getSettings(), builder);
         const savedwindowsRows = [];
@@ -352,5 +353,59 @@ export default class SAMPreferences extends ExtensionPreferences {
                 });
             });
         });
+    }
+
+    _resetSettings(settings, strKey) {
+        if (strKey === "all") {
+            // List all keys you want to reset
+            const keys = [
+                Common.SETTINGS_KEY_DEBUG_LOGGING,
+                Common.SETTINGS_KEY_SYNC_MODE,
+                Common.SETTINGS_KEY_MATCH_THRESHOLD,
+                Common.SETTINGS_KEY_SYNC_FREQUENCY,
+                Common.SETTINGS_KEY_SAVE_FREQUENCY,
+                Common.SETTINGS_KEY_STARTUP_DELAY,
+                Common.SETTINGS_KEY_FREEZE_SAVES,
+                Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
+                Common.SETTINGS_KEY_IGNORE_POSITION,
+                Common.SETTINGS_KEY_IGNORE_WORKSPACE,
+            ];
+            keys.forEach((key) => {
+                if (settings.is_writable(key)) {
+                    settings.reset(key);
+                }
+            });
+        } else if (settings.is_writable(strKey)) {
+            settings.reset(strKey);
+        }
+    }
+
+    _findWidgetByType(parent, type) {
+        for (const child of [...parent]) {
+            if (child instanceof type) return child;
+
+            const match = this._findWidgetByType(child, type);
+            if (match) return match;
+        }
+        return null;
+    }
+
+    _addResetButton(window, settings) {
+        const button = new Gtk.Button({
+            label: _("Reset Settings"),
+            icon_name: "edit-clear",
+            css_classes: ["destructive-action"],
+            vexpand: true,
+            valign: Gtk.Align.END,
+        });
+        button.set_tooltip_text(_("Reset all settings to default values"));
+        button.connect("clicked", () => {
+            this._resetSettings(settings, "all");
+        });
+
+        const header = this._findWidgetByType(window.get_content(), Adw.HeaderBar);
+        if (header) {
+            header.pack_start(button);
+        }
     }
 }
