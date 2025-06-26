@@ -56,7 +56,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
         }
 
         setMenuTitleAndHeader(savedWindowsCount, overridesCount) {
-            const stats = _("Saved Windows") + ":" + savedWindowsCount + "-" + _("Overrides") + ":" + overridesCount;
+            const stats = `${savedWindowsCount} ${_("Saved Windows")}-${overridesCount} ${_("Overrides")}`;
             this.set({
                 subtitle: stats,
             });
