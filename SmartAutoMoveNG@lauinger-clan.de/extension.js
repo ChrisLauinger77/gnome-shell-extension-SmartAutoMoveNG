@@ -283,7 +283,7 @@ export default class SmartAutoMoveNG extends Extension {
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
             workspace: win.get_workspace().index(),
-            maximized: win.get_maximized(),
+            maximized: win.is_maximized(),
             fullscreen: win.is_fullscreen(),
             above: win.is_above(),
             monitor: win.get_monitor(),
