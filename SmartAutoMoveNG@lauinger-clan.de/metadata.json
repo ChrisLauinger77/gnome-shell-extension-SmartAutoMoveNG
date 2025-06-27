@@ -11,5 +11,5 @@
     "original-author": "khimaros",
     "gettext-domain": "SmartAutoMoveNG",
     "version-name": "49.0",
-    "shell-version": ["48", "49"]
+    "shell-version": ["49"]
 }
