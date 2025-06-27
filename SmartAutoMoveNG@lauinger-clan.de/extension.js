@@ -7,10 +7,7 @@ import Gio from "gi://Gio";
 import GObject from "gi://GObject";
 import St from "gi://St";
 
-import {
-    Extension,
-    gettext as _,
-} from "resource:///org/gnome/shell/extensions/extension.js";
+import { Extension, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
@@ -35,64 +32,35 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             this._iconTheme = new St.IconTheme();
             if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
                 const IconPath = "/icons/";
-                this._finalMenuIcon = Gio.icon_new_for_string(
-                    `${Me.path}${IconPath}${SmartAutoMoveNGIcon}.svg`
-                );
+                this._finalMenuIcon = Gio.icon_new_for_string(`${Me.path}${IconPath}${SmartAutoMoveNGIcon}.svg`);
             }
             this.gicon = this._finalMenuIcon;
             this.menu.setHeader(this._finalMenuIcon, "Smart Auto Move NG", "");
 
-            _settings.bind(
-                "freeze-saves",
-                this,
-                "checked",
-                Gio.SettingsBindFlags.DEFAULT
-            );
+            _settings.bind("freeze-saves", this, "checked", Gio.SettingsBindFlags.DEFAULT);
             // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
-            const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(
-                _("Saved Windows")
-            );
+            const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(_("Saved Windows"));
             this.menu.addMenuItem(popupMenuExpander);
-            const submenu = new PopupMenu.PopupMenuItem(
-                _("Cleanup Non-occupied Windows")
-            );
-            submenu.connect(
-                "activate",
-                Common.cleanupNonOccupiedWindows.bind(this, _settings)
-            );
+            const submenu = new PopupMenu.PopupMenuItem(_("Cleanup Non-occupied Windows"));
+            submenu.connect("activate", Common.cleanupNonOccupiedWindows.bind(this, _settings));
             popupMenuExpander.menu.addMenuItem(submenu);
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-                const settingsItem = this.menu.addAction(_("Settings"), () =>
-                    Me._openPreferences()
-                );
+                const settingsItem = this.menu.addAction(_("Settings"), () => Me._openPreferences());
 
                 settingsItem.visible = Main.sessionMode.allowSettings;
                 this.menu._settingsActions[Me.uuid] = settingsItem;
             } catch (error) {
-                console.error(
-                    `Error in SmartAutoMoveNGMenuToggle constructor: ${error}`
-                );
+                this.getLogger().error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
             }
         }
 
         setMenuTitleAndHeader(savedWindowsCount, overridesCount) {
-            const stats =
-                _("Saved Windows") +
-                ":" +
-                savedWindowsCount +
-                "-" +
-                _("Overrides") +
-                ":" +
-                overridesCount;
+            const stats = `${savedWindowsCount} ${_("Saved Windows")}-${overridesCount} ${_("Overrides")}`;
             this.set({
                 subtitle: stats,
             });
-            this.menu.setHeader(
-                this._finalMenuIcon,
-                "Smart Auto Move NG",
-                stats
-            );
+            this.menu.setHeader(this._finalMenuIcon, "Smart Auto Move NG", stats);
         }
     }
 );
@@ -145,54 +113,18 @@ export default class SmartAutoMoveNG extends Extension {
         this._updateStats();
 
         const signalMap = [
-            [
-                Common.SETTINGS_KEY_DEBUG_LOGGING,
-                this._handleChangedDebugLogging.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_STARTUP_DELAY,
-                this._handleChangedStartupDelay.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_SYNC_FREQUENCY,
-                this._handleChangedSyncFrequency.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_SAVE_FREQUENCY,
-                this._handleChangedSaveFrequency.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_MATCH_THRESHOLD,
-                this._handleChangedMatchThreshold.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_SYNC_MODE,
-                this._handleChangedSyncMode.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_FREEZE_SAVES,
-                this._handleChangedFreezeSaves.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
-                this._handleChangedActivateWorkspace.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_IGNORE_POSITION,
-                this._handleChangedIgnorePosition.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_IGNORE_WORKSPACE,
-                this._handleChangedIgnoreWorkspace.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_OVERRIDES,
-                this._handleChangedOverrides.bind(this),
-            ],
-            [
-                Common.SETTINGS_KEY_SAVED_WINDOWS,
-                this._handleChangedSavedWindows.bind(this),
-            ],
+            [Common.SETTINGS_KEY_DEBUG_LOGGING, this._handleChangedDebugLogging.bind(this)],
+            [Common.SETTINGS_KEY_STARTUP_DELAY, this._handleChangedStartupDelay.bind(this)],
+            [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._handleChangedSyncFrequency.bind(this)],
+            [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._handleChangedSaveFrequency.bind(this)],
+            [Common.SETTINGS_KEY_MATCH_THRESHOLD, this._handleChangedMatchThreshold.bind(this)],
+            [Common.SETTINGS_KEY_SYNC_MODE, this._handleChangedSyncMode.bind(this)],
+            [Common.SETTINGS_KEY_FREEZE_SAVES, this._handleChangedFreezeSaves.bind(this)],
+            [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, this._handleChangedActivateWorkspace.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_POSITION, this._handleChangedIgnorePosition.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._handleChangedIgnoreWorkspace.bind(this)],
+            [Common.SETTINGS_KEY_OVERRIDES, this._handleChangedOverrides.bind(this)],
+            [Common.SETTINGS_KEY_SAVED_WINDOWS, this._handleChangedSavedWindows.bind(this)],
         ];
         for (const [key, handler] of signalMap) {
             const id = this._settings.connect("changed::" + key, handler);
@@ -229,22 +161,16 @@ export default class SmartAutoMoveNG extends Extension {
 
     //// DEBUG UTILITIES
 
-    _info(message) {
-        console.log("[SmartAutoMoveNG] " + message);
-    }
-
     _debug(message) {
         if (this._debugLogging) {
-            this._info(message);
+            this.getLogger().log(message);
         }
     }
 
     _dumpSavedWindows() {
         Object.keys(this._savedWindows).forEach((wsh) => {
             let sws = this._savedWindows[wsh];
-            this._debug(
-                "dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws)
-            );
+            this._debug("_dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws));
         });
     }
 
@@ -256,7 +182,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _dumpWindow(win) {
-        this._debug("dumpWindow(): " + this._windowRepr(win));
+        this._debug("_dumpWindow(): " + this._windowRepr(win));
     }
 
     _dumpState() {
@@ -299,7 +225,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _restoreSettings() {
-        this._debug("restoreSettings()");
+        this._debug("_restoreSettings()");
         this._handleChangedDebugLogging();
         this._handleChangedStartupDelay();
         this._handleChangedSyncFrequency();
@@ -316,68 +242,33 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _saveSettings() {
-        this._settings.set_boolean(
-            Common.SETTINGS_KEY_DEBUG_LOGGING,
-            this._debugLogging
-        );
-        this._settings.set_int(
-            Common.SETTINGS_KEY_STARTUP_DELAY,
-            this._startupDelayMs
-        );
-        this._settings.set_int(
-            Common.SETTINGS_KEY_SYNC_FREQUENCY,
-            this._syncFrequencyMs
-        );
-        this._settings.set_int(
-            Common.SETTINGS_KEY_SAVE_FREQUENCY,
-            this._saveFrequencyMs
-        );
-        this._settings.set_double(
-            Common.SETTINGS_KEY_MATCH_THRESHOLD,
-            this._matchThreshold
-        );
+        this._settings.set_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING, this._debugLogging);
+        this._settings.set_int(Common.SETTINGS_KEY_STARTUP_DELAY, this._startupDelayMs);
+        this._settings.set_int(Common.SETTINGS_KEY_SYNC_FREQUENCY, this._syncFrequencyMs);
+        this._settings.set_int(Common.SETTINGS_KEY_SAVE_FREQUENCY, this._saveFrequencyMs);
+        this._settings.set_double(Common.SETTINGS_KEY_MATCH_THRESHOLD, this._matchThreshold);
         this._settings.set_enum(Common.SETTINGS_KEY_SYNC_MODE, this._syncMode);
-        this._settings.set_boolean(
-            Common.SETTINGS_KEY_FREEZE_SAVES,
-            this._freezeSaves
-        );
-        this._settings.set_boolean(
-            Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
-            this._activateWorkspace
-        );
-        this._settings.set_boolean(
-            Common.SETTINGS_KEY_IGNORE_POSITION,
-            this._ignorePosition
-        );
-        this._settings.set_boolean(
-            Common.SETTINGS_KEY_IGNORE_WORKSPACE,
-            this._ignoreWorkspace
-        );
+        this._settings.set_boolean(Common.SETTINGS_KEY_FREEZE_SAVES, this._freezeSaves);
+        this._settings.set_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, this._activateWorkspace);
+        this._settings.set_boolean(Common.SETTINGS_KEY_IGNORE_POSITION, this._ignorePosition);
+        this._settings.set_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._ignoreWorkspace);
 
         let newOverrides = JSON.stringify(this._overrides);
         this._settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
 
-        let oldSavedWindows = this._settings.get_string(
-            Common.SETTINGS_KEY_SAVED_WINDOWS
-        );
+        let oldSavedWindows = this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS);
         let newSavedWindows = JSON.stringify(this._savedWindows);
         if (oldSavedWindows === newSavedWindows) return;
-        this._debug("saveSettings()");
+        this._debug("_saveSettings()");
         this._dumpSavedWindows();
-        this._settings.set_string(
-            Common.SETTINGS_KEY_SAVED_WINDOWS,
-            newSavedWindows
-        );
+        this._settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
     }
 
     //// WINDOW UTILITIES
 
     _windowReady(win) {
         let win_rect = win.get_frame_rect();
-        return (
-            !(win_rect.width === 0 && win_rect.height === 0) &&
-            !(win_rect.x === 0 && win_rect.y === 0)
-        );
+        return !(win_rect.width === 0 && win_rect.height === 0) && !(win_rect.x === 0 && win_rect.y === 0);
     }
 
     // https://gjs-docs-experimental.web.app/meta-10/Window/
@@ -436,30 +327,21 @@ export default class SmartAutoMoveNG extends Extension {
     _pushSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
         if (wsh === null) return false;
-        if (!Object.hasOwn(this._savedWindows, wsh))
-            this._savedWindows[wsh] = [];
+        if (!Object.hasOwn(this._savedWindows, wsh)) this._savedWindows[wsh] = [];
         let sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);
-        this._debug("pushSavedWindow() - pushed: " + JSON.stringify(sw));
+        this._debug("_pushSavedWindow() - pushed: " + JSON.stringify(sw));
         return true;
     }
 
     _updateSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
-        let [swi] = Common.findSavedWindow(
-            this._savedWindows,
-            wsh,
-            { hash: this._windowHash(win) },
-            1.0
-        );
+        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win) }, 1.0);
         if (swi === undefined) return false;
         let sw = this._windowData(win);
-        if (this._windowDataEqual(this._savedWindows[wsh][swi], sw))
-            return true;
+        if (this._windowDataEqual(this._savedWindows[wsh][swi], sw)) return true;
         this._savedWindows[wsh][swi] = sw;
-        this._debug(
-            "updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw)
-        );
+        this._debug("_updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw));
         return true;
     }
 
@@ -481,8 +363,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         let override = Common.findOverride(this._overrides, wsh, sw, threshold);
 
-        if (override !== undefined && override.action !== undefined)
-            action = override.action;
+        if (override !== undefined && override.action !== undefined) action = override.action;
 
         return action;
     }
@@ -513,8 +394,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (sw.above) win.make_above();
 
-        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace)
-            ws.activate(true);
+        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
 
         if (sw.on_all_workspaces) win.stick();
 
@@ -562,12 +442,7 @@ export default class SmartAutoMoveNG extends Extension {
             if (!(sw.x === nsw.x && sw.y === nsw.y)) return true;
         }
 
-        this._debug(
-            "restoreWindow() - moved: " +
-                pWinRepr +
-                " => " +
-                JSON.stringify(nsw)
-        );
+        this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
 
         this._savedWindows[wsh][swi] = nsw;
 
@@ -587,9 +462,7 @@ export default class SmartAutoMoveNG extends Extension {
             sws.forEach((sw) => {
                 if (sw.occupied && !found.has(sw.hash)) {
                     sw.occupied = false;
-                    this._debug(
-                        "cleanupWindows() - deoccupy: " + JSON.stringify(sw)
-                    );
+                    this._debug("_cleanupWindows() - deoccupy: " + JSON.stringify(sw));
                 }
             });
         });
@@ -597,18 +470,10 @@ export default class SmartAutoMoveNG extends Extension {
 
     _shouldSkipWindow(win) {
         this._debug(
-            "shouldSkipWindow() " +
-                win.get_title() +
-                " " +
-                win.is_skip_taskbar() +
-                " " +
-                win.get_window_type()
+            "_shouldSkipWindow() " + win.get_title() + " " + win.is_skip_taskbar() + " " + win.get_window_type()
         );
 
-        return (
-            win.is_skip_taskbar() ||
-            win.get_window_type() !== Meta.WindowType.NORMAL
-        );
+        return win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
     }
 
     _syncWindows() {
@@ -625,8 +490,7 @@ export default class SmartAutoMoveNG extends Extension {
     //// SIGNAL HANDLERS
 
     _handleTimeoutSave() {
-        if (this._timeoutSaveSignal !== null)
-            GLib.Source.remove(this._timeoutSaveSignal);
+        if (this._timeoutSaveSignal !== null) GLib.Source.remove(this._timeoutSaveSignal);
         this._timeoutSaveSignal = null;
         this._saveSettings();
         this._timeoutSaveSignal = GLib.timeout_add(
@@ -638,8 +502,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _handleTimeoutSync() {
-        if (this._timeoutSyncSignal !== null)
-            GLib.Source.remove(this._timeoutSyncSignal);
+        if (this._timeoutSyncSignal !== null) GLib.Source.remove(this._timeoutSyncSignal);
         this._timeoutSyncSignal = null;
         this._syncWindows();
         this._timeoutSyncSignal = GLib.timeout_add(
@@ -651,85 +514,53 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _handleChangedDebugLogging() {
-        this._debugLogging = this._settings.get_boolean(
-            Common.SETTINGS_KEY_DEBUG_LOGGING
-        );
-        console.log(
-            "[SmartAutoMoveNG] handleChangedDebugLogging(): " +
-                this._debugLogging
-        );
+        this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
+        this.getLogger().log("handleChangedDebugLogging(): " + this._debugLogging);
     }
 
     _handleChangedStartupDelay() {
-        this._startupDelayMs = this._settings.get_int(
-            Common.SETTINGS_KEY_STARTUP_DELAY
-        );
-        this._debug("handleChangedStartupDelay(): " + this._startupDelayMs);
+        this._startupDelayMs = this._settings.get_int(Common.SETTINGS_KEY_STARTUP_DELAY);
+        this._debug("_handleChangedStartupDelay(): " + this._startupDelayMs);
     }
 
     _handleChangedSyncFrequency() {
-        this._syncFrequencyMs = this._settings.get_int(
-            Common.SETTINGS_KEY_SYNC_FREQUENCY
-        );
-        this._debug("handleChangedSyncFrequency(): " + this._syncFrequencyMs);
+        this._syncFrequencyMs = this._settings.get_int(Common.SETTINGS_KEY_SYNC_FREQUENCY);
+        this._debug("_handleChangedSyncFrequency(): " + this._syncFrequencyMs);
     }
 
     _handleChangedSaveFrequency() {
-        this._saveFrequencyMs = this._settings.get_int(
-            Common.SETTINGS_KEY_SAVE_FREQUENCY
-        );
-        this._debug("handleChangedSaveFrequency(): " + this._saveFrequencyMs);
+        this._saveFrequencyMs = this._settings.get_int(Common.SETTINGS_KEY_SAVE_FREQUENCY);
+        this._debug("_handleChangedSaveFrequency(): " + this._saveFrequencyMs);
     }
 
     _handleChangedMatchThreshold() {
-        this._matchThreshold = this._settings.get_double(
-            Common.SETTINGS_KEY_MATCH_THRESHOLD
-        );
-        this._debug("handleChangedMatchThreshold(): " + this._matchThreshold);
+        this._matchThreshold = this._settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD);
+        this._debug("_handleChangedMatchThreshold(): " + this._matchThreshold);
     }
 
     _handleChangedSyncMode() {
         this._syncMode = this._settings.get_enum(Common.SETTINGS_KEY_SYNC_MODE);
-        this._debug("handleChangedSyncMode(): " + this._syncMode);
+        this._debug("_handleChangedSyncMode(): " + this._syncMode);
     }
 
     _handleChangedFreezeSaves() {
-        this._freezeSaves = this._settings.get_boolean(
-            Common.SETTINGS_KEY_FREEZE_SAVES
-        );
-        this._debug(
-            "[SmartAutoMoveNG] handleChangedFreezeSaves(): " + this._freezeSaves
-        );
+        this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
+        this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
     }
 
     _handleChangedActivateWorkspace() {
-        this._activateWorkspace = this._settings.get_boolean(
-            Common.SETTINGS_KEY_ACTIVATE_WORKSPACE
-        );
-        this._debug(
-            "[SmartAutoMoveNG] handleChangedActivateWorkspace(): " +
-                this._activateWorkspace
-        );
+        this._activateWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE);
+        this._debug("_handleChangedActivateWorkspace(): " + this._activateWorkspace);
     }
 
     _handleChangedIgnorePosition() {
-        this._ignorePosition = this._settings.get_boolean(
-            Common.SETTINGS_KEY_IGNORE_POSITION
-        );
-        this._debug(
-            "[SmartAutoMoveNG] handleChangedIgnorePosition(): " +
-                this._ignorePosition
-        );
+        this._ignorePosition = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_POSITION);
+        this._debug("_handleChangedIgnorePosition(): " + this._ignorePosition);
     }
 
     _handleChangedIgnoreWorkspace() {
-        this._ignoreWorkspace = this._settings.get_boolean(
-            Common.SETTINGS_KEY_IGNORE_WORKSPACE
-        );
-        this._debug(
-            "[SmartAutoMoveNG] handleChangedIgnoreWorkspace(): " +
-                this._ignoreWorkspace
-        );
+        this._ignoreWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE);
+        this._debug("_handleChangedIgnoreWorkspace(): " + this._ignoreWorkspace);
     }
 
     _updateStats() {
@@ -738,30 +569,16 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _handleChangedOverrides() {
-        this._overrides = JSON.parse(
-            this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES)
-        );
+        this._overrides = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         this._updateStats();
-        this._indicator.menuToggle.setMenuTitleAndHeader(
-            this._savedWindowsCount,
-            this._overridesCount
-        );
-        this._debug(
-            "handleChangedOverrides(): " + JSON.stringify(this._overrides)
-        );
+        this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        this._debug("handleChangedOverrides(): " + JSON.stringify(this._overrides));
     }
 
     _handleChangedSavedWindows() {
-        this._savedWindows = JSON.parse(
-            this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS)
-        );
+        this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._updateStats();
-        this._indicator.menuToggle.setMenuTitleAndHeader(
-            this._savedWindowsCount,
-            this._overridesCount
-        );
-        this._debug(
-            "handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows)
-        );
+        this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        this._debug("handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
     }
 }
