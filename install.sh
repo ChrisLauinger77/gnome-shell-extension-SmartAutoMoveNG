@@ -7,10 +7,9 @@ gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-
 cd ..
 mv SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip SmartAutoMoveNG@lauinger-clan.de.zip
 
-if [ "$1" = "zip" ]; then
+if [ "$1" = "zip" ] || [ "$1" = "pack" ]; then
    echo "Extension zip created ..."
 else
     gnome-extensions install SmartAutoMoveNG\@lauinger-clan.de.zip --force
     gnome-extensions enable SmartAutoMoveNG\@lauinger-clan.de
-fi
 
