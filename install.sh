@@ -12,7 +12,7 @@ case "$1" in
     ;;
   install)
     gnome-extensions install SmartAutoMoveNG\@lauinger-clan.de.shell-extension.zip --force
-    gnome-extensions enable SmartAutoMoveNG\@lauinger-clan.shell-extension.de
+    gnome-extensions enable SmartAutoMoveNG\@lauinger-clan.de
     ;;
   upload)
     gnome-extensions upload SmartAutoMoveNG\@lauinger-clan.de.shell-extension.zip
