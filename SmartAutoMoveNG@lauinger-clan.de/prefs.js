@@ -42,27 +42,26 @@ const AppChooser = GObject.registerClass(
                     const nameB = b.get_display_name().toLowerCase();
                     return nameA.localeCompare(nameB);
                 });
-            const filterFunc = (row) => {
-                const filterText = searchEntry.get_text().toLowerCase();
-                if (!filterText) return true;
-                return row._searchableText.includes(filterText);
-            };
             for (const app of apps) {
                 if (app.should_show() === false) continue;
                 const row = new Adw.ActionRow();
                 row.title = app.get_display_name();
                 row.subtitle = app.get_id();
-                row._searchableText = app.get_name().toLowerCase();
+                row._searchableText = app.get_display_name().toLowerCase() + " " + app.get_name().toLowerCase();
                 row.subtitleLines = 1;
                 const icon = new Gtk.Image({ gicon: app.get_icon() });
                 row.add_prefix(icon);
                 this.listBox.append(row);
-
-                this.listBox.set_filter_func(filterFunc);
-                searchEntry.connect("search-changed", () => {
-                    this.listBox.invalidate_filter();
-                });
             }
+            const filterFunc = (row) => {
+                const filterText = searchEntry.get_text().toLowerCase();
+                if (!filterText) return true;
+                return row._searchableText.includes(filterText);
+            };
+            this.listBox.set_filter_func(filterFunc);
+            searchEntry.connect("search-changed", () => {
+                this.listBox.invalidate_filter();
+            });
             this.cancelBtn.connect("clicked", () => {
                 this.close();
             });
