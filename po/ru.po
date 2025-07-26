@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-25 18:46+0200\n"
-"PO-Revision-Date: 2025-06-25 18:48+0200\n"
+"POT-Creation-Date: 2025-07-26 08:47+0200\n"
+"PO-Revision-Date: 2025-07-26 08:52+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
 "Language: ru\n"
@@ -21,12 +21,12 @@ msgstr ""
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:59
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:129
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
 msgid "Saved Windows"
 msgstr "Сохраненные окна"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
 msgid "Cleanup Non-occupied Windows"
 msgstr "Очистка незанятых окон"
 
@@ -37,7 +37,7 @@ msgstr "Настройки"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:59
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:144
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
 msgid "Overrides"
 msgstr "Переопределить"
 
@@ -49,51 +49,51 @@ msgstr "Выбрать"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:173
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
 msgid "Select app"
 msgstr "Приложение"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:232
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:335
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:233
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
 msgid "ANY"
 msgstr "ЛЮБОЙ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:256
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:257
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 msgid "IGNORE"
 msgstr "ИГНОРИРОВАТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:257
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:258
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "RESTORE"
 msgstr "ВОССТАНОВИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:258
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:259
 msgid "DEFAULT"
 msgstr "ПО УМОЛЧАНИЮ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:275
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:314
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:276
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:315
 msgid "Delete"
 msgstr "Удалить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:309
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:310
 msgid "Not occupied"
 msgstr "Не занято"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:326
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:327
 msgid "OVERRIDE"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:339
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:340
 msgid "OVERRIDE (ANY)"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ (ЛЮБОЙ)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:395
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:397
 msgid "Reset Settings"
 msgstr "Сбросить настройки"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:401
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:403
 msgid "Reset all settings to default values"
 msgstr ""
 
@@ -218,6 +218,17 @@ msgstr "Игнорировать рабочее пространство"
 msgid "Do not restore windows' workspace."
 msgstr "Не восстанавливайте окно рабочего пространства."
 
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:126
+msgid "Ignore Monitor"
+msgstr "Игнорировать монитор"
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:70
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:127
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
+msgid "Do not restore windows' monitor."
+msgstr ""
+
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:5
 msgid "General"
 msgstr "Общий"
@@ -246,6 +257,6 @@ msgstr "Игнорировать позицию"
 msgid "Ignore Workspace"
 msgstr "Игнорировать рабочее пространство"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
 msgid "Add Application"
 msgstr "Добавить приложение"
