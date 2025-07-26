@@ -12,6 +12,7 @@ export const SETTINGS_KEY_FREEZE_SAVES = "freeze-saves";
 export const SETTINGS_KEY_ACTIVATE_WORKSPACE = "activate-workspace";
 export const SETTINGS_KEY_IGNORE_POSITION = "ignore-position";
 export const SETTINGS_KEY_IGNORE_WORKSPACE = "ignore-workspace";
+export const SETTINGS_KEY_IGNORE_MONITOR = "ignore-monitor";
 export const SETTINGS_KEY_OVERRIDES = "overrides";
 
 // sync mode enum values
@@ -29,6 +30,7 @@ export const DEFAULT_FREEZE_SAVES = false;
 export const DEFAULT_ACTIVATE_WORKSPACE = true;
 export const DEFAULT_IGNORE_POSITION = false;
 export const DEFAULT_IGNORE_WORKSPACE = false;
+export const DEFAULT_IGNORE_MONITOR = false;
 
 function levensteinDistance(a, b) {
     let m = [],
@@ -46,10 +48,7 @@ function levensteinDistance(a, b) {
             if (b.charAt(i - 1) === a.charAt(j - 1)) {
                 m[i][j] = m[i - 1][j - 1];
             } else {
-                m[i][j] = min(
-                    m[i - 1][j - 1] + 1,
-                    min(m[i][j - 1] + 1, m[i - 1][j] + 1)
-                );
+                m[i][j] = min(m[i - 1][j - 1] + 1, min(m[i][j - 1] + 1, m[i - 1][j] + 1));
             }
         }
     }
@@ -58,8 +57,7 @@ function levensteinDistance(a, b) {
 }
 
 export function scoreWindow(sw, query) {
-    if (query.occupied !== undefined && sw.occupied !== query.occupied)
-        return 0;
+    if (query.occupied !== undefined && sw.occupied !== query.occupied) return 0;
     let match_parts = 0;
     let query_parts = 0;
     Object.keys(query).forEach(function (key) {
@@ -90,9 +88,7 @@ export function findSavedWindow(saved_windows, wsh, query, threshold) {
         scores.set(swi, score);
     });
 
-    let sorted_scores = new Map(
-        [...scores.entries()].sort((a, b) => b[1] - a[1])
-    );
+    let sorted_scores = new Map([...scores.entries()].sort((a, b) => b[1] - a[1]));
 
     let best_swi = sorted_scores.keys().next().value;
     let best_score = sorted_scores.get(best_swi);
@@ -133,24 +129,13 @@ export function findOverride(overrides, wsh, sw, threshold) {
     return override;
 }
 
-export function matchedWindow(
-    saved_windows,
-    overrides,
-    wsh,
-    title,
-    default_match_threshold
-) {
+export function matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold) {
     let o = findOverride(overrides, wsh, { title: title }, 1.0);
 
     let threshold = default_match_threshold;
     if (o !== undefined && o.threshold !== undefined) threshold = o.threshold;
 
-    let [swi] = findSavedWindow(
-        saved_windows,
-        wsh,
-        { title: title, occupied: false },
-        threshold
-    );
+    let [swi] = findSavedWindow(saved_windows, wsh, { title: title, occupied: false }, threshold);
 
     if (swi === undefined) return [undefined, undefined];
 
@@ -160,9 +145,7 @@ export function matchedWindow(
 }
 
 export function cleanupNonOccupiedWindows(settings) {
-    const saved_windows = JSON.parse(
-        settings.get_string(SETTINGS_KEY_SAVED_WINDOWS)
-    );
+    const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
 
     Object.keys(saved_windows).forEach((wsh) => {
         let sws = saved_windows[wsh];
@@ -172,8 +155,5 @@ export function cleanupNonOccupiedWindows(settings) {
         }
     });
 
-    settings.set_string(
-        SETTINGS_KEY_SAVED_WINDOWS,
-        JSON.stringify(saved_windows)
-    );
+    settings.set_string(SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
 }

@@ -125,6 +125,7 @@ export default class SmartAutoMoveNG extends Extension {
             [Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._handleChangedIgnoreWorkspace.bind(this)],
             [Common.SETTINGS_KEY_OVERRIDES, this._handleChangedOverrides.bind(this)],
             [Common.SETTINGS_KEY_SAVED_WINDOWS, this._handleChangedSavedWindows.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_MONITOR, this._handleChangedIgnoreMonitor.bind(this)],
         ];
         for (const [key, handler] of signalMap) {
             const id = this._settings.connect("changed::" + key, handler);
@@ -238,6 +239,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._handleChangedIgnoreWorkspace();
         this._handleChangedOverrides();
         this._handleChangedSavedWindows();
+        this._handleChangedIgnoreMonitor();
         this._dumpSavedWindows();
     }
 
@@ -369,7 +371,9 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _moveWindow(win, sw) {
-        win.move_to_monitor(sw.monitor);
+        if (!this._ignoreMonitor) {
+            win.move_to_monitor(sw.monitor);
+        }
 
         let ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
         if (!this._ignoreWorkspace) {
@@ -580,5 +584,10 @@ export default class SmartAutoMoveNG extends Extension {
         this._updateStats();
         this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
         this._debug("handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
+    }
+
+    _handleChangedIgnoreMonitor() {
+        this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
+        this._debug("_handleChangedIgnoreMonitor(): " + this._ignoreMonitor);
     }
 }

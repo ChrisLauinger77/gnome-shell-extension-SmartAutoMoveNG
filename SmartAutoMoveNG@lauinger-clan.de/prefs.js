@@ -113,6 +113,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, "activate-workspace-switch", "active"],
             [Common.SETTINGS_KEY_IGNORE_POSITION, "ignore-position-switch", "active"],
             [Common.SETTINGS_KEY_IGNORE_WORKSPACE, "ignore-workspace-switch", "active"],
+            [Common.SETTINGS_KEY_IGNORE_MONITOR, "ignore-monitor-switch", "active"],
         ];
 
         generalBindings.forEach(([key, widgetId, property]) => {
@@ -369,6 +370,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
                 Common.SETTINGS_KEY_IGNORE_POSITION,
                 Common.SETTINGS_KEY_IGNORE_WORKSPACE,
+                Common.SETTINGS_KEY_IGNORE_MONITOR,
             ];
             keys.forEach((key) => {
                 if (settings.is_writable(key)) {
