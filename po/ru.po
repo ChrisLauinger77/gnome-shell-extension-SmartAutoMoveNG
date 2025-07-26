@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-26 08:47+0200\n"
-"PO-Revision-Date: 2025-07-26 08:52+0200\n"
+"POT-Creation-Date: 2025-07-26 12:03+0200\n"
+"PO-Revision-Date: 2025-07-26 12:04+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
 "Language: ru\n"
@@ -41,59 +41,63 @@ msgstr "Настройки"
 msgid "Overrides"
 msgstr "Переопределить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:25
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:20
+msgid "Search..."
+msgstr "Поиск..."
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:32
 msgid "Select"
 msgstr "Выбрать"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:28
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:35
 msgid "Cancel"
 msgstr "Отмена"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:190
 msgid "Select app"
 msgstr "Приложение"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:233
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:249
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:352
 msgid "ANY"
 msgstr "ЛЮБОЙ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:257
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:273
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 msgid "IGNORE"
 msgstr "ИГНОРИРОВАТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:258
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:274
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "RESTORE"
 msgstr "ВОССТАНОВИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:259
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:275
 msgid "DEFAULT"
 msgstr "ПО УМОЛЧАНИЮ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:276
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:315
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:292
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:331
 msgid "Delete"
 msgstr "Удалить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:310
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:326
 msgid "Not occupied"
 msgstr "Не занято"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:327
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:343
 msgid "OVERRIDE"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:340
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:356
 msgid "OVERRIDE (ANY)"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ (ЛЮБОЙ)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:397
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:413
 msgid "Reset Settings"
 msgstr "Сбросить настройки"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:403
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:419
 msgid "Reset all settings to default values"
 msgstr ""
 
