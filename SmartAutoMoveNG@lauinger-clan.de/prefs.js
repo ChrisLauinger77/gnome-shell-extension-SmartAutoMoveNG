@@ -11,11 +11,18 @@ const AppChooser = GObject.registerClass(
     class AppChooser extends Adw.Window {
         constructor(params = {}) {
             super(params);
-            let adwtoolbarview = new Adw.ToolbarView();
-            let adwheaderbar = new Adw.HeaderBar();
+            const adwtoolbarview = new Adw.ToolbarView();
+            const adwheaderbar = new Adw.HeaderBar();
             adwtoolbarview.add_top_bar(adwheaderbar);
             this.set_content(adwtoolbarview);
-            let scrolledwindow = new Gtk.ScrolledWindow();
+
+            const searchEntry = new Gtk.SearchEntry({
+                placeholder_text: _("Search..."),
+                hexpand: true,
+            });
+            adwheaderbar.set_title_widget(searchEntry);
+
+            const scrolledwindow = new Gtk.ScrolledWindow();
             adwtoolbarview.set_content(scrolledwindow);
             this.listBox = new Gtk.ListBox({
                 selection_mode: Gtk.SelectionMode.SINGLE,
@@ -35,18 +42,26 @@ const AppChooser = GObject.registerClass(
                     const nameB = b.get_display_name().toLowerCase();
                     return nameA.localeCompare(nameB);
                 });
-
             for (const app of apps) {
                 if (app.should_show() === false) continue;
                 const row = new Adw.ActionRow();
                 row.title = app.get_display_name();
                 row.subtitle = app.get_id();
+                row._searchableText = app.get_display_name().toLowerCase() + " " + app.get_name().toLowerCase();
                 row.subtitleLines = 1;
                 const icon = new Gtk.Image({ gicon: app.get_icon() });
                 row.add_prefix(icon);
                 this.listBox.append(row);
             }
-
+            const filterFunc = (row) => {
+                const filterText = searchEntry.get_text().toLowerCase();
+                if (!filterText) return true;
+                return row._searchableText.includes(filterText);
+            };
+            this.listBox.set_filter_func(filterFunc);
+            searchEntry.connect("search-changed", () => {
+                this.listBox.invalidate_filter();
+            });
             this.cancelBtn.connect("clicked", () => {
                 this.close();
             });
