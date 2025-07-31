@@ -140,6 +140,8 @@ export default class SmartAutoMoveNG extends Extension {
             const id = this._settings.connect("changed::" + key, handler);
             this._settingSignals.push(id);
         }
+
+        this._isGnome49OrHigher = isGnome49OrHigher();
     }
 
     disable() {
@@ -277,7 +279,8 @@ export default class SmartAutoMoveNG extends Extension {
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
             workspace: win.get_workspace().index(),
-            maximized: isGnome49OrHigher() ? win.is_maximized() : win.get_maximized(),
+            // maximized: For GNOME 49+, only boolean is available. For older, bitmask.
+            maximized: this._isGnome49OrHigher ? win.is_maximized() : win.get_maximized(),
             fullscreen: win.is_fullscreen(),
             above: win.is_above(),
             monitor: win.get_monitor(),

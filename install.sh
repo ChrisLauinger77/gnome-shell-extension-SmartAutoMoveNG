@@ -24,7 +24,7 @@ case "$1" in
     if [ ! -f $extensionfile ]; then
       $0 zip
     fi
-    gnome-extensions upload $extensionfile
+    gnome-extensions upload --user ChrisLauinger77 --password-file /mnt/2TB/dev/ego_password $extensionfile
     ;;
   *)
     echo "Usage: $0 {zip|pack|install|upload}"
