@@ -1,21 +1,30 @@
 #!/bin/bash
 
-# glib-compile-schemas HeadsetControl\@lauinger-clan.de/schemas/
+extension="SmartAutoMoveNG@lauinger-clan.de"
+extensionfile=$extension".shell-extension.zip"
 
-cd SmartAutoMoveNG\@lauinger-clan.de
-gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=./icons/ --extra-source=../LICENSE --force
-cd ..
+echo "Running $0 for $extension with arguments: $@"
 
 case "$1" in
   zip|pack)
+    cd $extension
+    gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=./icons/ --extra-source=../LICENSE --force
+    cd ..
     echo "Extension zip created ..."
     ;;
   install)
-    gnome-extensions install SmartAutoMoveNG\@lauinger-clan.de.shell-extension.zip --force
-    gnome-extensions enable SmartAutoMoveNG\@lauinger-clan.de
+    if [ ! -f $extensionfile ]; then
+      $0 zip
+    fi
+    gnome-extensions install $extensionfile --force
+    gnome-extensions enable $extension
+    echo "Extension zip installed ..."
     ;;
   upload)
-    gnome-extensions upload SmartAutoMoveNG\@lauinger-clan.de.shell-extension.zip
+    if [ ! -f $extensionfile ]; then
+      $0 zip
+    fi
+    gnome-extensions upload $extensionfile
     ;;
   *)
     echo "Usage: $0 {zip|pack|install|upload}"
