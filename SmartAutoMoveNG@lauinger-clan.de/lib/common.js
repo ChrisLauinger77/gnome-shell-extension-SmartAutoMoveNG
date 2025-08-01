@@ -19,19 +19,6 @@ export const SETTINGS_KEY_OVERRIDES = "overrides";
 export const SYNC_MODE_IGNORE = 0;
 export const SYNC_MODE_RESTORE = 1;
 
-// default setting values (see also gschema xml)
-export const DEFAULT_DEBUG_LOGGING = false;
-export const DEFAULT_STARTUP_DELAY_MS = 2500;
-export const DEFAULT_SYNC_FREQUENCY_MS = 100;
-export const DEFAULT_SAVE_FREQUENCY_MS = 1000;
-export const DEFAULT_MATCH_THRESHOLD = 0.7;
-export const DEFAULT_SYNC_MODE = SYNC_MODE_RESTORE;
-export const DEFAULT_FREEZE_SAVES = false;
-export const DEFAULT_ACTIVATE_WORKSPACE = true;
-export const DEFAULT_IGNORE_POSITION = false;
-export const DEFAULT_IGNORE_WORKSPACE = false;
-export const DEFAULT_IGNORE_MONITOR = false;
-
 function levensteinDistance(a, b) {
     let m = [],
         i,

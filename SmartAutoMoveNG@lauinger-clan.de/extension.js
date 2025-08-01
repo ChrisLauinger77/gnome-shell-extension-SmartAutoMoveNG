@@ -12,10 +12,17 @@ import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js"
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
 import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
+import { PACKAGE_VERSION } from "resource:///org/gnome/shell/misc/config.js";
 
 import * as Common from "./lib/common.js";
 
 const QuickSettingsMenu = Main.panel.statusArea.quickSettings;
+
+function isGnome49OrHigher() {
+    // GNOME Shell exports its version as a string, e.g. "49.0"
+    const majorVersion = parseInt(PACKAGE_VERSION.split(".")[0], 10);
+    return majorVersion >= 49;
+}
 
 //quick settings
 const SmartAutoMoveNGMenuToggle = GObject.registerClass(
@@ -96,7 +103,9 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeWindows = new Map();
         this._settings = this.getSettings();
         this._indicator = new SmartAutoMoveNGIndicator(this);
-        this._initializeSettings();
+        this._overrides = {};
+        this._savedWindows = {};
+        this._handleChangedDebugLogging();
 
         this._debug("enable()");
         this._restoreSettings();
@@ -131,6 +140,8 @@ export default class SmartAutoMoveNG extends Extension {
             const id = this._settings.connect("changed::" + key, handler);
             this._settingSignals.push(id);
         }
+
+        this._isGnome49OrHigher = isGnome49OrHigher();
     }
 
     disable() {
@@ -153,6 +164,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeWindows = null;
         this._indicator.destroy();
         this._indicator = null;
+        this._isGnome49OrHigher = null;
     }
 
     _openPreferences() {
@@ -192,23 +204,6 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     //// SETTINGS
-
-    _initializeSettings() {
-        this._debugLogging = Common.DEFAULT_DEBUG_LOGGING;
-        this._startupDelayMs = Common.DEFAULT_STARTUP_DELAY_MS;
-        this._syncFrequencyMs = Common.DEFAULT_SYNC_FREQUENCY_MS;
-        this._saveFrequencyMs = Common.DEFAULT_SAVE_FREQUENCY_MS;
-        this._matchThreshold = Common.DEFAULT_MATCH_THRESHOLD;
-        this._syncMode = Common.DEFAULT_SYNC_MODE;
-        this._freezeSaves = Common.DEFAULT_FREEZE_SAVES;
-        this._activateWorkspace = Common.DEFAULT_ACTIVATE_WORKSPACE;
-        this._ignorePosition = Common.DEFAULT_IGNORE_POSITION;
-        this._ignoreWorkspace = Common.DEFAULT_IGNORE_WORKSPACE;
-        this._overrides = {};
-        this._savedWindows = {};
-        this._handleChangedDebugLogging();
-    }
-
     _cleanupSettings() {
         this._settings = null;
         this._debugLogging = null;
@@ -285,7 +280,8 @@ export default class SmartAutoMoveNG extends Extension {
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
             workspace: win.get_workspace().index(),
-            maximized: win.get_maximized(),
+            // maximized: For GNOME 49+, only boolean is available. For older, bitmask.
+            maximized: this._isGnome49OrHigher ? win.is_maximized() : win.get_maximized(),
             fullscreen: win.is_fullscreen(),
             above: win.is_above(),
             monitor: win.get_monitor(),

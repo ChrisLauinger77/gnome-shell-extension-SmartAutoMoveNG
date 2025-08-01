@@ -1,16 +1,33 @@
 #!/bin/bash
 
-# glib-compile-schemas HeadsetControl\@lauinger-clan.de/schemas/
+extension="SmartAutoMoveNG@lauinger-clan.de"
+extensionfile=$extension".shell-extension.zip"
 
-cd SmartAutoMoveNG\@lauinger-clan.de
-gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=./icons/ --extra-source=../LICENSE
-cd ..
-mv SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip SmartAutoMoveNG@lauinger-clan.de.zip
+echo "Running $0 for $extension with arguments: $@"
 
-if [ "$1" = "zip" ]; then
-   echo "Extension zip created ..."
-else
-    gnome-extensions install SmartAutoMoveNG\@lauinger-clan.de.zip --force
-    gnome-extensions enable SmartAutoMoveNG\@lauinger-clan.de
-fi
-
+case "$1" in
+  zip|pack)
+    cd $extension
+    gnome-extensions pack --podir=../po/ --out-dir=../ --extra-source=./lib --extra-source=./ui/ --extra-source=./icons/ --extra-source=../LICENSE --force
+    cd ..
+    echo "Extension zip created ..."
+    ;;
+  install)
+    if [ ! -f $extensionfile ]; then
+      $0 zip
+    fi
+    gnome-extensions install $extensionfile --force
+    gnome-extensions enable $extension
+    echo "Extension zip installed ..."
+    ;;
+  upload)
+    if [ ! -f $extensionfile ]; then
+      $0 zip
+    fi
+    gnome-extensions upload --user ChrisLauinger77 --password-file /mnt/2TB/dev/ego_password $extensionfile
+    ;;
+  *)
+    echo "Usage: $0 {zip|pack|install|upload}"
+    exit 1
+    ;;
+esac
