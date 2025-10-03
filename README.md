@@ -35,6 +35,16 @@ The toggle in quicksettings is connected to the "Freeze saves" switch of setting
 
 Most settings can be modified via the extension preferences dialog.
 
+## Overtake settings from [smart-auto-move](https://github.com/khimaros/smart-auto-move) (the one this was forked from)
+
+-   dump the settings from this extension to a file:
+
+`$ dconf dump /org/gnome/shell/extensions/smart-auto-move/ > smart-auto-move.dconf`
+
+-   load the dumped settings into the new gconf location:
+
+`$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < smart-auto-move.dconf`
+
 ### Defaults
 
 The first step is to choose your **Default Synchronization Mode**: `IGNORE` or `RESTORE`. `IGNORE` will keep track of windows but will not restore any unless an **Override** with `RESTORE` behavior is created. `RESTORE` will keep track and restore all windows unless an **Override** with `IGNORE` behavior is created.
