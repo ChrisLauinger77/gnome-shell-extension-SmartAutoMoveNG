@@ -37,11 +37,11 @@ Most settings can be modified via the extension preferences dialog.
 
 ## Overtake settings from [smart-auto-move](https://github.com/khimaros/smart-auto-move) (the one this was forked from)
 
--   dump the settings from this extension to a file:
+-   dump the settings from "smart-auto-move" to a file:
 
 `$ dconf dump /org/gnome/shell/extensions/smart-auto-move/ > smart-auto-move.dconf`
 
--   load the dumped settings into the new gconf location:
+-   load the dumped settings into "SmartAutoMoveNG":
 
 `$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < smart-auto-move.dconf`
 
