@@ -597,10 +597,11 @@ export default class SmartAutoMoveNG extends Extension {
         if (!state) {
             message = _("Freeze saves disabled");
         }
+        const finalmessage = `${this.metadata.name}\n${message}`;
         if (this._isGnome49OrHigher) {
-            Main.osdWindowManager.showAll(icon, message, null, null);
+            Main.osdWindowManager.showAll(icon, finalmessage, null, null);
         } else {
-            Main.osdWindowManager.show(-1, icon, message, null, null);
+            Main.osdWindowManager.show(-1, icon, finalmessage, null, null);
         }
     }
 }
