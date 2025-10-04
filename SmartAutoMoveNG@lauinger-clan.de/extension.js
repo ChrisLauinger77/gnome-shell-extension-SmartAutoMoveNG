@@ -109,6 +109,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._indicator = new SmartAutoMoveNGIndicator(this);
         this._overrides = {};
         this._savedWindows = {};
+        this._isGnome49OrHigher = isGnome49OrHigher();
         this._handleChangedDebugLogging();
 
         this._debug("enable()");
@@ -144,8 +145,6 @@ export default class SmartAutoMoveNG extends Extension {
             const id = this._settings.connect("changed::" + key, handler);
             this._settingSignals.push(id);
         }
-
-        this._isGnome49OrHigher = isGnome49OrHigher();
     }
 
     disable() {
@@ -598,7 +597,10 @@ export default class SmartAutoMoveNG extends Extension {
         if (!state) {
             message = _("Freeze saves disabled");
         }
-
-        Main.osdWindowManager.show(-1, icon, message, null, null);
+        if (this._isGnome49OrHigher) {
+            Main.osdWindowManager.showAll(icon, message, null, null);
+        } else {
+            Main.osdWindowManager.show(-1, icon, message, null, null);
+        }
     }
 }
