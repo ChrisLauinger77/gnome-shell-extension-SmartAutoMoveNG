@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-31 08:33+0200\n"
-"PO-Revision-Date: 2025-07-31 08:30+0200\n"
+"POT-Creation-Date: 2025-10-04 09:13+0200\n"
+"PO-Revision-Date: 2025-10-04 09:18+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Poedit 3.6\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:49
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:66
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
 msgid "Saved Windows"
@@ -35,11 +35,19 @@ msgstr "Очистка незанятых окон"
 msgid "Settings"
 msgstr "Настройки"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:66
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
 msgid "Overrides"
 msgstr "Переопределить"
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:596
+msgid "Freeze saves enabled"
+msgstr "Заморозить Сохранить включенный"
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:599
+msgid "Freeze saves disabled"
+msgstr "Заморозить Сохранить инвалид"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:20
 msgid "Search..."

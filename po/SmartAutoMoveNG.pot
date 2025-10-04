@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-31 08:33+0200\n"
+"POT-Creation-Date: 2025-10-04 09:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:49
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:66
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
 msgid "Saved Windows"
@@ -34,10 +34,18 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:66
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
 msgid "Overrides"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:596
+msgid "Freeze saves enabled"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:599
+msgid "Freeze saves disabled"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:20

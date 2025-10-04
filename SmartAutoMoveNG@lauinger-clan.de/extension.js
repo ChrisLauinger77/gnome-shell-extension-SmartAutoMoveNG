@@ -62,6 +62,10 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             }
         }
 
+        get menuIcon() {
+            return this._finalMenuIcon;
+        }
+
         setMenuTitleAndHeader(savedWindowsCount, overridesCount) {
             const stats = `${savedWindowsCount} ${_("Saved Windows")}-${overridesCount} ${_("Overrides")}`;
             this.set({
@@ -545,6 +549,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _handleChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
+        this._sendOSDNotification(this._freezeSaves);
         this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
     }
 
@@ -585,5 +590,15 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedIgnoreMonitor() {
         this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
         this._debug("_handleChangedIgnoreMonitor(): " + this._ignoreMonitor);
+    }
+
+    _sendOSDNotification(state) {
+        let message = _("Freeze saves enabled");
+        let icon = this._indicator.menuToggle.menuIcon;
+        if (!state) {
+            message = _("Freeze saves disabled");
+        }
+
+        Main.osdWindowManager.show(-1, icon, message, null, null);
     }
 }
