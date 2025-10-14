@@ -2,7 +2,7 @@
     "uuid": "SmartAutoMoveNG@lauinger-clan.de",
     "name": "Smart Auto Move NG",
     "url": "https://github.com/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNG",
-    "description": "Smart Auto Move learns the position, size, and workspace of your application windows and restores them on subsequent launches. Supports Wayland.\n\nNOTE: Optimized for use with static workspaces. For more control, set the default behavior to IGNORE and then selectively RESTORE only desired apps.\n\nKNOWN ISSUES: Multi-monitor  is not yet well supported. You may need to manually delete Saved Windows in preferences after adding or removing a display.\n\nForked from https://github.com/khimaros/smart-auto-move",
+    "description": "Smart Auto Move NG learns the position, size, and workspace of your application windows and restores them on subsequent launches. Supports Wayland.\n\nNOTE: Optimized for use with static workspaces. For more control, set the default behavior to IGNORE and then selectively RESTORE only desired apps.\n\nKNOWN ISSUES: Multi-monitor  is not yet well supported. You may need to manually delete Saved Windows in preferences after adding or removing a display.\n\nForked from https://github.com/khimaros/smart-auto-move",
     "settings-schema": "org.gnome.shell.extensions.SmartAutoMoveNG",
     "donations": {
         "github": "ChrisLauinger77",
