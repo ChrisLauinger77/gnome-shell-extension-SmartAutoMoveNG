@@ -20,7 +20,7 @@ const QuickSettingsMenu = Main.panel.statusArea.quickSettings;
 
 function isGnome49OrHigher() {
     // GNOME Shell exports its version as a string, e.g. "49.0"
-    const majorVersion = parseInt(PACKAGE_VERSION.split(".")[0], 10);
+    const majorVersion = Number.parseInt(PACKAGE_VERSION.split(".")[0], 10);
     return majorVersion >= 49;
 }
 
@@ -87,7 +87,9 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
             this.quickSettingsItems.push(this._smartAutoMoveNGMenuToggle);
 
             this.connect("destroy", () => {
-                this.quickSettingsItems.forEach((item) => item.destroy());
+                for (const item of this.quickSettingsItems) {
+                    item.destroy();
+                }
             });
 
             // Add the indicator to the panel and the toggle to the menu
@@ -155,9 +157,11 @@ export default class SmartAutoMoveNG extends Extension {
         GLib.Source.remove(this._timeoutSaveSignal);
         this._timeoutSaveSignal = null;
         // remove setting Signals
-        this._settingSignals.forEach(function (signal) {
-            this._settings.disconnect(signal);
-        }, this);
+        if (this._settingSignals) {
+            for (const signal of this._settingSignals) {
+                this._settings.disconnect(signal);
+            }
+        }
         this._settingSignals = null;
         this._savedWindowsCount = null;
         this._overridesCount = null;
@@ -184,17 +188,17 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _dumpSavedWindows() {
-        Object.keys(this._savedWindows).forEach((wsh) => {
+        for (const wsh of Object.keys(this._savedWindows)) {
             let sws = this._savedWindows[wsh];
             this._debug("_dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws));
-        });
+        }
     }
 
     _dumpCurrentWindows() {
-        global.get_window_actors().forEach((actor) => {
+        for (const actor of global.get_window_actors()) {
             let win = actor.get_meta_window();
             this._dumpWindow(win);
-        });
+        }
     }
 
     _dumpWindow(win) {
@@ -337,7 +341,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _updateSavedWindow(win) {
         let wsh = this._windowSectionHash(win);
-        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win) }, 1.0);
+        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win) }, 1);
         if (swi === undefined) return false;
         let sw = this._windowData(win);
         if (this._windowDataEqual(this._savedWindows[wsh][swi], sw)) return true;
@@ -411,12 +415,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         let sw;
 
-        let [swi] = Common.findSavedWindow(
-            this._savedWindows,
-            wsh,
-            { hash: this._windowHash(win), occupied: true },
-            1.0
-        );
+        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
 
         if (swi !== undefined) return false;
 
@@ -434,7 +433,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
 
-        let action = this._findOverrideAction(win, 1.0);
+        let action = this._findOverrideAction(win, 1);
         if (action !== Common.SYNC_MODE_RESTORE) return true;
 
         let pWinRepr = this._windowRepr(win);
@@ -455,20 +454,20 @@ export default class SmartAutoMoveNG extends Extension {
     _cleanupWindows() {
         let found = new Map();
 
-        global.get_window_actors().forEach((actor) => {
+        for (const actor of global.get_window_actors()) {
             let win = actor.get_meta_window();
             found.set(this._windowHash(win), true);
-        });
+        }
 
-        Object.keys(this._savedWindows).forEach((wsh) => {
+        for (const wsh of Object.keys(this._savedWindows)) {
             let sws = this._savedWindows[wsh];
-            sws.forEach((sw) => {
+            for (const sw of sws) {
                 if (sw.occupied && !found.has(sw.hash)) {
                     sw.occupied = false;
                     this._debug("_cleanupWindows() - deoccupy: " + JSON.stringify(sw));
                 }
-            });
-        });
+            }
+        }
     }
 
     _shouldSkipWindow(win) {
@@ -481,13 +480,13 @@ export default class SmartAutoMoveNG extends Extension {
 
     _syncWindows() {
         this._cleanupWindows();
-        global.get_window_actors().forEach((actor) => {
+        for (const actor of global.get_window_actors()) {
             let win = actor.get_meta_window();
 
-            if (this._shouldSkipWindow(win)) return;
+            if (this._shouldSkipWindow(win)) continue;
 
             if (!this._restoreWindow(win)) this._ensureSavedWindow(win);
-        });
+        }
     }
 
     //// SIGNAL HANDLERS
