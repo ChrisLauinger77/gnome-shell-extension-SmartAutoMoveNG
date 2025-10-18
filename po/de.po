@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 09:13+0200\n"
+"POT-Creation-Date: 2025-10-17 15:43+0200\n"
 "PO-Revision-Date: 2025-10-04 09:22+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -41,11 +41,11 @@ msgstr "Einstellungen"
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:596
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:594
 msgid "Freeze saves enabled"
 msgstr "Speichern einfrieren aktiviert"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:599
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:597
 msgid "Freeze saves disabled"
 msgstr "Speichern einfrieren deaktiviert"
 
@@ -65,47 +65,47 @@ msgstr "Abbrechen"
 msgid "Select app"
 msgstr "App auswählen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:248
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:351
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:256
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:357
 msgid "ANY"
 msgstr "Beliebig"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:272
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:280
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 msgid "IGNORE"
 msgstr "Ignorieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:273
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:281
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "RESTORE"
 msgstr "Wiederherstellen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:274
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:282
 msgid "DEFAULT"
 msgstr "Standard"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:291
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:330
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:299
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
 msgid "Delete"
 msgstr "Löschen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:325
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:331
 msgid "Not occupied"
 msgstr "Nicht besetzt"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:342
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:348
 msgid "OVERRIDE"
 msgstr "Überschreiben"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:355
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:361
 msgid "OVERRIDE (ANY)"
 msgstr "Überschreiben (beliebig)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:412
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:418
 msgid "Reset Settings"
 msgstr "Einstellungen zurücksetzen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:418
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:424
 msgid "Reset all settings to default values"
 msgstr "Alle Einstellungen auf Standardwerte zurücksetzen"
 

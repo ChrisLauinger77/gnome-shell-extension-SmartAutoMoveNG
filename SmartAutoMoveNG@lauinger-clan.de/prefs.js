@@ -131,7 +131,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             [Common.SETTINGS_KEY_IGNORE_MONITOR, "ignore-monitor-switch", "active"],
         ];
 
-        generalBindings.forEach(([key, widgetId, property]) => {
+        for (const [key, widgetId, property] of generalBindings) {
             const widget = builder.get_object(widgetId);
             if (property === "selected") {
                 widget[property] = settings.get_enum(key);
@@ -146,7 +146,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             } else {
                 settings.bind(key, widget, property, Gio.SettingsBindFlags.DEFAULT);
             }
-        });
+        }
     }
 
     _savedwindows(settings, builder, list_rows) {
@@ -216,15 +216,15 @@ export default class SAMPreferences extends ExtensionPreferences {
 
     _clearListWidget(list_widget, list_objects, list_rows) {
         if (list_rows.length < 1) return;
-        list_rows.forEach((element) => {
+        for (const element of list_rows) {
             list_widget.remove(element);
             let lo = list_objects.shift();
             if (lo !== null) {
-                Object.values(lo).forEach(([signal, widget]) => {
+                for (const [signal, widget] of Object.values(lo)) {
                     widget.disconnect(signal);
-                });
+                }
             }
-        });
+        }
         list_rows.splice(0, list_rows.length);
     }
 
@@ -235,7 +235,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         }
         const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         this._clearListWidget(list_widget, list_objects, list_rows);
-        Object.keys(overrides).forEach((wsh) => {
+        for (const wsh of Object.keys(overrides)) {
             const adwexprow = new Adw.ExpanderRow();
             list_rows.push(adwexprow);
             adwexprow.set_title(wsh);
@@ -244,67 +244,73 @@ export default class SAMPreferences extends ExtensionPreferences {
             list_objects.push(null);
 
             const wshos = overrides[wsh];
-            wshos.forEach((o, oi) => {
-                let query = _("ANY");
-                const row = new Adw.ActionRow();
+            for (let oi = 0; oi < wshos.length; oi++) {
+                this._appendOverrideRow(settings, { overrides, wsh, wshos, oi, adwexprow, list_widget, list_objects });
+            }
+        }
+    }
 
-                if (o.query) query = JSON.stringify(o.query);
-                row.set_title(query);
-                adwexprow.add_row(row);
+    _appendOverrideRow(settings, ctx) {
+        const { overrides, wsh, wshos, oi, adwexprow, list_widget, list_objects } = ctx;
+        const o = wshos[oi];
+        let query = _("ANY");
+        const row = new Adw.ActionRow();
 
-                const threshold_widget = Gtk.SpinButton.new_with_range(0, 1, 0.01);
-                threshold_widget.set_numeric(true);
-                threshold_widget.set_digits(2);
-                threshold_widget.set_climb_rate(0.1);
-                threshold_widget.set_valign(Gtk.Align.CENTER);
-                row.add_suffix(threshold_widget);
-                if (o.query !== undefined) threshold_widget.set_sensitive(false);
-                if (o.threshold !== undefined) threshold_widget.set_value(o.threshold);
-                const threshold_signal = threshold_widget.connect("value-changed", (spin) => {
-                    let threshold = spin.get_value();
-                    this._rebuildOverrides = false;
-                    if (threshold <= 0.01) threshold = undefined;
-                    wshos[oi].threshold = threshold;
-                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
-                });
+        if (o.query) query = JSON.stringify(o.query);
+        row.set_title(query);
+        adwexprow.add_row(row);
 
-                const action_widget = new Gtk.ComboBoxText();
-                action_widget.append_text(_("IGNORE"));
-                action_widget.append_text(_("RESTORE"));
-                action_widget.append_text(_("DEFAULT"));
-                action_widget.set_valign(Gtk.Align.CENTER);
-                row.add_suffix(action_widget);
-                if (o.action !== undefined) action_widget.set_active(o.action);
-                else action_widget.set_active(2);
-                let action_signal = action_widget.connect("changed", (combo) => {
-                    let action = combo.get_active();
-                    this._rebuildOverrides = false;
-                    if (action === 2) action = undefined;
-                    wshos[oi].action = action;
-                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
-                });
+        const threshold_widget = Gtk.SpinButton.new_with_range(0, 1, 0.01);
+        threshold_widget.set_numeric(true);
+        threshold_widget.set_digits(2);
+        threshold_widget.set_climb_rate(0.1);
+        threshold_widget.set_valign(Gtk.Align.CENTER);
+        row.add_suffix(threshold_widget);
+        if (o.query !== undefined) threshold_widget.set_sensitive(false);
+        if (o.threshold !== undefined) threshold_widget.set_value(o.threshold);
+        const threshold_signal = threshold_widget.connect("value-changed", (spin) => {
+            let threshold = spin.get_value();
+            this._rebuildOverrides = false;
+            if (threshold <= 0.01) threshold = undefined;
+            wshos[oi].threshold = threshold;
+            settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
+        });
 
-                const delete_widget = new Gtk.Button({
-                    valign: Gtk.Align.CENTER,
-                    css_classes: ["destructive-action"],
-                });
-                delete_widget.set_tooltip_text(_("Delete"));
-                delete_widget.set_icon_name("user-trash-symbolic");
-                row.add_suffix(delete_widget);
-                let delete_signal = delete_widget.connect("clicked", () => {
-                    wshos.splice(oi, 1);
-                    if (wshos.length < 1) delete overrides[wsh];
-                    settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
-                });
+        const action_widget = new Gtk.ComboBoxText();
+        action_widget.append_text(_("IGNORE"));
+        action_widget.append_text(_("RESTORE"));
+        action_widget.append_text(_("DEFAULT"));
+        action_widget.set_valign(Gtk.Align.CENTER);
+        row.add_suffix(action_widget);
+        if (o.action === undefined) action_widget.set_active(2);
+        else action_widget.set_active(o.action);
+        const action_signal = action_widget.connect("changed", (combo) => {
+            let action = combo.get_active();
+            this._rebuildOverrides = false;
+            if (action === 2) action = undefined;
+            wshos[oi].action = action;
+            settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
+        });
 
-                list_widget.add(row);
+        const delete_widget = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+            css_classes: ["destructive-action"],
+        });
+        delete_widget.set_tooltip_text(_("Delete"));
+        delete_widget.set_icon_name("user-trash-symbolic");
+        row.add_suffix(delete_widget);
+        const delete_signal = delete_widget.connect("clicked", () => {
+            wshos.splice(oi, 1);
+            if (wshos.length < 1) delete overrides[wsh];
+            settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
+        });
 
-                list_objects.push({
-                    threshold: [threshold_signal, threshold_widget],
-                    action: [action_signal, action_widget],
-                    delete: [delete_signal, delete_widget],
-                });
-            });
+        list_widget.add(row);
+
+        list_objects.push({
+            threshold: [threshold_signal, threshold_widget],
+            action: [action_signal, action_widget],
+            delete: [delete_signal, delete_widget],
         });
     }
 
@@ -315,9 +321,9 @@ export default class SAMPreferences extends ExtensionPreferences {
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
-        Object.keys(saved_windows).forEach((wsh) => {
+        for (const wsh of Object.keys(saved_windows)) {
             let sws = saved_windows[wsh];
-            sws.forEach((sw, swi) => {
+            for (const [swi, sw] of sws.entries()) {
                 const row = new Adw.ActionRow();
                 list_rows.push(row);
                 row.set_title(wsh + " - " + sw.title);
@@ -367,8 +373,8 @@ export default class SAMPreferences extends ExtensionPreferences {
                     ignore: [override_signal, override_widget],
                     ignore_any: [override_any_signal, override_any_widget],
                 });
-            });
-        });
+            }
+        }
     }
 
     _resetSettings(settings, strKey) {
@@ -387,18 +393,18 @@ export default class SAMPreferences extends ExtensionPreferences {
                 Common.SETTINGS_KEY_IGNORE_WORKSPACE,
                 Common.SETTINGS_KEY_IGNORE_MONITOR,
             ];
-            keys.forEach((key) => {
+            for (const key of keys) {
                 if (settings.is_writable(key)) {
                     settings.reset(key);
                 }
-            });
+            }
         } else if (settings.is_writable(strKey)) {
             settings.reset(strKey);
         }
     }
 
     _findWidgetByType(parent, type) {
-        for (const child of [...parent]) {
+        for (const child of parent) {
             if (child instanceof type) return child;
 
             const match = this._findWidgetByType(child, type);

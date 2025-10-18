@@ -47,7 +47,7 @@ export function scoreWindow(sw, query) {
     if (query.occupied !== undefined && sw.occupied !== query.occupied) return 0;
     let match_parts = 0;
     let query_parts = 0;
-    Object.keys(query).forEach(function (key) {
+    for (const key of Object.keys(query)) {
         let value = query[key];
         if (key === "title") {
             let dist = levensteinDistance(value, sw[key]);
@@ -58,7 +58,7 @@ export function scoreWindow(sw, query) {
             match_parts += 1;
         }
         query_parts += 1;
-    });
+    }
     let score = match_parts / query_parts;
     if (score < 0) score = 0;
     return score;
@@ -70,10 +70,10 @@ export function findSavedWindow(saved_windows, wsh, query, threshold) {
     }
 
     let scores = new Map();
-    saved_windows[wsh].forEach(function (sw, swi) {
+    for (const [swi, sw] of saved_windows[wsh].entries()) {
         let score = scoreWindow(sw, query);
         scores.set(swi, score);
-    });
+    }
 
     let sorted_scores = new Map([...scores.entries()].sort((a, b) => b[1] - a[1]));
 
@@ -92,32 +92,29 @@ export function findSavedWindow(saved_windows, wsh, query, threshold) {
 
 export function findOverride(overrides, wsh, sw, threshold) {
     let override = {};
-    let matched = false;
 
     if (!Object.hasOwn(overrides, wsh)) {
         return override;
     }
-    overrides[wsh].forEach(function (o) {
-        if (matched) return;
+    for (const o of overrides[wsh]) {
         if (!Object.hasOwn(o, "query")) {
             override.action = o.action;
             override.threshold = o.threshold;
-            matched = true;
-            return;
+            break;
         }
         let score = scoreWindow(sw, o.query);
         if (score >= threshold) {
             override.action = o.action;
             override.threshold = o.threshold;
-            matched = true;
+            break;
         }
-    });
+    }
 
     return override;
 }
 
 export function matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold) {
-    let o = findOverride(overrides, wsh, { title: title }, 1.0);
+    let o = findOverride(overrides, wsh, { title: title }, 1);
 
     let threshold = default_match_threshold;
     if (o !== undefined && o.threshold !== undefined) threshold = o.threshold;
@@ -133,14 +130,13 @@ export function matchedWindow(saved_windows, overrides, wsh, title, default_matc
 
 export function cleanupNonOccupiedWindows(settings) {
     const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
-
-    Object.keys(saved_windows).forEach((wsh) => {
+    for (const wsh of Object.keys(saved_windows)) {
         let sws = saved_windows[wsh];
         saved_windows[wsh] = sws.filter((sw) => sw.occupied);
         if (saved_windows[wsh].length < 1) {
             delete saved_windows[wsh];
         }
-    });
+    }
 
     settings.set_string(SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
 }
