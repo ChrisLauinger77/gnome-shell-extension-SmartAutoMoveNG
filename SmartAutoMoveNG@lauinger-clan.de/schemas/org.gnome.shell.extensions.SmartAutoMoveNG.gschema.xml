@@ -14,6 +14,11 @@
       <summary>Debug Logging</summary>
       <description>Write detailed logs about extension behavior.</description>
     </key>
+    <key name="quicksettings" type="b">
+      <default>true</default>
+      <summary>Quicksettings</summary>
+      <description>Show toggle and menu in quicksettings.</description>
+    </key>
     <key name="startup-delay" type="i">
       <default>2500</default>
       <summary>Startup Delay (ms)</summary>

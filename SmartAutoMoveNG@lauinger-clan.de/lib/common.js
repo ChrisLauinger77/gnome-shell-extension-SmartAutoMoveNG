@@ -3,6 +3,7 @@
 // setting constants
 export const SETTINGS_KEY_SAVED_WINDOWS = "saved-windows";
 export const SETTINGS_KEY_DEBUG_LOGGING = "debug-logging";
+export const SETTINGS_KEY_QUICKSETTINGS = "quicksettings";
 export const SETTINGS_KEY_STARTUP_DELAY = "startup-delay";
 export const SETTINGS_KEY_SYNC_FREQUENCY = "sync-frequency";
 export const SETTINGS_KEY_SAVE_FREQUENCY = "save-frequency";
