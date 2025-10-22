@@ -21,11 +21,11 @@ Then poedit (https://poedit.net/download) can be used to translate the strings. 
 
 ## Screenshots
 
-#### QuickSettings
+#### Quick Settings
 
 ![screenshot: quick settings](docs/screenshot-quicksettings.png)
 
-The toggle in quicksettings is connected to the "Freeze saves" switch of settings.
+The toggle in Quick Settings is connected to the "Freeze saves" switch of settings.
 
 #### General
 
