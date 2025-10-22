@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 20:00+0200\n"
-"PO-Revision-Date: 2025-10-22 20:01+0200\n"
+"POT-Creation-Date: 2025-10-22 20:40+0200\n"
+"PO-Revision-Date: 2025-10-22 20:39+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -41,11 +41,11 @@ msgstr "Einstellungen"
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:615
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:616
 msgid "Freeze saves enabled"
 msgstr "Speichern einfrieren aktiviert"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:618
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
 msgid "Freeze saves disabled"
 msgstr "Speichern einfrieren deaktiviert"
 
@@ -126,14 +126,14 @@ msgstr "Detaillierte Protokolle über das Verhalten der Erweiterung schreiben."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:19
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
-msgid "Quicksettings"
-msgstr "Quicksettings"
+msgid "Quick Settings"
+msgstr "Quick Settings"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:20
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
-msgid "Show toggle and menu in quicksettings."
-msgstr "Zeige Umschalter und Menü in Quicksettings."
+msgid "Show toggle and menu in Quick Settings."
+msgstr "Zeige Umschalter und Menü in Quick Settings."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24
 msgid "Startup Delay (ms)"
@@ -285,6 +285,12 @@ msgstr "Arbeitsbereich ignorieren"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
 msgid "Add Application"
 msgstr "Anwendung hinzufügen"
+
+#~ msgid "Quicksettings"
+#~ msgstr "Quicksettings"
+
+#~ msgid "Show toggle and menu in quicksettings."
+#~ msgstr "Zeige Umschalter und Menü in Quicksettings."
 
 #~ msgid "Ignore Monitor"
 #~ msgstr "Monitor ignorieren"

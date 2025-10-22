@@ -9,9 +9,9 @@
         <property name="title" translatable="yes">Settings</property>
         <child>
           <object class="AdwSwitchRow" id="quicksettings-switch">
-            <property name="title" translatable="yes">Quicksettings</property>
-            <property name="subtitle" translatable="yes">Show toggle and menu in quicksettings.</property>
-            <property name="tooltip-text" translatable="yes">Show toggle and menu in quicksettings.</property>
+            <property name="title" translatable="yes">Quick Settings</property>
+            <property name="subtitle" translatable="yes">Show toggle and menu in Quick Settings.</property>
+            <property name="tooltip-text" translatable="yes">Show toggle and menu in Quick Settings.</property>
           </object>
         </child>
         <child>

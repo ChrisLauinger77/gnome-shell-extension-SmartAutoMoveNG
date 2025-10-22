@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 20:00+0200\n"
-"PO-Revision-Date: 2025-10-22 20:01+0200\n"
+"POT-Creation-Date: 2025-10-22 20:40+0200\n"
+"PO-Revision-Date: 2025-10-22 20:40+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
 "Language: ru\n"
@@ -41,11 +41,11 @@ msgstr "Настройки"
 msgid "Overrides"
 msgstr "Переопределить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:615
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:616
 msgid "Freeze saves enabled"
 msgstr "Заморозить Сохранить включенный"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:618
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
 msgid "Freeze saves disabled"
 msgstr "Заморозить Сохранить инвалид"
 
@@ -126,13 +126,13 @@ msgstr "Вести подробный журналы о поведении ра�
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:19
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
-msgid "Quicksettings"
+msgid "Quick Settings"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:20
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
-msgid "Show toggle and menu in quicksettings."
+msgid "Show toggle and menu in Quick Settings."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24

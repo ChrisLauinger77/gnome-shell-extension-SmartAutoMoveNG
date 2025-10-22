@@ -16,8 +16,8 @@
     </key>
     <key name="quicksettings" type="b">
       <default>true</default>
-      <summary>Quicksettings</summary>
-      <description>Show toggle and menu in quicksettings.</description>
+      <summary>Quick Settings</summary>
+      <description>Show toggle and menu in Quick Settings.</description>
     </key>
     <key name="startup-delay" type="i">
       <default>2500</default>
