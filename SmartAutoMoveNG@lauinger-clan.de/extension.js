@@ -108,7 +108,7 @@ export default class SmartAutoMoveNG extends Extension {
     enable() {
         this._activeWindows = new Map();
         this._settings = this.getSettings();
-        this._indicator = new SmartAutoMoveNGIndicator(this);
+        this._indicator = null; // Quick Settings indicator see _handleChangedQuicksettings
         this._overrides = {};
         this._savedWindows = {};
         this._isGnome49OrHigher = isGnome49OrHigher();
@@ -130,6 +130,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         const signalMap = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, this._handleChangedDebugLogging.bind(this)],
+            [Common.SETTINGS_KEY_QUICKSETTINGS, this._handleChangedQuicksettings.bind(this)],
             [Common.SETTINGS_KEY_STARTUP_DELAY, this._handleChangedStartupDelay.bind(this)],
             [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._handleChangedSyncFrequency.bind(this)],
             [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._handleChangedSaveFrequency.bind(this)],
@@ -214,6 +215,7 @@ export default class SmartAutoMoveNG extends Extension {
     _cleanupSettings() {
         this._settings = null;
         this._debugLogging = null;
+        this._quickSettings = null;
         this._startupDelayMs = null;
         this._syncFrequencyMs = null;
         this._saveFrequencyMs = null;
@@ -230,6 +232,7 @@ export default class SmartAutoMoveNG extends Extension {
     _restoreSettings() {
         this._debug("_restoreSettings()");
         this._handleChangedDebugLogging();
+        this._handleChangedQuicksettings();
         this._handleChangedStartupDelay();
         this._handleChangedSyncFrequency();
         this._handleChangedSaveFrequency();
@@ -247,6 +250,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _saveSettings() {
         this._settings.set_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING, this._debugLogging);
+        this._settings.set_boolean(Common.SETTINGS_KEY_QUICKSETTINGS, this._quickSettings);
         this._settings.set_int(Common.SETTINGS_KEY_STARTUP_DELAY, this._startupDelayMs);
         this._settings.set_int(Common.SETTINGS_KEY_SYNC_FREQUENCY, this._syncFrequencyMs);
         this._settings.set_int(Common.SETTINGS_KEY_SAVE_FREQUENCY, this._saveFrequencyMs);
@@ -520,6 +524,18 @@ export default class SmartAutoMoveNG extends Extension {
         this.getLogger().log("handleChangedDebugLogging(): " + this._debugLogging);
     }
 
+    _handleChangedQuicksettings() {
+        this._quickSettings = this._settings.get_boolean(Common.SETTINGS_KEY_QUICKSETTINGS);
+        if (this._quickSettings && this._indicator === null) {
+            this._indicator = new SmartAutoMoveNGIndicator(this);
+            this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        } else if (!this._quickSettings && this._indicator !== null) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+        this._debug("_handleChangedQuicksettings(): " + this._quickSettings);
+    }
+
     _handleChangedStartupDelay() {
         this._startupDelayMs = this._settings.get_int(Common.SETTINGS_KEY_STARTUP_DELAY);
         this._debug("_handleChangedStartupDelay(): " + this._startupDelayMs);
@@ -547,7 +563,9 @@ export default class SmartAutoMoveNG extends Extension {
 
     _handleChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
-        this._sendOSDNotification(this._freezeSaves);
+        if (this._quickSettings) {
+            this._sendOSDNotification(this._freezeSaves);
+        }
         this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
     }
 
@@ -574,14 +592,18 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedOverrides() {
         this._overrides = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         this._updateStats();
-        this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        if (this._quickSettings) {
+            this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        }
         this._debug("handleChangedOverrides(): " + JSON.stringify(this._overrides));
     }
 
     _handleChangedSavedWindows() {
         this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._updateStats();
-        this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        if (this._quickSettings) {
+            this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
+        }
         this._debug("handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
     }
 

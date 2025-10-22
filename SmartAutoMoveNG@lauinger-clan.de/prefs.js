@@ -119,6 +119,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     _general(settings, builder) {
         const generalBindings = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, "debug-logging-switch", "active"],
+            [Common.SETTINGS_KEY_QUICKSETTINGS, "quicksettings-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],
             [Common.SETTINGS_KEY_SYNC_FREQUENCY, "sync-frequency-spin", "value"],
@@ -382,6 +383,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             // List all keys you want to reset
             const keys = [
                 Common.SETTINGS_KEY_DEBUG_LOGGING,
+                Common.SETTINGS_KEY_QUICKSETTINGS,
                 Common.SETTINGS_KEY_SYNC_MODE,
                 Common.SETTINGS_KEY_MATCH_THRESHOLD,
                 Common.SETTINGS_KEY_SYNC_FREQUENCY,

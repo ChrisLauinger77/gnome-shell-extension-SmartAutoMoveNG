@@ -8,6 +8,13 @@
       <object class="AdwPreferencesGroup" id="smartautomove_group1">
         <property name="title" translatable="yes">Settings</property>
         <child>
+          <object class="AdwSwitchRow" id="quicksettings-switch">
+            <property name="title" translatable="yes">Quicksettings</property>
+            <property name="subtitle" translatable="yes">Show toggle and menu in quicksettings.</property>
+            <property name="tooltip-text" translatable="yes">Show toggle and menu in quicksettings.</property>
+          </object>
+        </child>
+        <child>
           <object class="AdwSwitchRow" id="debug-logging-switch">
             <property name="title" translatable="yes">Debug Logging</property>
             <property name="subtitle" translatable="yes">Write detailed logs about extension behavior.</property>

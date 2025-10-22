@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 15:43+0200\n"
+"POT-Creation-Date: 2025-10-22 20:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,12 +20,12 @@ msgstr ""
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:49
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
 msgid "Saved Windows"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:51
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:150
 msgid "Cleanup Non-occupied Windows"
 msgstr ""
 
@@ -35,16 +35,16 @@ msgid "Settings"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:49
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
 msgid "Overrides"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:594
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:615
 msgid "Freeze saves enabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:597
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:618
 msgid "Freeze saves disabled"
 msgstr ""
 
@@ -60,51 +60,51 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:189
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:190
 msgid "Select app"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:256
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:357
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:257
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:358
 msgid "ANY"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:280
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:281
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:32
 msgid "IGNORE"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:281
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:282
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:33
 msgid "RESTORE"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:282
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:283
 msgid "DEFAULT"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:299
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:300
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:337
 msgid "Delete"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:331
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:332
 msgid "Not occupied"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:348
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:349
 msgid "OVERRIDE"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:361
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:362
 msgid "OVERRIDE (ANY)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:418
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:420
 msgid "Reset Settings"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:424
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:426
 msgid "Reset all settings to default values"
 msgstr ""
 
@@ -113,125 +113,136 @@ msgid "Persisted window data serialized to JSON."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:14
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
 msgid "Debug Logging"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:15
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
 msgid "Write detailed logs about extension behavior."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:19
-msgid "Startup Delay (ms)"
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
+msgid "Quicksettings"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:20
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:83
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:84
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
+msgid "Show toggle and menu in quicksettings."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24
+msgid "Startup Delay (ms)"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:25
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:90
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:91
 msgid ""
 "Period of time in milliseconds to wait between seeing a window and writing "
 "it to the in-memory store."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:29
 msgid "Sync Frequency (ms)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:25
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:51
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:52
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:30
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:58
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:59
 msgid ""
 "Frequency in milliseconds to synchronize changes to active windows into the "
 "in-memory store."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:29
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:34
 msgid "Save Frequency (ms)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:30
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:67
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:68
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:35
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:74
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:75
 msgid "Frequency in milliseconds to persist the in-memory store to disk."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:34
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:34
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:39
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:41
 msgid "Match Threshold"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:35
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:35
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:36
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:40
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:42
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:43
 msgid "Minimum threshold for matching restored windows."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:39
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
 msgid "Sync Mode"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:40
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:45
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 msgid "Default mode when synchronizing windows."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:45
-msgid "Overrides for restored window data."
-msgstr ""
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:49
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:98
-msgid "Freeze Saves"
-msgstr ""
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:50
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:99
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:100
-msgid "Do not update saved window data."
+msgid "Overrides for restored window data."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:54
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:105
-msgid "Activate Workspace"
+msgid "Freeze Saves"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:55
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:106
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:107
-msgid "Follow apps when they are moved to another workspace."
+msgid "Do not update saved window data."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
-msgid "Ignore position"
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
+msgid "Activate Workspace"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:60
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:114
-msgid "Do not restore windows' position."
+msgid "Follow apps when they are moved to another workspace."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:64
-msgid "Ignore workspace"
+msgid "Ignore position"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:65
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:120
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:121
-msgid "Do not restore windows' workspace."
+msgid "Do not restore windows' position."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:126
-msgid "Ignore monitor"
+msgid "Ignore workspace"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:70
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:127
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
+msgid "Do not restore windows' workspace."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:133
+msgid "Ignore monitor"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:75
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:134
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Do not restore windows' monitor."
 msgstr ""
 
@@ -239,30 +250,30 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "Default Synchronization Mode"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:57
 msgid "Sync Frequency (milliseconds)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:66
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:73
 msgid "Save Frequency (milliseconds)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:82
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:89
 msgid "Startup Delay (milliseconds)"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
 msgid "Ignore Position"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:126
 msgid "Ignore Workspace"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
 msgid "Add Application"
 msgstr ""
