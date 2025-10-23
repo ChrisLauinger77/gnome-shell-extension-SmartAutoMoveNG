@@ -384,7 +384,8 @@ export default class SmartAutoMoveNG extends Extension {
 
         let ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
         if (!this._ignoreWorkspace) {
-            win.change_workspace(ws);
+            if (ws !== null) win.change_workspace(ws);
+            this._debug("_moveWindow to workspace: " + ws);
         }
 
         if (this._ignorePosition) {
@@ -405,7 +406,9 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (sw.above) win.make_above();
 
-        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+        if (ws !== null) {
+            if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+        }
 
         if (sw.on_all_workspaces) win.stick();
 
