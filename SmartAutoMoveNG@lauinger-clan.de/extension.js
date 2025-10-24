@@ -170,8 +170,10 @@ export default class SmartAutoMoveNG extends Extension {
         this._saveSettings();
         this._cleanupSettings();
         this._activeWindows = null;
-        this._indicator.destroy();
-        this._indicator = null;
+        if (this._indicator !== null) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
         this._isGnome49OrHigher = null;
     }
 
