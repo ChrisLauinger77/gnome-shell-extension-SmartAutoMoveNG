@@ -34,15 +34,8 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 toggleMode: true,
             });
             // Icon
-            const SmartAutoMoveNGIcon = "smartautomoveng-symbolic";
-            this._finalMenuIcon = SmartAutoMoveNGIcon;
-            this._iconTheme = new St.IconTheme();
-            if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
-                const IconPath = "/icons/";
-                this._finalMenuIcon = Gio.icon_new_for_string(`${Me.path}${IconPath}${SmartAutoMoveNGIcon}.svg`);
-            }
-            this.gicon = this._finalMenuIcon;
-            this.menu.setHeader(this._finalMenuIcon, "Smart Auto Move NG", "");
+            this.gicon = Me._finalMenuIcon;
+            this.menu.setHeader(Me._finalMenuIcon, "Smart Auto Move NG", "");
 
             _settings.bind("freeze-saves", this, "checked", Gio.SettingsBindFlags.DEFAULT);
             // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
@@ -62,16 +55,12 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             }
         }
 
-        get menuIcon() {
-            return this._finalMenuIcon;
-        }
-
         setMenuTitleAndHeader(savedWindowsCount, overridesCount) {
             const stats = `${savedWindowsCount} ${_("Saved Windows")}-${overridesCount} ${_("Overrides")}`;
             this.set({
                 subtitle: stats,
             });
-            this.menu.setHeader(this._finalMenuIcon, "Smart Auto Move NG", stats);
+            this.menu.setHeader(this.gicon, "Smart Auto Move NG", stats);
         }
     }
 );
@@ -108,7 +97,8 @@ export default class SmartAutoMoveNG extends Extension {
     enable() {
         this._activeWindows = new Map();
         this._settings = this.getSettings();
-        this._indicator = null; // Quick Settings indicator see _handleChangedQuicksettings
+        this._indicator = null; // Quick Settings indicator see _OnParamChangedUI
+        this._finalMenuIcon = this._getMenuIcon();
         this._overrides = {};
         this._savedWindows = {};
         this._isGnome49OrHigher = isGnome49OrHigher();
@@ -130,7 +120,8 @@ export default class SmartAutoMoveNG extends Extension {
 
         const signalMap = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, this._handleChangedDebugLogging.bind(this)],
-            [Common.SETTINGS_KEY_QUICKSETTINGS, this._handleChangedQuicksettings.bind(this)],
+            [Common.SETTINGS_KEY_QUICKSETTINGS, this._OnParamChangedUI.bind(this)],
+            [Common.SETTINGS_KEY_NOTIFICATIONS, this._OnParamChangedUI.bind(this)],
             [Common.SETTINGS_KEY_STARTUP_DELAY, this._handleChangedStartupDelay.bind(this)],
             [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._handleChangedSyncFrequency.bind(this)],
             [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._handleChangedSaveFrequency.bind(this)],
@@ -166,6 +157,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._settingSignals = null;
         this._savedWindowsCount = null;
         this._overridesCount = null;
+        this._finalMenuIcon = null;
 
         this._saveSettings();
         this._cleanupSettings();
@@ -173,6 +165,17 @@ export default class SmartAutoMoveNG extends Extension {
         this._indicator?.destroy();
         this._indicator = null;
         this._isGnome49OrHigher = null;
+    }
+
+    _getMenuIcon() {
+        const SmartAutoMoveNGIcon = "smartautomoveng-symbolic";
+        let finalMenuIcon = SmartAutoMoveNGIcon;
+        this._iconTheme = new St.IconTheme();
+        if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
+            const IconPath = "/icons/";
+            finalMenuIcon = Gio.icon_new_for_string(`${this.path}${IconPath}${SmartAutoMoveNGIcon}.svg`);
+        }
+        return finalMenuIcon;
     }
 
     _openPreferences() {
@@ -216,6 +219,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._settings = null;
         this._debugLogging = null;
         this._quickSettings = null;
+        this._notifications = null;
         this._startupDelayMs = null;
         this._syncFrequencyMs = null;
         this._saveFrequencyMs = null;
@@ -232,7 +236,6 @@ export default class SmartAutoMoveNG extends Extension {
     _restoreSettings() {
         this._debug("_restoreSettings()");
         this._handleChangedDebugLogging();
-        this._handleChangedQuicksettings();
         this._handleChangedStartupDelay();
         this._handleChangedSyncFrequency();
         this._handleChangedSaveFrequency();
@@ -246,26 +249,16 @@ export default class SmartAutoMoveNG extends Extension {
         this._handleChangedSavedWindows();
         this._handleChangedIgnoreMonitor();
         this._dumpSavedWindows();
+        // Update the UI to reflect the restored settings - has to be last to not show notifications too early
+        this._OnParamChangedUI();
     }
 
     _saveSettings() {
-        this._settings.set_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING, this._debugLogging);
-        this._settings.set_boolean(Common.SETTINGS_KEY_QUICKSETTINGS, this._quickSettings);
-        this._settings.set_int(Common.SETTINGS_KEY_STARTUP_DELAY, this._startupDelayMs);
-        this._settings.set_int(Common.SETTINGS_KEY_SYNC_FREQUENCY, this._syncFrequencyMs);
-        this._settings.set_int(Common.SETTINGS_KEY_SAVE_FREQUENCY, this._saveFrequencyMs);
-        this._settings.set_double(Common.SETTINGS_KEY_MATCH_THRESHOLD, this._matchThreshold);
-        this._settings.set_enum(Common.SETTINGS_KEY_SYNC_MODE, this._syncMode);
-        this._settings.set_boolean(Common.SETTINGS_KEY_FREEZE_SAVES, this._freezeSaves);
-        this._settings.set_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, this._activateWorkspace);
-        this._settings.set_boolean(Common.SETTINGS_KEY_IGNORE_POSITION, this._ignorePosition);
-        this._settings.set_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._ignoreWorkspace);
-
-        let newOverrides = JSON.stringify(this._overrides);
+        const newOverrides = JSON.stringify(this._overrides);
         this._settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
 
-        let oldSavedWindows = this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS);
-        let newSavedWindows = JSON.stringify(this._savedWindows);
+        const oldSavedWindows = this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS);
+        const newSavedWindows = JSON.stringify(this._savedWindows);
         if (oldSavedWindows === newSavedWindows) return;
         this._debug("_saveSettings()");
         this._dumpSavedWindows();
@@ -525,9 +518,12 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedDebugLogging() {
         this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
         this.getLogger().log("handleChangedDebugLogging(): " + this._debugLogging);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Debug Logging"), this._debugLogging);
+        }
     }
 
-    _handleChangedQuicksettings() {
+    _OnParamChangedUI() {
         this._quickSettings = this._settings.get_boolean(Common.SETTINGS_KEY_QUICKSETTINGS);
         if (this._quickSettings && this._indicator === null) {
             this._indicator = new SmartAutoMoveNGIndicator(this);
@@ -536,7 +532,9 @@ export default class SmartAutoMoveNG extends Extension {
             this._indicator?.destroy();
             this._indicator = null;
         }
-        this._debug("_handleChangedQuicksettings(): " + this._quickSettings);
+        this._debug("_OnParamChangedUI() Quick Settings: " + this._quickSettings);
+        this._notifications = this._settings.get_boolean(Common.SETTINGS_KEY_NOTIFICATIONS);
+        this._debug("_OnParamChangedUI() Notifications: " + this._notifications);
     }
 
     _handleChangedStartupDelay() {
@@ -566,8 +564,8 @@ export default class SmartAutoMoveNG extends Extension {
 
     _handleChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
-        if (this._quickSettings) {
-            this._sendOSDNotification(this._freezeSaves);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Freeze saves"), this._freezeSaves);
         }
         this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
     }
@@ -575,16 +573,25 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedActivateWorkspace() {
         this._activateWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE);
         this._debug("_handleChangedActivateWorkspace(): " + this._activateWorkspace);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Activate Workspace"), this._activateWorkspace);
+        }
     }
 
     _handleChangedIgnorePosition() {
         this._ignorePosition = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_POSITION);
         this._debug("_handleChangedIgnorePosition(): " + this._ignorePosition);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Ignore Position"), this._ignorePosition);
+        }
     }
 
     _handleChangedIgnoreWorkspace() {
         this._ignoreWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE);
         this._debug("_handleChangedIgnoreWorkspace(): " + this._ignoreWorkspace);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Ignore Workspace"), this._ignoreWorkspace);
+        }
     }
 
     _updateStats() {
@@ -613,19 +620,21 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedIgnoreMonitor() {
         this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
         this._debug("_handleChangedIgnoreMonitor(): " + this._ignoreMonitor);
+        if (this._notifications) {
+            this._sendOSDNotification(_("Ignore Monitor"), this._ignoreMonitor);
+        }
     }
 
-    _sendOSDNotification(state) {
-        let message = _("Freeze saves enabled");
-        let icon = this._indicator.menuToggle.menuIcon;
+    _sendOSDNotification(message, state) {
+        let messagestate = _("enabled");
         if (!state) {
-            message = _("Freeze saves disabled");
+            messagestate = _("disabled");
         }
-        const finalmessage = `${this.metadata.name}\n${message}`;
+        const finalmessage = `${this.metadata.name}\n${message} ${messagestate}`;
         if (this._isGnome49OrHigher) {
-            Main.osdWindowManager.showAll(icon, finalmessage, null, null);
+            Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
         } else {
-            Main.osdWindowManager.show(-1, icon, finalmessage, null, null);
+            Main.osdWindowManager.show(-1, this._finalMenuIcon, finalmessage, null, null);
         }
     }
 }

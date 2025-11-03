@@ -19,6 +19,11 @@
       <summary>Quick Settings</summary>
       <description>Show toggle and menu in Quick Settings.</description>
     </key>
+    <key name="notifications" type="b">
+      <default>false</default>
+      <summary>Notifications</summary>
+      <description>Allow the extension to show OSD notifications.</description>
+    </key>
     <key name="startup-delay" type="i">
       <default>2500</default>
       <summary>Startup Delay (ms)</summary>
