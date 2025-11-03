@@ -6,7 +6,7 @@
     <property name="icon-name">preferences-system-symbolic</property>
     <child>
       <object class="AdwPreferencesGroup" id="smartautomove_group1">
-        <property name="title" translatable="yes">Settings</property>
+        <property name="title" translatable="yes">User Interface</property>
         <child>
           <object class="AdwSwitchRow" id="quicksettings-switch">
             <property name="title" translatable="yes">Quick Settings</property>
@@ -14,6 +14,18 @@
             <property name="tooltip-text" translatable="yes">Show toggle and menu in Quick Settings.</property>
           </object>
         </child>
+        <child>
+          <object class="AdwSwitchRow" id="notifications-switch">
+            <property name="title" translatable="yes">Notifications</property>
+            <property name="subtitle" translatable="yes">Allow the extension to show OSD notifications.</property>
+            <property name="tooltip-text" translatable="yes">Allow the extension to show OSD notifications.</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="smartautomove_group2">
+        <property name="title" translatable="yes">Settings</property>
         <child>
           <object class="AdwSwitchRow" id="debug-logging-switch">
             <property name="title" translatable="yes">Debug Logging</property>
