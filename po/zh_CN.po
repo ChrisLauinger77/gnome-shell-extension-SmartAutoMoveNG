@@ -1,142 +1,143 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# voyage200 hello_cmd@outlook.com, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-24 20:28+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-11-03 10:00+0000\n"
+"Last-Translator: voyage200 <hello_cmd@outlook.com>\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:49
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:9
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
 msgid "Saved Windows"
-msgstr ""
+msgstr "已保存的窗口"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:51
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:150
 msgid "Cleanup Non-occupied Windows"
-msgstr ""
+msgstr "清除未打开的窗口"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:56
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:9
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:70
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:49
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
 msgid "Overrides"
-msgstr ""
+msgstr "自定义规则"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
 msgid "Freeze saves enabled"
-msgstr ""
+msgstr "暂停记录窗口位置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:622
 msgid "Freeze saves disabled"
-msgstr ""
+msgstr "恢复记录窗口位置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:20
 msgid "Search..."
-msgstr ""
+msgstr "搜索..."
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:32
 msgid "Select"
-msgstr ""
+msgstr "选择"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:35
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:190
 msgid "Select app"
-msgstr ""
+msgstr "选择应用"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:257
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:358
 msgid "ANY"
-msgstr ""
+msgstr "任意"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:281
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:32
 msgid "IGNORE"
-msgstr ""
+msgstr "忽略"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:282
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:33
 msgid "RESTORE"
-msgstr ""
+msgstr "恢复"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:283
 msgid "DEFAULT"
-msgstr ""
+msgstr "默认"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:300
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:337
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:332
 msgid "Not occupied"
-msgstr ""
+msgstr "当前未打开"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:349
 msgid "OVERRIDE"
-msgstr ""
+msgstr "自定义规则"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:362
 msgid "OVERRIDE (ANY)"
-msgstr ""
+msgstr "自定义规则 (任意窗口)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:420
 msgid "Reset Settings"
-msgstr ""
+msgstr "重置设置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:426
 msgid "Reset all settings to default values"
-msgstr ""
+msgstr "将所有设置重置为默认值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:10
 msgid "Persisted window data serialized to JSON."
-msgstr ""
+msgstr "窗口数据将以 JSON 格式存储。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:14
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
 msgid "Debug Logging"
-msgstr ""
+msgstr "调试日志"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:15
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
 msgid "Write detailed logs about extension behavior."
-msgstr ""
+msgstr "记录扩展的详细行为日志。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:19
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
 msgid "Quick Settings"
-msgstr ""
+msgstr "快捷菜单"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:20
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
 msgid "Show toggle and menu in Quick Settings."
-msgstr ""
+msgstr "在系统快捷菜单中显示开关。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:24
 msgid "Startup Delay (ms)"
-msgstr ""
+msgstr "启动延迟 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:90
@@ -144,11 +145,11 @@ msgstr ""
 msgid ""
 "Period of time in milliseconds to wait between seeing a window and writing "
 "it to the in-memory store."
-msgstr ""
+msgstr "识别到新窗口后，等待多久（毫秒）再记录其信息到内存。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:29
 msgid "Sync Frequency (ms)"
-msgstr ""
+msgstr "同步频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:30
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:58
@@ -156,124 +157,124 @@ msgstr ""
 msgid ""
 "Frequency in milliseconds to synchronize changes to active windows into the "
 "in-memory store."
-msgstr ""
+msgstr "同步活动窗口变动到内存的频率（毫秒）。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:34
 msgid "Save Frequency (ms)"
-msgstr ""
+msgstr "保存频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:35
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:74
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:75
 msgid "Frequency in milliseconds to persist the in-memory store to disk."
-msgstr ""
+msgstr "将内存中的窗口信息保存到磁盘的频率（毫秒）。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:39
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:41
 msgid "Match Threshold"
-msgstr ""
+msgstr "匹配阈值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:40
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:42
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:43
 msgid "Minimum threshold for matching restored windows."
-msgstr ""
+msgstr "恢复窗口位置时的最低匹配相似度。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:44
 msgid "Sync Mode"
-msgstr ""
+msgstr "同步模式"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:45
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 msgid "Default mode when synchronizing windows."
-msgstr ""
+msgstr "识别到新窗口时的默认处理模式。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:50
 msgid "Overrides for restored window data."
-msgstr ""
+msgstr "为特定窗口设定自定义规则。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:54
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:105
 msgid "Freeze Saves"
-msgstr ""
+msgstr "暂停记录"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:55
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:106
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:107
 msgid "Do not update saved window data."
-msgstr ""
+msgstr "暂停更新已保存的窗口信息。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
 msgid "Activate Workspace"
-msgstr ""
+msgstr "激活工作区"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:60
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:114
 msgid "Follow apps when they are moved to another workspace."
-msgstr ""
+msgstr "当窗口被恢复到另一个工作区时，自动切换到该工作区。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:64
 msgid "Ignore position"
-msgstr ""
+msgstr "忽略位置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:65
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:120
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:121
 msgid "Do not restore windows' position."
-msgstr ""
+msgstr "不恢复窗口的位置。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
 msgid "Ignore workspace"
-msgstr ""
+msgstr "忽略工作区"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:70
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:127
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
 msgid "Do not restore windows' workspace."
-msgstr ""
+msgstr "不恢复窗口所在的工作区。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:133
 msgid "Ignore monitor"
-msgstr ""
+msgstr "忽略显示器"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:75
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:134
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Do not restore windows' monitor."
-msgstr ""
+msgstr "不恢复窗口所在的显示器。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:5
 msgid "General"
-msgstr ""
+msgstr "常规"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 msgid "Default Synchronization Mode"
-msgstr ""
+msgstr "默认同步模式"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:57
 msgid "Sync Frequency (milliseconds)"
-msgstr ""
+msgstr "同步频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:73
 msgid "Save Frequency (milliseconds)"
-msgstr ""
+msgstr "保存频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:89
 msgid "Startup Delay (milliseconds)"
-msgstr ""
+msgstr "启动延迟 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
 msgid "Ignore Position"
-msgstr ""
+msgstr "忽略位置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:126
 msgid "Ignore Workspace"
-msgstr ""
+msgstr "忽略工作区"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
 msgid "Add Application"
-msgstr ""
+msgstr "添加应用程序"
