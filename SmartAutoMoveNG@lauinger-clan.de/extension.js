@@ -169,13 +169,13 @@ export default class SmartAutoMoveNG extends Extension {
 
     _getMenuIcon() {
         const SmartAutoMoveNGIcon = "smartautomoveng-symbolic";
-        let finalMenuIcon = SmartAutoMoveNGIcon;
-        this._iconTheme = new St.IconTheme();
-        if (!this._iconTheme.has_icon(SmartAutoMoveNGIcon)) {
-            const IconPath = "/icons/";
-            finalMenuIcon = Gio.icon_new_for_string(`${this.path}${IconPath}${SmartAutoMoveNGIcon}.svg`);
+        const iconTheme = new St.IconTheme();
+        if (iconTheme.has_icon(SmartAutoMoveNGIcon)) {
+            return Gio.icon_new_for_string(SmartAutoMoveNGIcon);
+        } else {
+            const iconPath = "/icons/";
+            return Gio.icon_new_for_string(`${this.path}${iconPath}${SmartAutoMoveNGIcon}.svg`);
         }
-        return finalMenuIcon;
     }
 
     _openPreferences() {
@@ -565,7 +565,7 @@ export default class SmartAutoMoveNG extends Extension {
     _handleChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
         if (this._notifications) {
-            this._sendOSDNotification(_("Freeze saves"), this._freezeSaves);
+            this._sendOSDNotification(_("Freeze Saves"), this._freezeSaves);
         }
         this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
     }

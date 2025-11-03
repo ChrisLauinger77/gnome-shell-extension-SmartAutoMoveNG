@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 19:04+0100\n"
+"POT-Creation-Date: 2025-11-03 22:48+0100\n"
 "PO-Revision-Date: 2025-11-03 17:53+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -49,7 +49,9 @@ msgid "Debug Logging"
 msgstr "调试日志"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:568
-msgid "Freeze saves"
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:117
+msgid "Freeze Saves"
 msgstr "暂停记录"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:577
@@ -231,11 +233,6 @@ msgstr "识别到新窗口时的默认处理模式。"
 msgid "Overrides for restored window data."
 msgstr "为特定窗口设定自定义规则。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:117
-msgid "Freeze Saves"
-msgstr "暂停记录"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:60
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:118
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
@@ -306,6 +303,9 @@ msgstr "启动延迟 (毫秒)"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
 msgid "Add Application"
 msgstr "添加应用程序"
+
+#~ msgid "Freeze saves"
+#~ msgstr "暂停记录"
 
 #~ msgid "Freeze saves enabled"
 #~ msgstr "暂停记录窗口位置"

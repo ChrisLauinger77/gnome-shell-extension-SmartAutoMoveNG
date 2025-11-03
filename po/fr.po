@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 19:04+0100\n"
+"POT-Creation-Date: 2025-11-03 22:48+0100\n"
 "PO-Revision-Date: 2025-11-03 19:05+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -48,7 +48,9 @@ msgid "Debug Logging"
 msgstr "Journalisation du débogage"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:568
-msgid "Freeze saves"
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:117
+msgid "Freeze Saves"
 msgstr "Geler les sauvegardes"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:577
@@ -235,11 +237,6 @@ msgstr "Mode par défaut lors de la synchronisation des fenêtres."
 msgid "Overrides for restored window data."
 msgstr "Remplacements pour les données de fenêtre restaurées."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:59
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:117
-msgid "Freeze Saves"
-msgstr "Geler les sauvegardes"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:60
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:118
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
@@ -312,6 +309,9 @@ msgstr "Délai de démarrage (millisecondes)"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
 msgid "Add Application"
 msgstr "Ajouter une application"
+
+#~ msgid "Freeze saves"
+#~ msgstr "Geler les sauvegardes"
 
 #~ msgid "Freeze saves enabled"
 #~ msgstr "Gel des sauvegardes activé"
