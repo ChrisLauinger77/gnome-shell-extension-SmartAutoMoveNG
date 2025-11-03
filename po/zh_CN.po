@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-03 22:48+0100\n"
-"PO-Revision-Date: 2025-11-03 17:53+0100\n"
+"PO-Revision-Date: 2025-11-03 22:54+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -303,12 +303,3 @@ msgstr "启动延迟 (毫秒)"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
 msgid "Add Application"
 msgstr "添加应用程序"
-
-#~ msgid "Freeze saves"
-#~ msgstr "暂停记录"
-
-#~ msgid "Freeze saves enabled"
-#~ msgstr "暂停记录窗口位置"
-
-#~ msgid "Freeze saves disabled"
-#~ msgstr "恢复记录窗口位置"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-03 22:48+0100\n"
-"PO-Revision-Date: 2025-11-03 19:05+0100\n"
+"PO-Revision-Date: 2025-11-03 22:54+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -309,12 +309,3 @@ msgstr "Délai de démarrage (millisecondes)"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
 msgid "Add Application"
 msgstr "Ajouter une application"
-
-#~ msgid "Freeze saves"
-#~ msgstr "Geler les sauvegardes"
-
-#~ msgid "Freeze saves enabled"
-#~ msgstr "Gel des sauvegardes activé"
-
-#~ msgid "Freeze saves disabled"
-#~ msgstr "Gel des sauvegardes désactivé"
