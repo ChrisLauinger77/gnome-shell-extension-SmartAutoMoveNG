@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 20:40+0200\n"
+"POT-Creation-Date: 2025-10-24 20:28+0800\n"
 "PO-Revision-Date: 2025-10-22 20:39+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -41,11 +41,11 @@ msgstr "Einstellungen"
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:616
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
 msgid "Freeze saves enabled"
 msgstr "Speichern einfrieren aktiviert"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:622
 msgid "Freeze saves disabled"
 msgstr "Speichern einfrieren deaktiviert"
 
