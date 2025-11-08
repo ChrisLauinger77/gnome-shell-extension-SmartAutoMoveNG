@@ -471,11 +471,11 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _shouldSkipWindow(win) {
-        this._debug(
-            "_shouldSkipWindow() " + win.get_title() + " " + win.is_skip_taskbar() + " " + win.get_window_type()
-        );
-
-        return win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
+        const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
+        if (this._debugLogging) {
+            this._debug(this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`));
+        }
+        return shouldSkip;
     }
 
     _syncWindows() {
