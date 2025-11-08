@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 22:48+0100\n"
-"PO-Revision-Date: 2025-11-03 22:54+0100\n"
+"POT-Creation-Date: 2025-11-08 12:02+0100\n"
+"PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -60,16 +60,20 @@ msgid "Activate Workspace"
 msgstr "Activer l'espace de travail"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:585
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:131
 msgid "Ignore Position"
 msgstr "Ignorer la position"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:593
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:138
 msgid "Ignore Workspace"
 msgstr "Ignorer l'espace de travail"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:624
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:79
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:145
 msgid "Ignore Monitor"
 msgstr "Ignorer l'écran"
 
@@ -251,30 +255,17 @@ msgstr ""
 "Suivre les applications lorsqu'elles sont déplacées vers un autre espace de "
 "travail."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
-msgid "Ignore position"
-msgstr "Ignorer la position"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:70
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:132
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:133
 msgid "Do not restore windows' position."
 msgstr "Ne pas restaurer la position des fenêtres."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
-msgid "Ignore workspace"
-msgstr "Ignorer l'espace de travail"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:75
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:139
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:140
 msgid "Do not restore windows' workspace."
 msgstr "Ne pas restaurer l'espace de travail des fenêtres."
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:79
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:145
-msgid "Ignore monitor"
-msgstr "Ignorer l'écran"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:80
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:146

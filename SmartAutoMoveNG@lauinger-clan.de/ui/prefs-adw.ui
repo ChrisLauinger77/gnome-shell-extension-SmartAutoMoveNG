@@ -142,7 +142,7 @@
         </child>
         <child>
           <object class="AdwSwitchRow" id="ignore-monitor-switch">
-            <property name="title" translatable="yes">Ignore monitor</property>
+            <property name="title" translatable="yes">Ignore Monitor</property>
             <property name="subtitle" translatable="yes">Do not restore windows&apos; monitor.</property>
             <property name="tooltip-text" translatable="yes">Do not restore windows&apos; monitor.</property>
           </object>

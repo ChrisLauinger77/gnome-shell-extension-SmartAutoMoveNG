@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-03 22:48+0100\n"
-"PO-Revision-Date: 2025-11-03 22:54+0100\n"
+"POT-Creation-Date: 2025-11-08 12:02+0100\n"
+"PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -61,16 +61,20 @@ msgid "Activate Workspace"
 msgstr "激活工作区"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:585
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:131
 msgid "Ignore Position"
 msgstr "忽略位置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:593
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:138
 msgid "Ignore Workspace"
 msgstr "忽略工作区"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:624
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:79
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:145
 msgid "Ignore Monitor"
 msgstr "忽略显示器"
 
@@ -245,30 +249,17 @@ msgstr "暂停更新已保存的窗口信息。"
 msgid "Follow apps when they are moved to another workspace."
 msgstr "当窗口被恢复到另一个工作区时，自动切换到该工作区。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:69
-msgid "Ignore position"
-msgstr "忽略位置"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:70
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:132
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:133
 msgid "Do not restore windows' position."
 msgstr "不恢复窗口的位置。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:74
-msgid "Ignore workspace"
-msgstr "忽略工作区"
-
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:75
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:139
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:140
 msgid "Do not restore windows' workspace."
 msgstr "不恢复窗口所在的工作区。"
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:79
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:145
-msgid "Ignore monitor"
-msgstr "忽略显示器"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:80
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:146

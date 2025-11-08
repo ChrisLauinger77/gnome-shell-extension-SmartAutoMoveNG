@@ -66,17 +66,17 @@
     </key>
     <key name="ignore-position" type="b">
       <default>false</default>
-      <summary>Ignore position</summary>
+      <summary>Ignore Position</summary>
       <description>Do not restore windows' position.</description>
     </key>
     <key name="ignore-workspace" type="b">
       <default>false</default>
-      <summary>Ignore workspace</summary>
+      <summary>Ignore Workspace</summary>
       <description>Do not restore windows' workspace.</description>
     </key>
     <key name="ignore-monitor" type="b">
       <default>false</default>
-      <summary>Ignore monitor</summary>
+      <summary>Ignore Monitor</summary>
       <description>Do not restore windows' monitor.</description>
     </key>
   </schema>
