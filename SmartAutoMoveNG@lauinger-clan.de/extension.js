@@ -96,6 +96,8 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
 export default class SmartAutoMoveNG extends Extension {
     enable() {
         this._activeWindows = new Map();
+        this._windowStableTimes = new Map();
+        this._lastSkipStates = new Map();
         this._settings = this.getSettings();
         this._indicator = null; // Quick Settings indicator see _OnParamChangedUI
         this._finalMenuIcon = this._getMenuIcon();
@@ -162,6 +164,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._saveSettings();
         this._cleanupSettings();
         this._activeWindows = null;
+        this._windowStableTimes = null;
+        this._lastSkipStates = null;
         this._indicator?.destroy();
         this._indicator = null;
         this._isGnome49OrHigher = null;
@@ -268,8 +272,27 @@ export default class SmartAutoMoveNG extends Extension {
     //// WINDOW UTILITIES
 
     _windowReady(win) {
+        if (!win || win.is_hidden() || win.minimized) return false;
+
         let win_rect = win.get_frame_rect();
-        return !(win_rect.width === 0 && win_rect.height === 0) && !(win_rect.x === 0 && win_rect.y === 0);
+
+        // More reliable ready check - windows should have reasonable size
+        return win_rect.width > 50 && win_rect.height > 50;
+    }
+
+    _windowStateStable(win) {
+        let wh = this._windowHash(win);
+        let currentTime = Date.now();
+
+        let lastCheck = this._windowStableTimes.get(wh) || 0;
+
+        // Only consider window stable if it hasn't changed for 500ms
+        if (currentTime - lastCheck > 500) {
+            this._windowStableTimes.set(wh, currentTime);
+            return true;
+        }
+
+        return false;
     }
 
     // https://gjs-docs-experimental.web.app/meta-10/Window/
@@ -348,9 +371,14 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _ensureSavedWindow(win) {
-        if (this._windowNewerThan(win, this._startupDelayMs)) return;
+        if (this._shouldSkipWindow(win)) return;
 
         if (this._freezeSaves) return;
+
+        // Only save if window is stable and not too new
+        if (!this._windowStateStable(win) || this._windowNewerThan(win, this._startupDelayMs)) {
+            return;
+        }
 
         if (!this._updateSavedWindow(win)) {
             this._pushSavedWindow(win);
@@ -411,17 +439,24 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _restoreWindow(win) {
+        if (this._shouldSkipWindow(win)) return false;
+
         let wsh = this._windowSectionHash(win);
+        if (!wsh) return false;
 
-        let sw;
+        // Don't restore if window is too new
+        if (this._windowNewerThan(win, this._startupDelayMs)) {
+            return false;
+        }
 
-        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
+        // Check if we should restore based on override rules
+        let action = this._findOverrideAction(win, this._matchThreshold);
+        if (action !== Common.SYNC_MODE_RESTORE) {
+            return true;
+        }
 
-        if (swi !== undefined) return false;
-
-        if (!this._windowReady(win)) return true; // try again later
-
-        [swi, sw] = Common.matchedWindow(
+        // Try to find a matching saved window
+        let [swi, sw] = Common.matchedWindow(
             this._savedWindows,
             this._overrides,
             wsh,
@@ -429,24 +464,30 @@ export default class SmartAutoMoveNG extends Extension {
             this._matchThreshold
         );
 
-        if (swi === undefined) return false;
-
-        if (this._windowDataEqual(sw, this._windowData(win))) return true;
-
-        let action = this._findOverrideAction(win, 1);
-        if (action !== Common.SYNC_MODE_RESTORE) return true;
-
-        let pWinRepr = this._windowRepr(win);
-
-        let nsw = this._moveWindow(win, sw);
-
-        if (!this._ignorePosition) {
-            if (!(sw.x === nsw.x && sw.y === nsw.y)) return true;
+        if (swi === undefined) {
+            return false; // No match found
         }
 
-        this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
+        // Check if window is already in the correct position
+        let currentData = this._windowData(win);
+        if (this._windowDataEqual(sw, currentData)) {
+            return true; // Already correct
+        }
 
-        this._savedWindows[wsh][swi] = nsw;
+        // Only restore if the window is ready
+        if (!this._windowReady(win)) {
+            return true; // Try again later
+        }
+
+        this._debug(`_restoreWindow(): restoring window "${win.get_title()}"`);
+
+        let previousRepr = this._windowRepr(win);
+        let newData = this._moveWindow(win, sw);
+
+        this._debug(`_restoreWindow(): moved: ${previousRepr} => ${JSON.stringify(newData)}`);
+
+        // Update the saved data with the actual final position
+        this._savedWindows[wsh][swi] = newData;
 
         return true;
     }
@@ -471,11 +512,20 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _shouldSkipWindow(win) {
-        this._debug(
-            "_shouldSkipWindow() " + win.get_title() + " " + win.is_skip_taskbar() + " " + win.get_window_type()
-        );
+        const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
 
-        return win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
+        // Only log when the skip state changes to reduce spam
+        if (this._debugLogging) {
+            const winId = this._windowHash(win);
+            const lastSkipState = this._lastSkipStates?.get(winId);
+            if (lastSkipState !== shouldSkip) {
+                if (!this._lastSkipStates) this._lastSkipStates = new Map();
+                this._lastSkipStates.set(winId, shouldSkip);
+                this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`);
+            }
+        }
+
+        return shouldSkip;
     }
 
     _syncWindows() {
