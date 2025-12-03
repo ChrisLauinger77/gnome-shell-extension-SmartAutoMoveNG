@@ -193,14 +193,14 @@ export default class SmartAutoMoveNG extends Extension {
 
     _dumpSavedWindows() {
         for (const wsh of Object.keys(this._savedWindows)) {
-            let sws = this._savedWindows[wsh];
+            const sws = this._savedWindows[wsh];
             this._debug("_dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws));
         }
     }
 
     _dumpCurrentWindows() {
         for (const actor of global.get_window_actors()) {
-            let win = actor.get_meta_window();
+            const win = actor.get_meta_window();
             this._dumpWindow(win);
         }
     }
@@ -268,13 +268,13 @@ export default class SmartAutoMoveNG extends Extension {
     //// WINDOW UTILITIES
 
     _windowReady(win) {
-        let win_rect = win.get_frame_rect();
+        const win_rect = win.get_frame_rect();
         return !(win_rect.width === 0 && win_rect.height === 0) && !(win_rect.x === 0 && win_rect.y === 0);
     }
 
     // https://gjs-docs-experimental.web.app/meta-10/Window/
     _windowData(win) {
-        let win_rect = win.get_frame_rect();
+        const win_rect = win.get_frame_rect();
         return {
             id: win.get_id(),
             hash: this._windowHash(win),
@@ -315,7 +315,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _windowNewerThan(win, age) {
-        let wh = this._windowHash(win);
+        const wh = this._windowHash(win);
 
         if (this._activeWindows.get(wh) === undefined) {
             this._activeWindows.set(wh, Date.now());
@@ -327,20 +327,20 @@ export default class SmartAutoMoveNG extends Extension {
     //// WINDOW SAVE / RESTORE
 
     _pushSavedWindow(win) {
-        let wsh = this._windowSectionHash(win);
+        const wsh = this._windowSectionHash(win);
         if (wsh === null) return false;
         if (!Object.hasOwn(this._savedWindows, wsh)) this._savedWindows[wsh] = [];
-        let sw = this._windowData(win);
+        const sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);
         this._debug("_pushSavedWindow() - pushed: " + JSON.stringify(sw));
         return true;
     }
 
     _updateSavedWindow(win) {
-        let wsh = this._windowSectionHash(win);
-        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win) }, 1);
+        const wsh = this._windowSectionHash(win);
+        const [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win) }, 1);
         if (swi === undefined) return false;
-        let sw = this._windowData(win);
+        const sw = this._windowData(win);
         if (this._windowDataEqual(this._savedWindows[wsh][swi], sw)) return true;
         this._savedWindows[wsh][swi] = sw;
         this._debug("_updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw));
@@ -358,12 +358,12 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _findOverrideAction(win, threshold) {
-        let wsh = this._windowSectionHash(win);
-        let sw = this._windowData(win);
+        const wsh = this._windowSectionHash(win);
+        const sw = this._windowData(win);
 
         let action = this._syncMode;
 
-        let override = Common.findOverride(this._overrides, wsh, sw, threshold);
+        const override = Common.findOverride(this._overrides, wsh, sw, threshold);
 
         if (override !== undefined && override.action !== undefined) action = override.action;
 
@@ -375,14 +375,14 @@ export default class SmartAutoMoveNG extends Extension {
             win.move_to_monitor(sw.monitor);
         }
 
-        let ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
+        const ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
         if (!this._ignoreWorkspace) {
             if (ws !== null) win.change_workspace(ws);
             this._debug("_moveWindow to workspace: " + ws);
         }
 
         if (this._ignorePosition) {
-            let cw = this._windowData(win);
+            const cw = this._windowData(win);
             sw.x = cw.x;
             sw.y = cw.y;
         }
@@ -405,13 +405,13 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (sw.on_all_workspaces) win.stick();
 
-        let nsw = this._windowData(win);
+        const nsw = this._windowData(win);
 
         return nsw;
     }
 
     _restoreWindow(win) {
-        let wsh = this._windowSectionHash(win);
+        const wsh = this._windowSectionHash(win);
 
         let sw;
 
@@ -433,12 +433,12 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
 
-        let action = this._findOverrideAction(win, 1);
+        const action = this._findOverrideAction(win, 1);
         if (action !== Common.SYNC_MODE_RESTORE) return true;
 
-        let pWinRepr = this._windowRepr(win);
+        const pWinRepr = this._windowRepr(win);
 
-        let nsw = this._moveWindow(win, sw);
+        const nsw = this._moveWindow(win, sw);
 
         if (!this._ignorePosition) {
             if (!(sw.x === nsw.x && sw.y === nsw.y)) return true;
@@ -452,15 +452,15 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _cleanupWindows() {
-        let found = new Map();
+        const found = new Map();
 
         for (const actor of global.get_window_actors()) {
-            let win = actor.get_meta_window();
+            const win = actor.get_meta_window();
             found.set(this._windowHash(win), true);
         }
 
         for (const wsh of Object.keys(this._savedWindows)) {
-            let sws = this._savedWindows[wsh];
+            const sws = this._savedWindows[wsh];
             for (const sw of sws) {
                 if (sw.occupied && !found.has(sw.hash)) {
                     sw.occupied = false;
@@ -472,16 +472,14 @@ export default class SmartAutoMoveNG extends Extension {
 
     _shouldSkipWindow(win) {
         const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
-        if (this._debugLogging) {
-            this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`);
-        }
+        this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`);
         return shouldSkip;
     }
 
     _syncWindows() {
         this._cleanupWindows();
         for (const actor of global.get_window_actors()) {
-            let win = actor.get_meta_window();
+            const win = actor.get_meta_window();
 
             if (this._shouldSkipWindow(win)) continue;
 
