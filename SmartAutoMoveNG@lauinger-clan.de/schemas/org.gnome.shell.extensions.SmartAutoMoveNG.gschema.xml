@@ -20,7 +20,7 @@
       <description>Show toggle and menu in Quick Settings.</description>
     </key>
     <key name="notifications" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Notifications</summary>
       <description>Allow the extension to show OSD notifications.</description>
     </key>
