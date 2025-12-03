@@ -6,7 +6,7 @@ SmartAutoMoveNG
 is a Gnome Shell extension which keeps track of all application windows and restores them to the previous position, size, and workspace on restart. Supports Wayland.
 
 <p align="left">
-  <a href="https://extensions.gnome.org/extension/8149/smart-auto-move-ng/" target="_blank">
+  <a href="https://extensions.gnome.org/extension/8149/smart-auto-move-ng/">
     <img alt="Get it on GNOME Extensions" width="228" src="https://raw.githubusercontent.com/andyholmes/gnome-shell-extensions-badge/master/get-it-on-ego.svg?sanitize=true"/>
   </a>
 </p>
@@ -17,7 +17,7 @@ Pull requests are welcome.
 
 To update the translation files run
 `./smartautomoveng.sh translate` in the extensions directory after your code changes are finished. This will update the files in po folder.
-Then [poedit](https://poedit.net/download){:target="_blank"} can be used to translate the strings. poedit can also be used to create new localization files.
+Then [Poedit](https://poedit.net/download) can be used to translate the strings. poedit can also be used to create new localization files.
 
 ## Screenshots
 
