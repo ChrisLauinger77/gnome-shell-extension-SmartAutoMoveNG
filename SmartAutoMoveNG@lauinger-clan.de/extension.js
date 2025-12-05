@@ -268,7 +268,7 @@ export default class SmartAutoMoveNG extends Extension {
     //// WINDOW UTILITIES
 
     _windowReady(win) {
-        const windowReady_win = win && !win.is_hidden() && !win.minimized;
+        const windowReady_win = win && !win.minimized; // is_hidden is true when opened on another workspace - follow ws does not work then
         this._debug(`_windowReady() - windowReady_win: - ${win.get_title()} - ${windowReady_win}`);
 
         const win_rect = win.get_frame_rect();
