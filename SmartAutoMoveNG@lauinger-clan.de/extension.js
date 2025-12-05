@@ -268,11 +268,17 @@ export default class SmartAutoMoveNG extends Extension {
     //// WINDOW UTILITIES
 
     _windowReady(win) {
+        const windowReady_win = win && !win.is_hidden() && !win.minimized;
+        this._debug(`_windowReady() - windowReady_win: - ${win.get_title()} - ${windowReady_win}`);
+
         const win_rect = win.get_frame_rect();
-        return !(win_rect.width === 0 && win_rect.height === 0) && !(win_rect.x === 0 && win_rect.y === 0);
+        this._debug(`_windowReady() - win_rect: - ${win.get_title()} - ${win_rect.width},${win_rect.height}`);
+        const windowReady_rect = win_rect.width > 50 && win_rect.height > 50;
+        this._debug(`_windowReady() - windowReady_rect: ${win.get_title()} - ${windowReady_rect}`);
+        return windowReady_win && windowReady_rect;
     }
 
-    // https://gjs-docs-experimental.web.app/meta-10/Window/
+    // https://mutter.gnome.org/meta/class.Window.html
     _windowData(win) {
         const win_rect = win.get_frame_rect();
         return {
