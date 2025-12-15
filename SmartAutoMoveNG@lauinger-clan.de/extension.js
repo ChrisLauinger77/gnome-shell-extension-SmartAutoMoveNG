@@ -97,12 +97,12 @@ export default class SmartAutoMoveNG extends Extension {
     enable() {
         this._activeWindows = new Map();
         this._settings = this.getSettings();
-        this._indicator = null; // Quick Settings indicator see _OnParamChangedUI
+        this._indicator = null; // Quick Settings indicator see _onParamChangedUI
         this._finalMenuIcon = this._getMenuIcon();
         this._overrides = {};
         this._savedWindows = {};
         this._isGnome49OrHigher = isGnome49OrHigher();
-        this._handleChangedDebugLogging();
+        this._onParamChangedDebugLogging();
 
         this._debug("enable()");
         this._restoreSettings();
@@ -119,21 +119,21 @@ export default class SmartAutoMoveNG extends Extension {
         this._updateStats();
 
         const signalMap = [
-            [Common.SETTINGS_KEY_DEBUG_LOGGING, this._handleChangedDebugLogging.bind(this)],
-            [Common.SETTINGS_KEY_QUICKSETTINGS, this._OnParamChangedUI.bind(this)],
-            [Common.SETTINGS_KEY_NOTIFICATIONS, this._OnParamChangedUI.bind(this)],
-            [Common.SETTINGS_KEY_STARTUP_DELAY, this._handleChangedStartupDelay.bind(this)],
-            [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._handleChangedSyncFrequency.bind(this)],
-            [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._handleChangedSaveFrequency.bind(this)],
-            [Common.SETTINGS_KEY_MATCH_THRESHOLD, this._handleChangedMatchThreshold.bind(this)],
-            [Common.SETTINGS_KEY_SYNC_MODE, this._handleChangedSyncMode.bind(this)],
-            [Common.SETTINGS_KEY_FREEZE_SAVES, this._handleChangedFreezeSaves.bind(this)],
-            [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, this._handleChangedActivateWorkspace.bind(this)],
-            [Common.SETTINGS_KEY_IGNORE_POSITION, this._handleChangedIgnorePosition.bind(this)],
-            [Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._handleChangedIgnoreWorkspace.bind(this)],
-            [Common.SETTINGS_KEY_OVERRIDES, this._handleChangedOverrides.bind(this)],
-            [Common.SETTINGS_KEY_SAVED_WINDOWS, this._handleChangedSavedWindows.bind(this)],
-            [Common.SETTINGS_KEY_IGNORE_MONITOR, this._handleChangedIgnoreMonitor.bind(this)],
+            [Common.SETTINGS_KEY_DEBUG_LOGGING, this._onParamChangedDebugLogging.bind(this)],
+            [Common.SETTINGS_KEY_QUICKSETTINGS, this._onParamChangedUI.bind(this)],
+            [Common.SETTINGS_KEY_NOTIFICATIONS, this._onParamChangedUI.bind(this)],
+            [Common.SETTINGS_KEY_STARTUP_DELAY, this._onParamChangedStartupDelay.bind(this)],
+            [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._onParamChangedSyncFrequency.bind(this)],
+            [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._onParamChangedSaveFrequency.bind(this)],
+            [Common.SETTINGS_KEY_MATCH_THRESHOLD, this._onParamChangedMatchThreshold.bind(this)],
+            [Common.SETTINGS_KEY_SYNC_MODE, this._onParamChangedSyncMode.bind(this)],
+            [Common.SETTINGS_KEY_FREEZE_SAVES, this._onParamChangedFreezeSaves.bind(this)],
+            [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, this._onParamChangedActivateWorkspace.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_POSITION, this._onParamChangedIgnorePosition.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_WORKSPACE, this._onParamChangedIgnoreWorkspace.bind(this)],
+            [Common.SETTINGS_KEY_OVERRIDES, this._onParamChangedOverrides.bind(this)],
+            [Common.SETTINGS_KEY_SAVED_WINDOWS, this._onParamChangedSavedWindows.bind(this)],
+            [Common.SETTINGS_KEY_IGNORE_MONITOR, this._onParamChangedIgnoreMonitor.bind(this)],
         ];
         for (const [key, handler] of signalMap) {
             const id = this._settings.connect("changed::" + key, handler);
@@ -235,22 +235,22 @@ export default class SmartAutoMoveNG extends Extension {
 
     _restoreSettings() {
         this._debug("_restoreSettings()");
-        this._handleChangedDebugLogging();
-        this._handleChangedStartupDelay();
-        this._handleChangedSyncFrequency();
-        this._handleChangedSaveFrequency();
-        this._handleChangedMatchThreshold();
-        this._handleChangedSyncMode();
-        this._handleChangedFreezeSaves();
-        this._handleChangedActivateWorkspace();
-        this._handleChangedIgnorePosition();
-        this._handleChangedIgnoreWorkspace();
-        this._handleChangedOverrides();
-        this._handleChangedSavedWindows();
-        this._handleChangedIgnoreMonitor();
+        this._onParamChangedDebugLogging();
+        this._onParamChangedStartupDelay();
+        this._onParamChangedSyncFrequency();
+        this._onParamChangedSaveFrequency();
+        this._onParamChangedMatchThreshold();
+        this._onParamChangedSyncMode();
+        this._onParamChangedFreezeSaves();
+        this._onParamChangedActivateWorkspace();
+        this._onParamChangedIgnorePosition();
+        this._onParamChangedIgnoreWorkspace();
+        this._onParamChangedOverrides();
+        this._onParamChangedSavedWindows();
+        this._onParamChangedIgnoreMonitor();
         this._dumpSavedWindows();
         // Update the UI to reflect the restored settings - has to be last to not show notifications too early
-        this._OnParamChangedUI();
+        this._onParamChangedUI();
     }
 
     _saveSettings() {
@@ -267,13 +267,15 @@ export default class SmartAutoMoveNG extends Extension {
 
     //// WINDOW UTILITIES
 
+    _windowTitle(win) {
+        return win.get_title();
+    }
+
     _windowReady(win) {
-        const windowReady_win = win && !win.minimized; // is_hidden is true when opened on another workspace - follow ws does not work then
+        const windowReady_win = win && !win.minimized && this._windowTitle(win).length > 0; // is_hidden is true when opened on another workspace - follow ws does not work then
         const win_rect = win.get_frame_rect();
         const windowReady_rect = win_rect.width > 50 && win_rect.height > 50;
-        this._debug(
-            `_windowReady() ${win.get_title()} - windowReady_rect: ${windowReady_rect} - windowReady_win: ${windowReady_win}`
-        );
+        this._debug(`_windowReady() ${this._windowTitle(win)} - rect: ${windowReady_rect} - win: ${windowReady_win}`);
         return windowReady_win && windowReady_rect;
     }
 
@@ -284,7 +286,7 @@ export default class SmartAutoMoveNG extends Extension {
             id: win.get_id(),
             hash: this._windowHash(win),
             sequence: win.get_stable_sequence(),
-            title: win.get_title(),
+            title: this._windowTitle(win),
             //sandboxed_app_id: win.get_sandboxed_app_id(),
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
@@ -430,7 +432,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._savedWindows,
             this._overrides,
             wsh,
-            win.get_title(),
+            this._windowTitle(win),
             this._matchThreshold
         );
 
@@ -477,7 +479,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _shouldSkipWindow(win) {
         const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
-        this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`);
+        this._debug(`_shouldSkipWindow() ${this._windowTitle(win)} - skip: ${shouldSkip}`);
         return shouldSkip;
     }
 
@@ -518,7 +520,7 @@ export default class SmartAutoMoveNG extends Extension {
         return GLib.SOURCE_CONTINUE;
     }
 
-    _handleChangedDebugLogging() {
+    _onParamChangedDebugLogging() {
         this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
         this.getLogger().log("handleChangedDebugLogging(): " + this._debugLogging);
         if (this._notifications) {
@@ -526,7 +528,7 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _OnParamChangedUI() {
+    _onParamChangedUI() {
         this._quickSettings = this._settings.get_boolean(Common.SETTINGS_KEY_QUICKSETTINGS);
         if (this._quickSettings && this._indicator === null) {
             this._indicator = new SmartAutoMoveNGIndicator(this);
@@ -535,63 +537,63 @@ export default class SmartAutoMoveNG extends Extension {
             this._indicator?.destroy();
             this._indicator = null;
         }
-        this._debug("_OnParamChangedUI() Quick Settings: " + this._quickSettings);
+        this._debug("_onParamChangedUI() Quick Settings: " + this._quickSettings);
         this._notifications = this._settings.get_boolean(Common.SETTINGS_KEY_NOTIFICATIONS);
-        this._debug("_OnParamChangedUI() Notifications: " + this._notifications);
+        this._debug("_onParamChangedUI() Notifications: " + this._notifications);
     }
 
-    _handleChangedStartupDelay() {
+    _onParamChangedStartupDelay() {
         this._startupDelayMs = this._settings.get_int(Common.SETTINGS_KEY_STARTUP_DELAY);
-        this._debug("_handleChangedStartupDelay(): " + this._startupDelayMs);
+        this._debug("_onParamChangedStartupDelay(): " + this._startupDelayMs);
     }
 
-    _handleChangedSyncFrequency() {
+    _onParamChangedSyncFrequency() {
         this._syncFrequencyMs = this._settings.get_int(Common.SETTINGS_KEY_SYNC_FREQUENCY);
-        this._debug("_handleChangedSyncFrequency(): " + this._syncFrequencyMs);
+        this._debug("_onParamChangedSyncFrequency(): " + this._syncFrequencyMs);
     }
 
-    _handleChangedSaveFrequency() {
+    _onParamChangedSaveFrequency() {
         this._saveFrequencyMs = this._settings.get_int(Common.SETTINGS_KEY_SAVE_FREQUENCY);
-        this._debug("_handleChangedSaveFrequency(): " + this._saveFrequencyMs);
+        this._debug("_onParamChangedSaveFrequency(): " + this._saveFrequencyMs);
     }
 
-    _handleChangedMatchThreshold() {
+    _onParamChangedMatchThreshold() {
         this._matchThreshold = this._settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD);
-        this._debug("_handleChangedMatchThreshold(): " + this._matchThreshold);
+        this._debug("_onParamChangedMatchThreshold(): " + this._matchThreshold);
     }
 
-    _handleChangedSyncMode() {
+    _onParamChangedSyncMode() {
         this._syncMode = this._settings.get_enum(Common.SETTINGS_KEY_SYNC_MODE);
-        this._debug("_handleChangedSyncMode(): " + this._syncMode);
+        this._debug("_onParamChangedSyncMode(): " + this._syncMode);
     }
 
-    _handleChangedFreezeSaves() {
+    _onParamChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
         if (this._notifications) {
             this._sendOSDNotification(_("Freeze Saves"), this._freezeSaves);
         }
-        this._debug("_handleChangedFreezeSaves(): " + this._freezeSaves);
+        this._debug("_onParamChangedFreezeSaves(): " + this._freezeSaves);
     }
 
-    _handleChangedActivateWorkspace() {
+    _onParamChangedActivateWorkspace() {
         this._activateWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE);
-        this._debug("_handleChangedActivateWorkspace(): " + this._activateWorkspace);
+        this._debug("_onParamChangedActivateWorkspace(): " + this._activateWorkspace);
         if (this._notifications) {
             this._sendOSDNotification(_("Activate Workspace"), this._activateWorkspace);
         }
     }
 
-    _handleChangedIgnorePosition() {
+    _onParamChangedIgnorePosition() {
         this._ignorePosition = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_POSITION);
-        this._debug("_handleChangedIgnorePosition(): " + this._ignorePosition);
+        this._debug("_onParamChangedIgnorePosition(): " + this._ignorePosition);
         if (this._notifications) {
             this._sendOSDNotification(_("Ignore Position"), this._ignorePosition);
         }
     }
 
-    _handleChangedIgnoreWorkspace() {
+    _onParamChangedIgnoreWorkspace() {
         this._ignoreWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE);
-        this._debug("_handleChangedIgnoreWorkspace(): " + this._ignoreWorkspace);
+        this._debug("_onParamChangedIgnoreWorkspace(): " + this._ignoreWorkspace);
         if (this._notifications) {
             this._sendOSDNotification(_("Ignore Workspace"), this._ignoreWorkspace);
         }
@@ -602,7 +604,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._overridesCount = Object.keys(this._overrides).length;
     }
 
-    _handleChangedOverrides() {
+    _onParamChangedOverrides() {
         this._overrides = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         this._updateStats();
         if (this._quickSettings) {
@@ -611,7 +613,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("handleChangedOverrides(): " + JSON.stringify(this._overrides));
     }
 
-    _handleChangedSavedWindows() {
+    _onParamChangedSavedWindows() {
         this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._updateStats();
         if (this._quickSettings) {
@@ -620,9 +622,9 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
     }
 
-    _handleChangedIgnoreMonitor() {
+    _onParamChangedIgnoreMonitor() {
         this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
-        this._debug("_handleChangedIgnoreMonitor(): " + this._ignoreMonitor);
+        this._debug("_onParamChangedIgnoreMonitor(): " + this._ignoreMonitor);
         if (this._notifications) {
             this._sendOSDNotification(_("Ignore Monitor"), this._ignoreMonitor);
         }
