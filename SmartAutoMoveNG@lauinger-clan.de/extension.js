@@ -267,13 +267,15 @@ export default class SmartAutoMoveNG extends Extension {
 
     //// WINDOW UTILITIES
 
+    _windowTitle(win) {
+        return win.get_title();
+    }
+
     _windowReady(win) {
-        const windowReady_win = win && !win.minimized && win.get_title().length > 0; // is_hidden is true when opened on another workspace - follow ws does not work then
+        const windowReady_win = win && !win.minimized && this._windowTitle(win).length > 0; // is_hidden is true when opened on another workspace - follow ws does not work then
         const win_rect = win.get_frame_rect();
         const windowReady_rect = win_rect.width > 50 && win_rect.height > 50;
-        this._debug(
-            `_windowReady() ${win.get_title()} - windowReady_rect: ${windowReady_rect} - windowReady_win: ${windowReady_win}`
-        );
+        this._debug(`_windowReady() ${this._windowTitle(win)} - rect: ${windowReady_rect} - win: ${windowReady_win}`);
         return windowReady_win && windowReady_rect;
     }
 
@@ -284,7 +286,7 @@ export default class SmartAutoMoveNG extends Extension {
             id: win.get_id(),
             hash: this._windowHash(win),
             sequence: win.get_stable_sequence(),
-            title: win.get_title(),
+            title: this._windowTitle(win),
             //sandboxed_app_id: win.get_sandboxed_app_id(),
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
@@ -430,7 +432,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._savedWindows,
             this._overrides,
             wsh,
-            win.get_title(),
+            this._windowTitle(win),
             this._matchThreshold
         );
 
@@ -477,7 +479,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _shouldSkipWindow(win) {
         const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
-        this._debug(`_shouldSkipWindow() ${win.get_title()} - skip: ${shouldSkip}`);
+        this._debug(`_shouldSkipWindow() ${this._windowTitle(win)} - skip: ${shouldSkip}`);
         return shouldSkip;
     }
 
