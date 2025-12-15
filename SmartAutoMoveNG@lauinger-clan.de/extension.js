@@ -522,7 +522,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _onParamChangedDebugLogging() {
         this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
-        this.getLogger().log("handleChangedDebugLogging(): " + this._debugLogging);
+        this.getLogger().log("_onParamChangedDebugLogging(): " + this._debugLogging);
         if (this._notifications) {
             this._sendOSDNotification(_("Debug Logging"), this._debugLogging);
         }
@@ -610,7 +610,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
         }
-        this._debug("handleChangedOverrides(): " + JSON.stringify(this._overrides));
+        this._debug("_onParamChangedOverrides(): " + JSON.stringify(this._overrides));
     }
 
     _onParamChangedSavedWindows() {
@@ -619,7 +619,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
         }
-        this._debug("handleChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
+        this._debug("_onParamChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
     }
 
     _onParamChangedIgnoreMonitor() {
