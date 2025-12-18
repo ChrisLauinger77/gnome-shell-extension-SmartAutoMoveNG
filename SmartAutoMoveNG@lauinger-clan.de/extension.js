@@ -523,9 +523,7 @@ export default class SmartAutoMoveNG extends Extension {
     _onParamChangedDebugLogging() {
         this._debugLogging = this._settings.get_boolean(Common.SETTINGS_KEY_DEBUG_LOGGING);
         this.getLogger().log("_onParamChangedDebugLogging(): " + this._debugLogging);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Debug Logging"), this._debugLogging);
-        }
+        this._sendOSDNotification(_("Debug Logging"), this._debugLogging);
     }
 
     _onParamChangedUI() {
@@ -569,34 +567,26 @@ export default class SmartAutoMoveNG extends Extension {
 
     _onParamChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Freeze Saves"), this._freezeSaves);
-        }
+        this._sendOSDNotification(_("Freeze Saves"), this._freezeSaves);
         this._debug("_onParamChangedFreezeSaves(): " + this._freezeSaves);
     }
 
     _onParamChangedActivateWorkspace() {
         this._activateWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_ACTIVATE_WORKSPACE);
         this._debug("_onParamChangedActivateWorkspace(): " + this._activateWorkspace);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Activate Workspace"), this._activateWorkspace);
-        }
+        this._sendOSDNotification(_("Activate Workspace"), this._activateWorkspace);
     }
 
     _onParamChangedIgnorePosition() {
         this._ignorePosition = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_POSITION);
         this._debug("_onParamChangedIgnorePosition(): " + this._ignorePosition);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Ignore Position"), this._ignorePosition);
-        }
+        this._sendOSDNotification(_("Ignore Position"), this._ignorePosition);
     }
 
     _onParamChangedIgnoreWorkspace() {
         this._ignoreWorkspace = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_WORKSPACE);
         this._debug("_onParamChangedIgnoreWorkspace(): " + this._ignoreWorkspace);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Ignore Workspace"), this._ignoreWorkspace);
-        }
+        this._sendOSDNotification(_("Ignore Workspace"), this._ignoreWorkspace);
     }
 
     _updateStats() {
@@ -625,21 +615,21 @@ export default class SmartAutoMoveNG extends Extension {
     _onParamChangedIgnoreMonitor() {
         this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
         this._debug("_onParamChangedIgnoreMonitor(): " + this._ignoreMonitor);
-        if (this._notifications) {
-            this._sendOSDNotification(_("Ignore Monitor"), this._ignoreMonitor);
-        }
+        this._sendOSDNotification(_("Ignore Monitor"), this._ignoreMonitor);
     }
 
     _sendOSDNotification(message, state) {
-        let messagestate = _("enabled");
-        if (!state) {
-            messagestate = _("disabled");
-        }
-        const finalmessage = `${this.metadata.name}\n${message} ${messagestate}`;
-        if (this._isGnome49OrHigher) {
-            Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
-        } else {
-            Main.osdWindowManager.show(-1, this._finalMenuIcon, finalmessage, null, null);
+        if (this._notifications) {
+            let messagestate = _("enabled");
+            if (!state) {
+                messagestate = _("disabled");
+            }
+            const finalmessage = `${this.metadata.name}\n${message} ${messagestate}`;
+            if (this._isGnome49OrHigher) {
+                Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
+            } else {
+                Main.osdWindowManager.show(-1, this._finalMenuIcon, finalmessage, null, null);
+            }
         }
     }
 }
