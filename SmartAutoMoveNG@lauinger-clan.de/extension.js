@@ -36,8 +36,8 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             // Icon
             this.gicon = Me._finalMenuIcon;
             this.menu.setHeader(Me._finalMenuIcon, "Smart Auto Move NG", "");
-
-            _settings.bind("freeze-saves", this, "checked", Gio.SettingsBindFlags.DEFAULT);
+            // Bind toggle (robust enum handling)
+            this.bindToggleToSetting(_settings);
             // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
             const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(_("Saved Windows"));
             this.menu.addMenuItem(popupMenuExpander);
@@ -61,6 +61,33 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 subtitle: stats,
             });
             this.menu.setHeader(this.gicon, "Smart Auto Move NG", stats);
+        }
+
+        bindToggleToSetting(_settings) {
+            const usageEnumValue = _settings.get_enum(Common.SETTINGS_KEY_QUICKSETTINGSTOGGLE);
+            let quicksettingstogglekey;
+            switch (usageEnumValue) {
+                case 0:
+                    quicksettingstogglekey = Common.SETTINGS_KEY_FREEZE_SAVES;
+                    break;
+                case 1:
+                    quicksettingstogglekey = Common.SETTINGS_KEY_ACTIVATE_WORKSPACE;
+                    break;
+                case 2:
+                    quicksettingstogglekey = Common.SETTINGS_KEY_IGNORE_POSITION;
+                    break;
+                case 3:
+                    quicksettingstogglekey = Common.SETTINGS_KEY_IGNORE_WORKSPACE;
+                    break;
+                case 4:
+                    quicksettingstogglekey = Common.SETTINGS_KEY_IGNORE_MONITOR;
+                    break;
+                default:
+                    // Fallback to a known value
+                    quicksettingstogglekey = Common.SETTINGS_KEY_FREEZE_SAVES;
+                    break;
+            }
+            _settings.bind(quicksettingstogglekey, this, "checked", Gio.SettingsBindFlags.DEFAULT);
         }
     }
 );
@@ -121,6 +148,7 @@ export default class SmartAutoMoveNG extends Extension {
         const signalMap = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, this._onParamChangedDebugLogging.bind(this)],
             [Common.SETTINGS_KEY_QUICKSETTINGS, this._onParamChangedUI.bind(this)],
+            [Common.SETTINGS_KEY_QUICKSETTINGSTOGGLE, this._onParamChangedUI.bind(this)],
             [Common.SETTINGS_KEY_NOTIFICATIONS, this._onParamChangedUI.bind(this)],
             [Common.SETTINGS_KEY_STARTUP_DELAY, this._onParamChangedStartupDelay.bind(this)],
             [Common.SETTINGS_KEY_SYNC_FREQUENCY, this._onParamChangedSyncFrequency.bind(this)],
@@ -538,6 +566,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("_onParamChangedUI() Quick Settings: " + this._quickSettings);
         this._notifications = this._settings.get_boolean(Common.SETTINGS_KEY_NOTIFICATIONS);
         this._debug("_onParamChangedUI() Notifications: " + this._notifications);
+        this._indicator?.menuToggle.bindToggleToSetting(this._settings);
     }
 
     _onParamChangedStartupDelay() {

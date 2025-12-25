@@ -120,6 +120,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const generalBindings = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, "debug-logging-switch", "active"],
             [Common.SETTINGS_KEY_QUICKSETTINGS, "quicksettings-switch", "active"],
+            [Common.SETTINGS_KEY_QUICKSETTINGSTOGGLE, "quicksettings-combo", "selected"],
             [Common.SETTINGS_KEY_NOTIFICATIONS, "notifications-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],

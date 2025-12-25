@@ -15,6 +15,24 @@
           </object>
         </child>
         <child>
+          <object class="AdwComboRow" id="quicksettings-combo">
+            <property name="title" translatable="yes">Quick Settings toggle</property>
+            <property name="subtitle" translatable="yes">Usage of Quick Settings toggle</property>
+            <property name="tooltip-text" translatable="yes">Usage of Quick Settings toggle</property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item translatable="yes">Freeze Saves</item>
+                  <item translatable="yes">Activate Workspace</item>
+                  <item translatable="yes">Ignore Position</item>
+                  <item translatable="yes">Ignore Workspace</item>
+                  <item translatable="yes">Ignore Monitor</item>
+                </items>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
           <object class="AdwSwitchRow" id="notifications-switch">
             <property name="title" translatable="yes">Notifications</property>
             <property name="subtitle" translatable="yes">Allow the extension to show OSD notifications.</property>
@@ -38,14 +56,14 @@
             <property name="title" translatable="yes">Default Synchronization Mode</property>
             <property name="subtitle" translatable="yes">Default mode when synchronizing windows.</property>
             <property name="tooltip-text" translatable="yes">Default mode when synchronizing windows.</property>
-              <property name="model">
-                <object class="GtkStringList">
-                  <items>
-                    <item translatable="yes">IGNORE</item>
-                    <item translatable="yes">RESTORE</item>
-                  </items>
-                </object>
-              </property>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item translatable="yes">IGNORE</item>
+                  <item translatable="yes">RESTORE</item>
+                </items>
+              </object>
+            </property>
           </object>
         </child>
         <child>
@@ -151,33 +169,33 @@
     </child>
   </object>
   <object class="AdwPreferencesPage" id="smartautomove_page2">
-      <property name="name">smartautomove_page2</property>
-      <property name="title" translatable="yes">Saved Windows</property>
-      <property name="icon-name">window-restore-symbolic</property>
-      <child>
-        <object class="AdwPreferencesGroup" id="saved-windows-listbox">
-          <property name="title" translatable="yes"></property>
-          <child>
+    <property name="name">smartautomove_page2</property>
+    <property name="title" translatable="yes">Saved Windows</property>
+    <property name="icon-name">window-restore-symbolic</property>
+    <child>
+      <object class="AdwPreferencesGroup" id="saved-windows-listbox">
+        <property name="title" translatable="yes"></property>
+        <child>
           <object class="AdwButtonRow" id="saved-windows-cleanup-button">
             <property name="title" translatable="yes">Cleanup Non-occupied Windows</property>
           </object>
         </child>
-        </object>
-      </child>
+      </object>
+    </child>
   </object>
   <object class="AdwPreferencesPage" id="smartautomove_page3">
-      <property name="name">smartautomove_page3</property>
-      <property name="title" translatable="yes">Overrides</property>
-      <property name="icon-name">dialog-warning-symbolic</property>
-      <child>
-        <object class="AdwPreferencesGroup" id="overrides-listbox">
-          <property name="title" translatable="yes"></property>
-          <child>
+    <property name="name">smartautomove_page3</property>
+    <property name="title" translatable="yes">Overrides</property>
+    <property name="icon-name">dialog-warning-symbolic</property>
+    <child>
+      <object class="AdwPreferencesGroup" id="overrides-listbox">
+        <property name="title" translatable="yes"></property>
+        <child>
           <object class="AdwButtonRow" id="overrides-add-application-button">
             <property name="title" translatable="yes">Add Application</property>
           </object>
         </child>
-        </object>
-      </child>
+      </object>
+    </child>
   </object>
 </interface>
