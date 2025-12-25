@@ -566,6 +566,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("_onParamChangedUI() Quick Settings: " + this._quickSettings);
         this._notifications = this._settings.get_boolean(Common.SETTINGS_KEY_NOTIFICATIONS);
         this._debug("_onParamChangedUI() Notifications: " + this._notifications);
+        Gio.Settings.unbind(this._indicator?.menuToggle, "checked");
         this._indicator?.menuToggle.bindToggleToSetting(this._settings);
     }
 
