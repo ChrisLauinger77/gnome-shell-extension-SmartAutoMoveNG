@@ -3,7 +3,7 @@
 import * as Common from "../lib/common.js";
 
 function assertScore(sw, query, want_score) {
-    let score = Common.scoreWindow(sw, query);
+    const score = Common.scoreWindow(sw, query);
     console.assert(want_score === score, {
         want_score: want_score,
         score: score,
@@ -21,25 +21,12 @@ assertScore(
     0.625
 );
 
-assertScore(
-    { title: "user@host: ~", occupied: false },
-    { title: "user@host: ~", occupied: false },
-    1.0
-);
+assertScore({ title: "user@host: ~", occupied: false }, { title: "user@host: ~", occupied: false }, 1.0);
 
-assertScore(
-    { title: "user@host: ~", occupied: true },
-    { title: "user@host: ~", occupied: false },
-    0.0
-);
+assertScore({ title: "user@host: ~", occupied: true }, { title: "user@host: ~", occupied: false }, 0.0);
 
 function assertFoundWindow(saved_windows, wsh, query, threshold, want_found) {
-    let [found, best_score] = Common.findSavedWindow(
-        saved_windows,
-        wsh,
-        query,
-        threshold
-    );
+    const [found, best_score] = Common.findSavedWindow(saved_windows, wsh, query, threshold);
     console.assert(want_found === found, {
         want_found: want_found,
         found: found,
@@ -118,7 +105,7 @@ assertFoundWindow(
 );
 
 function assertFoundOverride(overrides, wsh, sw, threshold, want_found) {
-    let found = Common.findOverride(overrides, wsh, sw, threshold);
+    const found = Common.findOverride(overrides, wsh, sw, threshold);
     console.assert(JSON.stringify(want_found) === JSON.stringify(found), {
         want_found: want_found,
         found: found,
@@ -130,10 +117,7 @@ function assertFoundOverride(overrides, wsh, sw, threshold, want_found) {
 
 assertFoundOverride(
     {
-        "gnome-terminal-server": [
-            { query: { title: "user@host: ~" }, action: 1 },
-            { action: 0 },
-        ],
+        "gnome-terminal-server": [{ query: { title: "user@host: ~" }, action: 1 }, { action: 0 }],
     },
     "gnome-terminal-server",
     { title: "user@host: ~/src" },
@@ -143,10 +127,7 @@ assertFoundOverride(
 
 assertFoundOverride(
     {
-        "gnome-terminal-server": [
-            { query: { title: "user@host: ~" }, action: 1, threshold: 0.3 },
-            { action: 0 },
-        ],
+        "gnome-terminal-server": [{ query: { title: "user@host: ~" }, action: 1, threshold: 0.3 }, { action: 0 }],
     },
     "gnome-terminal-server",
     { title: "user@host: ~" },
@@ -154,36 +135,19 @@ assertFoundOverride(
     { action: 1, threshold: 0.3 }
 );
 
-function assertMatchedWindow(
-    saved_windows,
-    overrides,
-    wsh,
-    title,
-    default_match_threshold,
-    want_swi,
-    want_sw
-) {
-    let [swi, sw] = Common.matchedWindow(
-        saved_windows,
-        overrides,
-        wsh,
-        title,
-        default_match_threshold
-    );
-    console.assert(
-        want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw),
-        {
-            want_swi: want_swi,
-            swi: swi,
-            want_sw: want_sw,
-            sw: sw,
-            saved_windows: saved_windows,
-            overrides: overrides,
-            wsh: wsh,
-            title: title,
-            default_match_threshold: default_match_threshold,
-        }
-    );
+function assertMatchedWindow(saved_windows, overrides, wsh, title, default_match_threshold, want_swi, want_sw) {
+    const [swi, sw] = Common.matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold);
+    console.assert(want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw), {
+        want_swi: want_swi,
+        swi: swi,
+        want_sw: want_sw,
+        sw: sw,
+        saved_windows: saved_windows,
+        overrides: overrides,
+        wsh: wsh,
+        title: title,
+        default_match_threshold: default_match_threshold,
+    });
 }
 
 assertMatchedWindow(
