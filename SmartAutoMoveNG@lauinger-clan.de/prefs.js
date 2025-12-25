@@ -325,7 +325,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(saved_windows)) {
-            let sws = saved_windows[wsh];
+            const sws = saved_windows[wsh];
             for (const [swi, sw] of sws.entries()) {
                 const row = new Adw.ActionRow();
                 list_rows.push(row);
