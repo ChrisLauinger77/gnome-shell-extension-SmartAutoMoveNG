@@ -3,6 +3,13 @@
     <value value="0" nick="IGNORE" />
     <value value="1" nick="RESTORE" />
   </enum>
+  <enum id="org.gnome.shell.extensions.SmartAutoMoveNG.quicksettings-usage-enum">
+    <value value="0" nick="Freeze Saves" />
+    <value value="1" nick="Activate Workspace" />
+    <value value="2" nick="Ignore Position" />
+    <value value="3" nick="Ignore Workspace" />
+    <value value="4" nick="Ignore Monitor" />
+  </enum>
   <schema id="org.gnome.shell.extensions.SmartAutoMoveNG" path="/org/gnome/shell/extensions/SmartAutoMoveNG/">
     <key name="saved-windows" type="s">
       <default>'{}'</default>
@@ -18,6 +25,11 @@
       <default>true</default>
       <summary>Quick Settings</summary>
       <description>Show toggle and menu in Quick Settings.</description>
+    </key>
+    <key name="quicksettings-usage" enum="org.gnome.shell.extensions.SmartAutoMoveNG.quicksettings-usage-enum">
+      <default>'Freeze Saves'</default>
+      <summary>Usage of quicksettings toggle</summary>
+      <description>Enum - 0 Freeze Saves, 1 Activate Workspace, 2 Ignore Position, 3 Ignore Workspace, 4 Ignore Monitor</description>
     </key>
     <key name="notifications" type="b">
       <default>true</default>
