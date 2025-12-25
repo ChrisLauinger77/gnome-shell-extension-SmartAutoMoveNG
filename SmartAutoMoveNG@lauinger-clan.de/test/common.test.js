@@ -21,9 +21,9 @@ assertScore(
     0.625
 );
 
-assertScore({ title: "user@host: ~", occupied: false }, { title: "user@host: ~", occupied: false }, 1.0);
+assertScore({ title: "user@host: ~", occupied: false }, { title: "user@host: ~", occupied: false }, 1);
 
-assertScore({ title: "user@host: ~", occupied: true }, { title: "user@host: ~", occupied: false }, 0.0);
+assertScore({ title: "user@host: ~", occupied: true }, { title: "user@host: ~", occupied: false }, 0);
 
 function assertFoundWindow(saved_windows, wsh, query, threshold, want_found) {
     const [found, best_score] = Common.findSavedWindow(saved_windows, wsh, query, threshold);
@@ -92,7 +92,7 @@ assertFoundWindow(
     },
     "gnome-terminal",
     { title: "user@host: ~", occupied: false },
-    0.0,
+    0,
     2
 );
 
@@ -121,7 +121,7 @@ assertFoundOverride(
     },
     "gnome-terminal-server",
     { title: "user@host: ~/src" },
-    1.0,
+    1,
     { action: 0 }
 );
 
@@ -131,7 +131,7 @@ assertFoundOverride(
     },
     "gnome-terminal-server",
     { title: "user@host: ~" },
-    1.0,
+    1,
     { action: 1, threshold: 0.3 }
 );
 
