@@ -166,19 +166,19 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _override(settings, wsh, swtitle) {
-        let o = { query: { title: swtitle }, action: 0 };
-        let overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        const o = { query: { title: swtitle }, action: 0 };
+        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].unshift(o);
         settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
     }
 
     _override_any(settings, wsh) {
-        let o = {
+        const o = {
             action: 0,
             threshold: settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD),
         };
-        let overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].push(o);
         settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
@@ -207,7 +207,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             };
             const appRow = await myAppChooser.showChooser().catch(handleError);
             if (appRow !== null) {
-                let wsh = appRow.subtitle.slice(0, -8);
+                const wsh = appRow.subtitle.slice(0, -8);
                 this._override_any(settings, wsh);
             }
         });
@@ -221,7 +221,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         if (list_rows.length < 1) return;
         for (const element of list_rows) {
             list_widget.remove(element);
-            let lo = list_objects.shift();
+            const lo = list_objects.shift();
             if (lo !== null) {
                 for (const [signal, widget] of Object.values(lo)) {
                     widget.disconnect(signal);

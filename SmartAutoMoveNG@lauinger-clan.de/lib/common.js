@@ -23,10 +23,9 @@ export const SYNC_MODE_IGNORE = 0;
 export const SYNC_MODE_RESTORE = 1;
 
 function levensteinDistance(a, b) {
-    let m = [],
-        i,
-        j,
+    const m = [],
         min = Math.min;
+    let i, j;
 
     if (!(a && b)) return (b || a).length;
 

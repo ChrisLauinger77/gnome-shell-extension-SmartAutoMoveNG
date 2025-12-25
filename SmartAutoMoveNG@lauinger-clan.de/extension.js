@@ -448,7 +448,7 @@ export default class SmartAutoMoveNG extends Extension {
     _restoreWindow(win) {
         const wsh = this._windowSectionHash(win);
 
-        let sw;
+        // 'sw' is assigned once from matchedWindow and never reassigned
 
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
 
@@ -456,13 +456,14 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (!this._windowReady(win)) return true; // try again later
 
-        [swi, sw] = Common.matchedWindow(
+        const [swiNew, sw] = Common.matchedWindow(
             this._savedWindows,
             this._overrides,
             wsh,
             this._windowTitle(win),
             this._matchThreshold
         );
+        swi = swiNew;
 
         if (swi === undefined) return false;
 
