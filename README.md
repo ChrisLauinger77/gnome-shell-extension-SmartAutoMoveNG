@@ -25,7 +25,7 @@ Then [Poedit](https://poedit.net/download) can be used to translate the strings.
 
 ![screenshot: quick settings](docs/screenshot-quicksettings.png)
 
-The toggle in Quick Settings is connected to the "Freeze saves" switch of settings.
+The toggle in Quick Settings is connected to the "Freeze saves" switch of settings. (Configurable in GNOME 48 and later)
 
 #### General
 
