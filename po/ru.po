@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-25 17:04+0100\n"
+"POT-Creation-Date: 2025-12-26 09:47+0100\n"
 "PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
@@ -41,52 +41,52 @@ msgstr "Настройки"
 msgid "Overrides"
 msgstr "Переопределить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:561
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:555
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 msgid "Debug Logging"
 msgstr "Журнал"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:606
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:601
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Freeze Saves"
 msgstr "Заморозить Сохранить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:613
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:608
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Activate Workspace"
 msgstr "Активировать рабочее пространство"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:614
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Ignore Position"
 msgstr "Игнорировать позицию"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:625
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:620
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 msgid "Ignore Workspace"
 msgstr "Игнорировать рабочее пространство"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:654
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:649
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 msgid "Ignore Monitor"
 msgstr "Игнорировать монитор"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:659
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:654
 msgid "enabled"
 msgstr "включенный"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:661
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:656
 msgid "disabled"
 msgstr "инвалид"
 
@@ -172,7 +172,9 @@ msgid "Show toggle and menu in Quick Settings."
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:31
-msgid "Usage of quicksettings toggle"
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
+msgid "Usage of Quick Settings toggle"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:32
@@ -296,11 +298,6 @@ msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
 msgid "Quick Settings toggle"
-msgstr ""
-
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
-msgid "Usage of Quick Settings toggle"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:56

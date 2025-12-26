@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-25 17:04+0100\n"
+"POT-Creation-Date: 2025-12-26 09:47+0100\n"
 "PO-Revision-Date: 2025-12-25 15:47+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -42,52 +42,52 @@ msgstr "设置"
 msgid "Overrides"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:561
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:555
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 msgid "Debug Logging"
 msgstr "调试日志"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:606
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:601
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Freeze Saves"
 msgstr "暂停记录"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:613
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:608
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Activate Workspace"
 msgstr "激活工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:614
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Ignore Position"
 msgstr "忽略位置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:625
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:620
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 msgid "Ignore Workspace"
 msgstr "忽略工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:654
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:649
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 msgid "Ignore Monitor"
 msgstr "忽略显示器"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:659
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:654
 msgid "enabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:661
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:656
 msgid "disabled"
 msgstr ""
 
@@ -173,7 +173,9 @@ msgid "Show toggle and menu in Quick Settings."
 msgstr "在系统快捷菜单中显示开关。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:31
-msgid "Usage of quicksettings toggle"
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
+msgid "Usage of Quick Settings toggle"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:32
@@ -292,11 +294,6 @@ msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
 msgid "Quick Settings toggle"
-msgstr ""
-
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
-msgid "Usage of Quick Settings toggle"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:56

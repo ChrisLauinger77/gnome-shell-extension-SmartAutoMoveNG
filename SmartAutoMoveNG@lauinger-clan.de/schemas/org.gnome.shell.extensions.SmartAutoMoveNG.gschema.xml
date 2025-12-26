@@ -28,7 +28,7 @@
     </key>
     <key name="quicksettings-usage" enum="org.gnome.shell.extensions.SmartAutoMoveNG.quicksettings-usage-enum">
       <default>'Freeze Saves'</default>
-      <summary>Usage of quicksettings toggle</summary>
+      <summary>Usage of Quick Settings toggle</summary>
       <description>Enum - 0 Freeze Saves, 1 Activate Workspace, 2 Ignore Position, 3 Ignore Workspace, 4 Ignore Monitor</description>
     </key>
     <key name="notifications" type="b">
