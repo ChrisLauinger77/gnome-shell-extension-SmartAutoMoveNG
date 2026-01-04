@@ -405,14 +405,29 @@ export default class SmartAutoMoveNG extends Extension {
         return action;
     }
 
+    _moveWindowToMonitor(win, monitor) {
+        // global.display.get_n_monitors() is count of monitors, monitor is zero-based index
+        if (global.display.get_n_monitors() > monitor) {
+            win.move_to_monitor(monitor);
+            this._debug("_moveWindow to monitor: " + monitor);
+        }
+    }
+
+    _moveWindowToWorkspace(win, sw) {
+        const ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
+        if (ws !== null) {
+            win.change_workspace(ws);
+            this._debug("_moveWindow to workspace: " + ws);
+            if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+        }
+    }
+
     _moveWindow(win, sw) {
         if (!this._ignoreMonitor) {
-            if (sw.monitor >= global.display.get_n_monitors()) win.move_to_monitor(sw.monitor);
+            this._moveWindowToMonitor(win, sw.monitor);
         }
-        const ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
         if (!this._ignoreWorkspace) {
-            if (ws !== null) win.change_workspace(ws);
-            this._debug("_moveWindow to workspace: " + ws);
+            this._moveWindowToWorkspace(win, sw);
         }
         if (this._ignorePosition) {
             const cw = this._windowData(win);
@@ -429,10 +444,6 @@ export default class SmartAutoMoveNG extends Extension {
         if (sw.fullscreen) win.make_fullscreen();
 
         if (sw.above) win.make_above();
-
-        if (ws !== null) {
-            if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
-        }
 
         if (sw.on_all_workspaces) win.stick();
 
