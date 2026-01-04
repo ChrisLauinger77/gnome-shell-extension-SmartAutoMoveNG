@@ -407,25 +407,21 @@ export default class SmartAutoMoveNG extends Extension {
 
     _moveWindow(win, sw) {
         if (!this._ignoreMonitor) {
-            win.move_to_monitor(sw.monitor);
+            if (sw.monitor >= global.display.get_n_monitors()) win.move_to_monitor(sw.monitor);
         }
-
         const ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
         if (!this._ignoreWorkspace) {
             if (ws !== null) win.change_workspace(ws);
             this._debug("_moveWindow to workspace: " + ws);
         }
-
         if (this._ignorePosition) {
             const cw = this._windowData(win);
             sw.x = cw.x;
             sw.y = cw.y;
         }
-
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
         if (sw.maximized) win.maximize(sw.maximized);
-        // NOTE: these additional move/maximize operations were needed in order
-        // to convince Firefox to stay where we put it.
+        // NOTE: these additional move/maximize operations were needed in order to convince Firefox to stay where we put it.
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
         if (sw.maximized) win.maximize(sw.maximized);
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
