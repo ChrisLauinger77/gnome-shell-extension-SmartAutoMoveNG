@@ -122,6 +122,8 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
 //// EXTENSION CLASS
 export default class SmartAutoMoveNG extends Extension {
     enable() {
+        this._prevCheckWorkspaces = Main.wm._workspaceTracker._checkWorkspaces;
+        Main.wm._workspaceTracker._checkWorkspaces = this._getCheckWorkspaceOverride(this._prevCheckWorkspaces);
         this._activeWindows = new Map();
         this._settings = this.getSettings();
         this._indicator = null; // Quick Settings indicator see _onParamChangedUI
@@ -170,6 +172,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     disable() {
+        Main.wm._workspaceTracker._checkWorkspaces = this._prevCheckWorkspaces;
         this._debug("disable()");
         //remove timeout signals
         GLib.Source.remove(this._timeoutSyncSignal);
@@ -193,6 +196,29 @@ export default class SmartAutoMoveNG extends Extension {
         this._indicator?.destroy();
         this._indicator = null;
         this._isGnome49OrHigher = null;
+    }
+
+    _getCheckWorkspaceOverride(originalMethod) {
+        /* eslint-disable no-invalid-this */
+        return function () {
+            const keepAliveWorkspaces = [];
+            let foundNonEmpty = false;
+            for (let i = this._workspaces.length - 1; i >= 0; i--) {
+                if (!foundNonEmpty) {
+                    foundNonEmpty = this._workspaces[i].list_windows().some((w) => !w.is_on_all_workspaces());
+                } else if (!this._workspaces[i]._keepAliveId) {
+                    keepAliveWorkspaces.push(this._workspaces[i]);
+                }
+            }
+
+            // make sure the original method only removes empty workspaces at the end
+            keepAliveWorkspaces.forEach((ws) => (ws._keepAliveId = 1));
+            originalMethod.call(this);
+            keepAliveWorkspaces.forEach((ws) => delete ws._keepAliveId);
+
+            return false;
+        };
+        /* eslint-enable no-invalid-this */
     }
 
     _getMenuIcon() {
@@ -413,13 +439,17 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _moveWindowToWorkspace(win, sw) {
-        const ws = global.workspaceManager.get_workspace_by_index(sw.workspace);
-        if (ws !== null) {
-            win.change_workspace(ws);
-            this._debug("_moveWindow to workspace: " + ws);
-            if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+    _moveWindowToWorkspace(win, workspace) {
+        const workspaceManager = global.workspace_manager;
+        // ensure we have the required number of workspaces
+        for (let i = workspaceManager.n_workspaces; i <= workspace; i++) {
+            win.change_workspace_by_index(i - 1, false);
+            workspaceManager.append_new_workspace(false, 0);
         }
+        win.change_workspace_by_index(workspace, false);
+        this._debug("_moveWindow to workspace: " + workspace);
+        const ws = workspaceManager.get_workspace_by_index(workspace);
+        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
     }
 
     _moveWindow(win, sw) {
@@ -427,7 +457,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._moveWindowToMonitor(win, sw.monitor);
         }
         if (!this._ignoreWorkspace) {
-            this._moveWindowToWorkspace(win, sw);
+            this._moveWindowToWorkspace(win, sw.workspace);
         }
         if (this._ignorePosition) {
             const cw = this._windowData(win);
