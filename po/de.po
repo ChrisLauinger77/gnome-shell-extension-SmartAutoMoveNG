@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-26 09:47+0100\n"
-"PO-Revision-Date: 2025-12-26 09:49+0100\n"
+"POT-Creation-Date: 2026-01-05 09:32+0100\n"
+"PO-Revision-Date: 2026-01-05 09:33+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -41,52 +41,52 @@ msgstr "Einstellungen"
 msgid "Overrides"
 msgstr "Überschreibungen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:555
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:592
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 msgid "Debug Logging"
 msgstr "Debug-Logging"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:601
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:639
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Freeze Saves"
 msgstr "Speichern einfrieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:608
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:646
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Activate Workspace"
 msgstr "Arbeitsbereich aktivieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:614
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:652
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Ignore Position"
 msgstr "Position ignorieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:620
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:658
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 msgid "Ignore Workspace"
 msgstr "Arbeitsbereich ignorieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:649
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:687
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 msgid "Ignore Monitor"
 msgstr "Monitor ignorieren"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:654
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:692
 msgid "enabled"
 msgstr "aktiviert"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:656
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:694
 msgid "disabled"
 msgstr "deaktiviert"
 
@@ -107,7 +107,7 @@ msgid "Select app"
 msgstr "App auswählen"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:259
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:360
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:377
 msgid "ANY"
 msgstr "Beliebig"
 
@@ -126,27 +126,43 @@ msgid "DEFAULT"
 msgstr "Standard"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:302
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:339
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:356
 msgid "Delete"
 msgstr "Löschen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:334
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
+msgid "Monitor: "
+msgstr "Monitor: "
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:341
+msgid "Workspace: "
+msgstr "Arbeitsbereich: "
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:342
+msgid "All"
+msgstr "Alle"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:344
+msgid "Position: "
+msgstr "Position: "
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:351
 msgid "Not occupied"
 msgstr "Nicht besetzt"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:351
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:368
 msgid "OVERRIDE"
 msgstr "Überschreiben"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:364
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:381
 msgid "OVERRIDE (ANY)"
 msgstr "Überschreiben (beliebig)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:423
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:440
 msgid "Reset Settings"
 msgstr "Einstellungen zurücksetzen"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:429
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:446
 msgid "Reset all settings to default values"
 msgstr "Alle Einstellungen auf Standardwerte zurücksetzen"
 
