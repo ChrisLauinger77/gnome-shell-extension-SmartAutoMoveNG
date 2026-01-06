@@ -439,7 +439,7 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _moveWindowToWorkspace(win, workspace) {
+    _moveWindowToWorkspace(win, workspace, on_all_workspaces) {
         const workspaceManager = global.workspace_manager;
         // ensure we have the required number of workspaces
         for (let i = workspaceManager.n_workspaces; i <= workspace; i++) {
@@ -449,7 +449,8 @@ export default class SmartAutoMoveNG extends Extension {
         win.change_workspace_by_index(workspace, false);
         this._debug("_moveWindow to workspace: " + workspace);
         const ws = workspaceManager.get_workspace_by_index(workspace);
-        if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+        if (on_all_workspaces) win.stick();
+        else if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
     }
 
     _moveWindow(win, sw) {
@@ -457,7 +458,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._moveWindowToMonitor(win, sw.monitor);
         }
         if (!this._ignoreWorkspace) {
-            this._moveWindowToWorkspace(win, sw.workspace);
+            this._moveWindowToWorkspace(win, sw.workspace, sw.on_all_workspaces);
         }
         if (this._ignorePosition) {
             const cw = this._windowData(win);
@@ -474,8 +475,6 @@ export default class SmartAutoMoveNG extends Extension {
         if (sw.fullscreen) win.make_fullscreen();
 
         if (sw.above) win.make_above();
-
-        if (sw.on_all_workspaces) win.stick();
 
         const nsw = this._windowData(win);
 
