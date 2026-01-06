@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-05 09:32+0100\n"
+"POT-Creation-Date: 2026-01-06 08:12+0100\n"
 "PO-Revision-Date: 2025-12-25 15:46+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -107,7 +107,7 @@ msgid "Select app"
 msgstr "Sélectionner une application"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:259
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:377
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:364
 msgid "ANY"
 msgstr "N'IMPORTE LAQUELLE"
 
@@ -126,43 +126,43 @@ msgid "DEFAULT"
 msgstr "PAR DÉFAUT"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:302
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:356
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:343
 msgid "Delete"
 msgstr "Supprimer"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
-msgid "Monitor: "
-msgstr ""
-
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:341
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:334
 msgid "Workspace: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:342
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:335
 msgid "All"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:344
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
 msgid "Position: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:351
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Monitor: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
 msgid "Not occupied"
 msgstr "Non occupée"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:368
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:355
 msgid "OVERRIDE"
 msgstr "REMPLACER"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:381
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:368
 msgid "OVERRIDE (ANY)"
 msgstr "REMPLACER (N'IMPORTE LAQUELLE)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:440
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:427
 msgid "Reset Settings"
 msgstr "Réinitialiser les paramètres"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:446
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:433
 msgid "Reset all settings to default values"
 msgstr "Réinitialiser tous les paramètres aux valeurs par défaut"
 
