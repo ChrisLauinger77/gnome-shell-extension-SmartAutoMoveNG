@@ -331,22 +331,9 @@ export default class SAMPreferences extends ExtensionPreferences {
                 list_rows.push(row);
                 row.set_title(wsh + " - " + sw.title);
                 row.set_tooltip_text(
-                    wsh +
-                        " - " +
-                        sw.title +
-                        "\n" +
-                        _("Workspace: ") +
-                        (sw.on_all_workspaces ? _("All") : sw.workspace + 1) +
-                        "\n" +
-                        _("Position: ") +
-                        " (" +
-                        sw.x +
-                        "," +
-                        sw.y +
-                        ")" +
-                        "\n" +
-                        _("Monitor: ") +
-                        (sw.monitor + 1)
+                    `${wsh} - ${sw.title}\n${_("Workspace: ")}${
+                        sw.on_all_workspaces ? _("All") : sw.workspace + 1
+                    }\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Monitor: ")}${sw.monitor + 1}`
                 );
                 if (!sw.occupied) row.set_subtitle(_("Not occupied"));
                 const delete_widget = new Gtk.Button({
