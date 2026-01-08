@@ -27,15 +27,15 @@ function isGnome49OrHigher() {
 //quick settings
 const SmartAutoMoveNGMenuToggle = GObject.registerClass(
     class SmartAutoMoveNGMenuToggle extends QuickSettings.QuickMenuToggle {
-        constructor(Me) {
-            const { _settings } = Me;
+        constructor(extension) {
+            const { _settings } = extension;
             super({
                 title: "Smart Auto Move NG",
                 toggleMode: true,
             });
             // Icon
-            this.gicon = Me._finalMenuIcon;
-            this.menu.setHeader(Me._finalMenuIcon, "Smart Auto Move NG", "");
+            this.gicon = extension._finalMenuIcon;
+            this.menu.setHeader(extension._finalMenuIcon, "Smart Auto Move NG", "");
             // Bind toggle (robust enum handling)
             this.bindToggleToSetting(_settings);
             // Menu item Saved Windows with subnmenu Cleanup Non-occupied Windows
@@ -46,10 +46,10 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             popupMenuExpander.menu.addMenuItem(submenu);
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-                const settingsItem = this.menu.addAction(_("Settings"), () => Me._openPreferences());
+                const settingsItem = this.menu.addAction(_("Settings"), () => extension._openPreferences());
 
                 settingsItem.visible = Main.sessionMode.allowSettings;
-                this.menu._settingsActions[Me.uuid] = settingsItem;
+                this.menu._settingsActions[extension.uuid] = settingsItem;
             } catch (error) {
                 this.getLogger().error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
             }
@@ -94,12 +94,12 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
 
 const SmartAutoMoveNGIndicator = GObject.registerClass(
     class SmartAutoMoveNGIndicator extends QuickSettings.SystemIndicator {
-        constructor(Me) {
+        constructor(extension) {
             super();
 
             // Create the toggle menu and associate it with the indicator, being
             // sure to destroy it along with the indicator
-            this._smartAutoMoveNGMenuToggle = new SmartAutoMoveNGMenuToggle(Me);
+            this._smartAutoMoveNGMenuToggle = new SmartAutoMoveNGMenuToggle(extension);
             this.quickSettingsItems.push(this._smartAutoMoveNGMenuToggle);
 
             this.connect("destroy", () => {
@@ -450,7 +450,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("_moveWindow to workspace: " + workspace);
         const ws = workspaceManager.get_workspace_by_index(workspace);
         if (on_all_workspaces) win.stick();
-        else if (this._activateWorkspace && !ws.active && !this._ignoreWorkspace) ws.activate(true);
+        else if (this._activateWorkspace && !ws.active) ws.activate(true);
     }
 
     _moveWindow(win, sw) {
