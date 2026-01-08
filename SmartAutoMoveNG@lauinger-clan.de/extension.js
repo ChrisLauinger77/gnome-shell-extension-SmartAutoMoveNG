@@ -46,7 +46,10 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             popupMenuExpander.menu.addMenuItem(submenu);
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-                const settingsItem = this.menu.addAction(_("Settings"), () => extension._openPreferences());
+                const settingsItem = this.menu.addAction(_("Settings"), () => {
+                    extension.openPreferences();
+                    QuickSettingsMenu.menu.close(PopupAnimation.FADE);
+                });
 
                 settingsItem.visible = Main.sessionMode.allowSettings;
                 this.menu._settingsActions[extension.uuid] = settingsItem;
@@ -230,11 +233,6 @@ export default class SmartAutoMoveNG extends Extension {
             const iconPath = "/icons/";
             return Gio.icon_new_for_string(`${this.path}${iconPath}${SmartAutoMoveNGIcon}.svg`);
         }
-    }
-
-    _openPreferences() {
-        this.openPreferences();
-        QuickSettingsMenu.menu.close(PopupAnimation.FADE);
     }
 
     //// DEBUG UTILITIES
