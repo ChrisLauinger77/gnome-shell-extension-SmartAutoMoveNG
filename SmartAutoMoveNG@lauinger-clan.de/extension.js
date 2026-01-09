@@ -54,7 +54,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 settingsItem.visible = Main.sessionMode.allowSettings;
                 this.menu._settingsActions[extension.uuid] = settingsItem;
             } catch (error) {
-                this.getLogger().error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
+                extension.getLogger().error(`Error in SmartAutoMoveNGMenuToggle constructor: ${error}`);
             }
         }
 
