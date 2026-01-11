@@ -44,7 +44,7 @@ The toggle in Quick Settings is connected to the "Freeze saves" switch of settin
 
 Most settings can be modified via the extension preferences dialog.
 
-## Overtake settings from [smart-auto-move](https://github.com/khimaros/smart-auto-move) (the one this was forked from)
+## Overtake settings from [smart-auto-move](https://github.com/khimaros/smart-auto-move) (the one this was forked from - only supported until GNOME 48)
 
 -   dump the settings from "smart-auto-move" to a file:
 
