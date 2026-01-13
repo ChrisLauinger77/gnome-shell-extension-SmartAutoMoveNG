@@ -438,17 +438,21 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _moveWindowToWorkspace(win, workspace, on_all_workspaces) {
-        const workspaceManager = global.workspace_manager;
-        // ensure we have the required number of workspaces
-        for (let i = workspaceManager.n_workspaces; i <= workspace; i++) {
-            win.change_workspace_by_index(i - 1, false);
-            workspaceManager.append_new_workspace(false, 0);
+        if (on_all_workspaces) {
+            win.stick();
+            this._debug("_moveWindow to workspace: all workspaces");
+        } else {
+            const workspaceManager = global.workspace_manager;
+            // ensure we have the required number of workspaces
+            for (let i = workspaceManager.n_workspaces; i <= workspace; i++) {
+                win.change_workspace_by_index(i - 1, false);
+                workspaceManager.append_new_workspace(false, 0);
+            }
+            win.change_workspace_by_index(workspace, false);
+            this._debug("_moveWindow to workspace: " + workspace);
+            const ws = workspaceManager.get_workspace_by_index(workspace);
+            if (this._activateWorkspace && !ws.active) ws.activate(true);
         }
-        win.change_workspace_by_index(workspace, false);
-        this._debug("_moveWindow to workspace: " + workspace);
-        const ws = workspaceManager.get_workspace_by_index(workspace);
-        if (on_all_workspaces) win.stick();
-        else if (this._activateWorkspace && !ws.active) ws.activate(true);
     }
 
     _moveWindow(win, sw) {
