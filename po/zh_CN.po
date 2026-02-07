@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 08:12+0100\n"
+"POT-Creation-Date: 2026-02-07 09:57+0100\n"
 "PO-Revision-Date: 2025-12-25 15:47+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Poedit 3.6\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:59
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:16
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:173
 msgid "Saved Windows"
@@ -36,58 +36,58 @@ msgstr "清除未打开的窗口"
 msgid "Settings"
 msgstr "设置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:59
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:66
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:188
 msgid "Overrides"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:592
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:593
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 msgid "Debug Logging"
 msgstr "调试日志"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:639
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:640
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Freeze Saves"
 msgstr "暂停记录"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:646
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:647
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Activate Workspace"
 msgstr "激活工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:652
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:653
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Ignore Position"
 msgstr "忽略位置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:658
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:659
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 msgid "Ignore Workspace"
 msgstr "忽略工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:687
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:688
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 msgid "Ignore Monitor"
 msgstr "忽略显示器"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:692
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:693
 msgid "enabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:694
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:695
 msgid "disabled"
 msgstr ""
 
