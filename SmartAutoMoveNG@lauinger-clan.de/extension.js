@@ -455,6 +455,16 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
+    _moveWindowToPosition(win, x, y, sw, maximized) {
+        win.move_resize_frame(false, x, y, sw.width, sw.height);
+        if (maximized) win.maximize(maximized);
+        this._debug("_moveWindow to position: (" + x + ", " + y + ")");
+    }
+
+    _windowPositionMatch(sw, nsw) {
+        return sw.x === nsw.x && sw.y === nsw.y;
+    }
+
     _moveWindow(win, sw) {
         if (!this._ignoreMonitor) {
             this._moveWindowToMonitor(win, sw.monitor);
@@ -467,12 +477,23 @@ export default class SmartAutoMoveNG extends Extension {
             sw.x = cw.x;
             sw.y = cw.y;
         }
-        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
         // NOTE: these additional move/maximize operations were needed in order to convince Firefox to stay where we put it.
-        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
-        win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
+        const maxAttempts = 3;
+        const retryDelayMs = 500;
+        let attempt = 0;
+
+        // Retry window move in a single timed sequence. Some applications (e.g. Firefox)
+        // can ignore the first move request and settle correctly only after a short delay.
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, retryDelayMs, () => {
+            attempt++;
+            this._moveWindowToPosition(win, sw.x, sw.y, sw, sw.maximized);
+
+            if (this._windowPositionMatch(sw, this._windowData(win))) {
+                return GLib.SOURCE_REMOVE;
+            }
+
+            return attempt >= maxAttempts ? GLib.SOURCE_REMOVE : GLib.SOURCE_CONTINUE;
+        });
 
         if (sw.fullscreen) win.make_fullscreen();
 
@@ -515,7 +536,7 @@ export default class SmartAutoMoveNG extends Extension {
         const nsw = this._moveWindow(win, sw);
 
         if (!this._ignorePosition) {
-            if (!(sw.x === nsw.x && sw.y === nsw.y))
+            if (!this._windowPositionMatch(sw, nsw))
                 this.getLogger().warn(
                     `Position mismatch after move: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
                 );
