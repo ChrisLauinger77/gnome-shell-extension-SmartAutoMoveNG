@@ -182,6 +182,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._timeoutSyncSignal = null;
         GLib.Source.remove(this._timeoutSaveSignal);
         this._timeoutSaveSignal = null;
+        if (this._timeoutMoveWindowSignal !== null) GLib.Source.remove(this._timeoutMoveWindowSignal);
+        this._timeoutMoveWindowSignal = null;
         // remove setting Signals
         if (this._settingSignals) {
             for (const signal of this._settingSignals) {
@@ -479,7 +481,8 @@ export default class SmartAutoMoveNG extends Extension {
         if (sw.above) win.make_above();
         // give the window 500ms to react to the move/resize and update its state
         await new Promise((resolve) => {
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+            if (this._timeoutMoveWindowSignal !== null) GLib.Source.remove(this._timeoutMoveWindowSignal);
+            this._timeoutMoveWindowSignal = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
                 resolve();
                 return GLib.SOURCE_REMOVE;
             });
