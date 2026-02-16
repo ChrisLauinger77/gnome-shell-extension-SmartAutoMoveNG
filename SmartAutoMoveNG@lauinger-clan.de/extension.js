@@ -455,7 +455,7 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _moveWindow(win, sw) {
+    async _moveWindow(win, sw) {
         if (!this._ignoreMonitor) {
             this._moveWindowToMonitor(win, sw.monitor);
         }
@@ -477,13 +477,20 @@ export default class SmartAutoMoveNG extends Extension {
         if (sw.fullscreen) win.make_fullscreen();
 
         if (sw.above) win.make_above();
+        // give the window 500ms to react to the move/resize and update its state
+        await new Promise((resolve) => {
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+                resolve();
+                return GLib.SOURCE_REMOVE;
+            });
+        });
 
         const nsw = this._windowData(win);
 
         return nsw;
     }
 
-    _restoreWindow(win) {
+    async _restoreWindow(win) {
         const wsh = this._windowSectionHash(win);
 
         // 'sw' is assigned once from matchedWindow and never reassigned
@@ -512,7 +519,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         const pWinRepr = this._windowRepr(win);
 
-        const nsw = this._moveWindow(win, sw);
+        const nsw = await this._moveWindow(win, sw);
 
         if (!this._ignorePosition) {
             if (!(sw.x === nsw.x && sw.y === nsw.y))
@@ -553,14 +560,14 @@ export default class SmartAutoMoveNG extends Extension {
         return shouldSkip;
     }
 
-    _syncWindows() {
+    async _syncWindows() {
         this._cleanupWindows();
         for (const actor of global.get_window_actors()) {
             const win = actor.get_meta_window();
 
             if (this._shouldSkipWindow(win)) continue;
 
-            if (!this._restoreWindow(win)) this._ensureSavedWindow(win);
+            if (!(await this._restoreWindow(win))) this._ensureSavedWindow(win);
         }
     }
 
@@ -578,10 +585,10 @@ export default class SmartAutoMoveNG extends Extension {
         return GLib.SOURCE_CONTINUE;
     }
 
-    _handleTimeoutSync() {
+    async _handleTimeoutSync() {
         if (this._timeoutSyncSignal !== null) GLib.Source.remove(this._timeoutSyncSignal);
         this._timeoutSyncSignal = null;
-        this._syncWindows();
+        await this._syncWindows();
         this._timeoutSyncSignal = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             this._syncFrequencyMs,
