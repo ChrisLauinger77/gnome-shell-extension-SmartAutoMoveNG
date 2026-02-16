@@ -333,7 +333,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 row.set_tooltip_text(
                     `${wsh} - ${sw.title}\n${_("Workspace: ")}${
                         sw.on_all_workspaces ? _("All") : sw.workspace + 1
-                    }\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Monitor: ")}${sw.monitor + 1}`
+                    }\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") : _("Not Maximized")}\n${sw.fullscreen ? _("Fullscreen") : _("Not Fullscreen")}`
                 );
                 if (!sw.occupied) row.set_subtitle(_("Not occupied"));
                 const delete_widget = new Gtk.Button({
