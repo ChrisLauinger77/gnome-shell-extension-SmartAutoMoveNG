@@ -61,7 +61,7 @@ jobs:
               uses: fire-man-x/gnome-shell-extension-uploader@v1
               with:
                   # Using your secret names: EGO_USER and EGO_PASSWORD
-                  gnome_username: ${{ secrets.EGO_USER }}
+                  gnome_username: ${{ secrets.EGO_USERNAME }}
                   gnome_password: ${{ secrets.EGO_PASSWORD }}
                   # Path to your zip created by the shell script
                   extension_zip_file: ./SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip
