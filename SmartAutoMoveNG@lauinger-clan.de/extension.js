@@ -562,13 +562,24 @@ export default class SmartAutoMoveNG extends Extension {
 
     async _syncWindows() {
         this._cleanupWindows();
+        const windows = [];
+
         for (const actor of global.get_window_actors()) {
             const win = actor.get_meta_window();
 
             if (this._shouldSkipWindow(win)) continue;
 
-            if (!(await this._restoreWindow(win))) this._ensureSavedWindow(win);
+            windows.push(win);
         }
+
+        const processWindow = async (index) => {
+            if (index >= windows.length) return;
+            const win = windows[index];
+            if (!(await this._restoreWindow(win))) this._ensureSavedWindow(win);
+            await processWindow(index + 1);
+        };
+
+        await processWindow(0);
     }
 
     //// SIGNAL HANDLERS
