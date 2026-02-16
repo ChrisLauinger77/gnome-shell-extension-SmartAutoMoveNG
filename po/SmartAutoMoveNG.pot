@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:57+0100\n"
+"POT-Creation-Date: 2026-02-16 17:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,52 +40,52 @@ msgstr ""
 msgid "Overrides"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:593
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:596
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 msgid "Debug Logging"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:640
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:643
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Freeze Saves"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:647
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:650
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Activate Workspace"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:653
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:656
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Ignore Position"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:659
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:662
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 msgid "Ignore Workspace"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:688
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:691
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 msgid "Ignore Monitor"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:693
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:696
 msgid "enabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:695
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:698
 msgid "disabled"
 msgstr ""
 
@@ -138,11 +138,31 @@ msgid "All"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Monitor: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
 msgid "Position: "
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
-msgid "Monitor: "
+msgid "Size: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Maximized"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Not Maximized"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Fullscreen"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+msgid "Not Fullscreen"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
