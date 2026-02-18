@@ -322,6 +322,8 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
+        const checkMark = "\u2713";
+        const heavyCross = "\u2718";
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(saved_windows)) {
@@ -333,7 +335,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 row.set_tooltip_text(
                     `${wsh} - ${sw.title}\n${_("Workspace: ")}${
                         sw.on_all_workspaces ? _("All") : sw.workspace + 1
-                    }\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") : _("Not Maximized")}\n${sw.fullscreen ? _("Fullscreen") : _("Not Fullscreen")}`
+                    }\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`
                 );
                 if (!sw.occupied) row.set_subtitle(_("Not occupied"));
                 const delete_widget = new Gtk.Button({
