@@ -525,10 +525,12 @@ export default class SmartAutoMoveNG extends Extension {
         const nsw = await this._moveWindow(win, sw);
 
         if (!this._ignorePosition) {
-            if (!(sw.x === nsw.x && sw.y === nsw.y))
+            if (!(sw.x === nsw.x && sw.y === nsw.y)) {
                 this.getLogger().warn(
                     `Position mismatch after move: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
                 );
+                if (!this._activateWorkspace) return true; // prevent endless loop if we cannot move the window to the correct workspace
+            }
         }
 
         this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
