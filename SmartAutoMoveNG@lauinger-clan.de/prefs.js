@@ -321,9 +321,54 @@ export default class SAMPreferences extends ExtensionPreferences {
         Common.cleanupNonOccupiedWindows(settings);
     }
 
-    _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
+    _addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows) {
+        const delete_widget = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+            css_classes: ["destructive-action"],
+        });
+        delete_widget.set_tooltip_text(_("Delete"));
+        delete_widget.set_icon_name("user-trash-symbolic");
+        row.add_suffix(delete_widget);
+        const delete_signal = delete_widget.connect("clicked", () => {
+            sws.splice(swi, 1);
+            if (sws.length < 1) delete saved_windows[wsh];
+            settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
+        });
+
+        const override_widget = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+        });
+        override_widget.set_tooltip_text(_("OVERRIDE"));
+        override_widget.set_icon_name("application-add-symbolic");
+        row.add_suffix(override_widget);
+        const override_signal = override_widget.connect("clicked", this._override.bind(this, settings, wsh, sw.title));
+
+        const override_any_widget = new Gtk.Button({
+            label: _("ANY"),
+            valign: Gtk.Align.CENTER,
+            css_classes: ["suggested-action"],
+        });
+        override_any_widget.set_tooltip_text(_("OVERRIDE (ANY)"));
+        override_any_widget.set_icon_name("application-add-symbolic");
+        row.add_suffix(override_any_widget);
+        const override_any_signal = override_any_widget.connect(
+            "clicked",
+            this._override_any.bind(this, settings, wsh)
+        );
+        return {
+            delete: [delete_signal, delete_widget],
+            ignore: [override_signal, override_widget],
+            ignore_any: [override_any_signal, override_any_widget],
+        };
+    }
+
+    _createSavedWindowsTooltip(sw, wsh) {
         const checkMark = "\u2713";
         const heavyCross = "\u2718";
+        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
+    }
+
+    _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(saved_windows)) {
@@ -332,55 +377,15 @@ export default class SAMPreferences extends ExtensionPreferences {
                 const row = new Adw.ActionRow();
                 list_rows.push(row);
                 row.set_title(wsh + " - " + sw.title);
-                row.set_tooltip_text(
-                    `${wsh} - ${sw.title}\n${_("Workspace: ")}${
-                        sw.on_all_workspaces ? _("All") : sw.workspace + 1
-                    }\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`
-                );
+                row.set_tooltip_text(this._createSavedWindowsTooltip(sw, wsh));
                 if (!sw.occupied) row.set_subtitle(_("Not occupied"));
-                const delete_widget = new Gtk.Button({
-                    valign: Gtk.Align.CENTER,
-                    css_classes: ["destructive-action"],
-                });
-                delete_widget.set_tooltip_text(_("Delete"));
-                delete_widget.set_icon_name("user-trash-symbolic");
-                row.add_suffix(delete_widget);
-                const delete_signal = delete_widget.connect("clicked", () => {
-                    sws.splice(swi, 1);
-                    if (sws.length < 1) delete saved_windows[wsh];
-                    settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
-                });
-
-                const override_widget = new Gtk.Button({
-                    valign: Gtk.Align.CENTER,
-                });
-                override_widget.set_tooltip_text(_("OVERRIDE"));
-                override_widget.set_icon_name("application-add-symbolic");
-                row.add_suffix(override_widget);
-                const override_signal = override_widget.connect(
-                    "clicked",
-                    this._override.bind(this, settings, wsh, sw.title)
-                );
-
-                const override_any_widget = new Gtk.Button({
-                    label: _("ANY"),
-                    valign: Gtk.Align.CENTER,
-                    css_classes: ["suggested-action"],
-                });
-                override_any_widget.set_tooltip_text(_("OVERRIDE (ANY)"));
-                override_any_widget.set_icon_name("application-add-symbolic");
-                row.add_suffix(override_any_widget);
-                const override_any_signal = override_any_widget.connect(
-                    "clicked",
-                    this._override_any.bind(this, settings, wsh)
-                );
+                const widgets = this._addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows);
 
                 list_widget.add(row);
-
                 list_objects.push({
-                    delete: [delete_signal, delete_widget],
-                    ignore: [override_signal, override_widget],
-                    ignore_any: [override_any_signal, override_any_widget],
+                    delete: widgets.delete,
+                    ignore: widgets.ignore,
+                    ignore_any: widgets.ignore_any,
                 });
             }
         }
