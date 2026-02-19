@@ -144,6 +144,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._handleTimeoutSync();
         this._timeoutSaveSignal = null;
         this._handleTimeoutSave();
+        this._timeoutMoveWindowSignal = null;
 
         this._settingSignals = [];
         this._savedWindowsCount = 0;
