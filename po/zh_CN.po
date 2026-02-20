@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-18 18:44+0100\n"
+"POT-Creation-Date: 2026-02-21 11:12+0100\n"
 "PO-Revision-Date: 2025-12-25 15:47+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -22,12 +22,13 @@ msgstr ""
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:16
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:173
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:174
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:291
 msgid "Saved Windows"
 msgstr "已保存的窗口"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:180
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:295
 msgid "Cleanup Non-occupied Windows"
 msgstr "清除未打开的窗口"
 
@@ -38,148 +39,209 @@ msgstr "设置"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:66
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:188
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:304
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:307
 msgid "Overrides"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:619
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:624
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
 msgid "Debug Logging"
 msgstr "调试日志"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:666
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:671
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:22
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
 msgid "Freeze Saves"
 msgstr "暂停记录"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:673
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:678
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:23
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
 msgid "Activate Workspace"
 msgstr "激活工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:679
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:684
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:27
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:24
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:150
 msgid "Ignore Position"
 msgstr "忽略位置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:685
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:690
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:28
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:157
 msgid "Ignore Workspace"
 msgstr "忽略工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:714
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:719
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:29
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:164
 msgid "Ignore Monitor"
 msgstr "忽略显示器"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:719
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:724
 msgid "enabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:721
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:726
 msgid "disabled"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:20
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:21
 msgid "Search..."
 msgstr "搜索..."
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:32
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:33
 msgid "Select"
 msgstr "选择"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:35
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:36
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:101
 msgid "Cancel"
 msgstr "取消"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:192
-msgid "Select app"
-msgstr "选择应用"
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:98
+msgid "Save"
+msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:259
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:366
-msgid "ANY"
-msgstr "任意"
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:119
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:529
+msgid "Edit Saved Window"
+msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:283
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:62
-msgid "IGNORE"
-msgstr "忽略"
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:121
+msgid "Title"
+msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:284
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:63
-msgid "RESTORE"
-msgstr "恢复"
-
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:285
-msgid "DEFAULT"
-msgstr "默认"
-
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:302
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:345
-msgid "Delete"
-msgstr "删除"
-
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:336
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:124
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:196
 msgid "Workspace: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:337
-msgid "All"
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:134
+msgid "On all workspaces: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:138
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:212
 msgid "Monitor: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
-msgid "Position: "
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:144
+msgid "Position X: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
-msgid "Size: "
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:153
+msgid "Position Y: "
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:158
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:260
+msgid "Width: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:163
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:276
+msgid "Height: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:169
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Maximized"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Fullscreen"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:338
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:179
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Always on Top"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:340
-msgid "Not occupied"
-msgstr "当前未打开"
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:316
+msgid "Preferences Saved"
+msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:357
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:320
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:282
+msgid "Save Preferences"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:385
+msgid "Select app"
+msgstr "选择应用"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:452
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:564
+msgid "ANY"
+msgstr "任意"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:476
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:59
+msgid "IGNORE"
+msgstr "忽略"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:477
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:60
+msgid "RESTORE"
+msgstr "恢复"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:478
+msgid "DEFAULT"
+msgstr "默认"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:495
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:546
+msgid "Delete"
+msgstr "删除"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:558
 msgid "OVERRIDE"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:370
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:568
 msgid "OVERRIDE (ANY)"
 msgstr "自定义规则 (任意窗口)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:429
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:577
+msgid "Edit"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:580
+msgid "Edit Window - only allowed if the window is not occupied"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+msgid "All"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+msgid "Position: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+msgid "Size: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:611
+msgid "Not occupied"
+msgstr "当前未打开"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:665
 msgid "Reset Settings"
 msgstr "重置设置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:435
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:671
 msgid "Reset all settings to default values"
 msgstr "将所有设置重置为默认值"
 
@@ -188,25 +250,25 @@ msgid "Persisted window data serialized to JSON."
 msgstr "窗口数据将以 JSON 格式存储。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:22
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:51
 msgid "Write detailed logs about extension behavior."
 msgstr "记录扩展的详细行为日志。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:26
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
 msgid "Quick Settings"
 msgstr "快捷菜单"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:27
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:13
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:12
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:14
 msgid "Show toggle and menu in Quick Settings."
 msgstr "在系统快捷菜单中显示开关。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:31
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:30
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:32
 msgid "Usage of Quick Settings toggle"
 msgstr ""
 
@@ -217,12 +279,12 @@ msgid ""
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:36
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:37
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:38
 msgid "Notifications"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:37
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:38
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:37
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:39
 msgid "Allow the extension to show OSD notifications."
 msgstr ""
@@ -232,8 +294,8 @@ msgid "Startup Delay (ms)"
 msgstr "启动延迟 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:42
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:120
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:121
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:130
 msgid ""
 "Period of time in milliseconds to wait between seeing a window and writing "
 "it to the in-memory store."
@@ -244,8 +306,8 @@ msgid "Sync Frequency (ms)"
 msgstr "同步频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:47
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:88
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:89
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:96
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:98
 msgid ""
 "Frequency in milliseconds to synchronize changes to active windows into the "
 "in-memory store."
@@ -256,19 +318,19 @@ msgid "Save Frequency (ms)"
 msgstr "保存频率 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:52
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:104
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:105
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:114
 msgid "Frequency in milliseconds to persist the in-memory store to disk."
 msgstr "将内存中的窗口信息保存到磁盘的频率（毫秒）。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:56
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:71
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:81
 msgid "Match Threshold"
 msgstr "匹配阈值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:57
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:72
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:73
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:80
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:82
 msgid "Minimum threshold for matching restored windows."
 msgstr "恢复窗口位置时的最低匹配相似度。"
 
@@ -277,8 +339,8 @@ msgid "Sync Mode"
 msgstr "同步模式"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:62
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:57
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:58
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:64
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:66
 msgid "Default mode when synchronizing windows."
 msgstr "识别到新窗口时的默认处理模式。"
 
@@ -287,36 +349,84 @@ msgid "Overrides for restored window data."
 msgstr "为特定窗口设定自定义规则。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:72
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:137
 msgid "Do not update saved window data."
 msgstr "暂停更新已保存的窗口信息。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:77
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:144
 msgid "Follow apps when they are moved to another workspace."
 msgstr "当窗口被恢复到另一个工作区时，自动切换到该工作区。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:82
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:150
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
 msgid "Do not restore windows' position."
 msgstr "不恢复窗口的位置。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:87
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:157
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
 msgid "Do not restore windows' workspace."
 msgstr "不恢复窗口所在的工作区。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:92
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:164
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
 msgid "Do not restore windows' monitor."
 msgstr "不恢复窗口所在的显示器。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:5
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:96
+msgid "Edit-Dialog Workspace max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:97
+msgid "Workspace max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:101
+msgid "Edit-Dialog Monitor max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:102
+msgid "Monitor max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:106
+msgid "Edit-Dialog Position X max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:107
+msgid "Position X max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:111
+msgid "Edit-Dialog Position Y max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:112
+msgid "Position Y max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:116
+msgid "Edit-Dialog Width max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:117
+msgid "Width max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:121
+msgid "Edit-Dialog Height max value"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:122
+msgid "Height max value in the edit-saved-windows dialog."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:6
 msgid "General"
 msgstr "常规"
 
@@ -324,26 +434,89 @@ msgstr "常规"
 msgid "User Interface"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:31
 msgid "Quick Settings toggle"
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:56
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:65
 msgid "Default Synchronization Mode"
 msgstr "默认同步模式"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:87
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
 msgid "Sync Frequency (milliseconds)"
 msgstr "同步频率 (毫秒)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:103
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Save Frequency (milliseconds)"
 msgstr "保存频率 (毫秒)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:129
 msgid "Startup Delay (milliseconds)"
 msgstr "启动延迟 (毫秒)"
 
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
+msgid "Boundaries for Edit-dialog"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:178
+msgid "Edit-Dialog"
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:181
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:183
+msgid "Click 'Save Preferences' to apply your changes."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:182
+msgid "Boundaries"
+msgstr ""
+
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:195
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:197
+msgid "Max value for workspace."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:211
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:213
+msgid "Max value for monitor."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:227
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:229
+msgid "Max value for X position."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
+msgid "PositionX: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
+msgid "Max value for Y position."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
+msgid "PositionY: "
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:261
+msgid "Max value for width."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:275
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:277
+msgid "Max value for height."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:292
+msgid "List of saved windows and their properties."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:308
+msgid "List of application-specific overrides."
+msgstr ""
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:311
 msgid "Add Application"
 msgstr "添加应用程序"
