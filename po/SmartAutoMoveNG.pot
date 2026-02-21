@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 11:12+0100\n"
+"POT-Creation-Date: 2026-02-21 11:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,10 +134,12 @@ msgid "Monitor: "
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:144
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
 msgid "Position X: "
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:153
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
 msgid "Position Y: "
 msgstr ""
 
@@ -216,7 +218,7 @@ msgid "Edit"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:580
-msgid "Edit Window - only allowed if the window is not occupied"
+msgid "Edit - only allowed if the window is not occupied"
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
@@ -484,17 +486,9 @@ msgstr ""
 msgid "Max value for X position."
 msgstr ""
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
-msgid "PositionX: "
-msgstr ""
-
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
 msgid "Max value for Y position."
-msgstr ""
-
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
-msgid "PositionY: "
 msgstr ""
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259

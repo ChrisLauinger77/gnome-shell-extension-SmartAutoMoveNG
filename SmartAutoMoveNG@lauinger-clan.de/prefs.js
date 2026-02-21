@@ -577,7 +577,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             label: _("Edit"),
             valign: Gtk.Align.CENTER,
         });
-        edit_window_widget.set_tooltip_text(_("Edit Window - only allowed if the window is not occupied"));
+        edit_window_widget.set_tooltip_text(_("Edit - only allowed if the window is not occupied"));
         edit_window_widget.set_icon_name("edit-symbolic");
         row.add_suffix(edit_window_widget);
         const edit_window_signal = edit_window_widget.connect(

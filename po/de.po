@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 11:12+0100\n"
-"PO-Revision-Date: 2026-02-21 11:15+0100\n"
+"POT-Creation-Date: 2026-02-21 11:56+0100\n"
+"PO-Revision-Date: 2026-02-21 11:57+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -126,7 +126,7 @@ msgstr "Arbeitsbereich: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:134
 msgid "On all workspaces: "
-msgstr "Immer auf der sichtbaren Arbeitsfläche"
+msgstr "Immer auf der sichtbaren Arbeitsfläche: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:138
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
@@ -135,10 +135,12 @@ msgid "Monitor: "
 msgstr "Monitor: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:144
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
 msgid "Position X: "
 msgstr "Position X: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:153
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
 msgid "Position Y: "
 msgstr "Position Y: "
 
@@ -217,8 +219,8 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:580
-msgid "Edit Window - only allowed if the window is not occupied"
-msgstr "Fenster bearbeiten – nur zulässig, wenn das Fenster nicht belegt ist"
+msgid "Edit - only allowed if the window is not occupied"
+msgstr "Bearbeiten – nur zulässig, wenn das Fenster nicht belegt ist"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "All"
@@ -503,18 +505,10 @@ msgstr "Maximalwert für Monitor."
 msgid "Max value for X position."
 msgstr "Maximalwert für die X-Position."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
-msgid "PositionX: "
-msgstr "PositionX: "
-
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
 msgid "Max value for Y position."
 msgstr "Maximalwert für die Y-Position."
-
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
-msgid "PositionY: "
-msgstr "PositionY: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:261
