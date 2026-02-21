@@ -605,7 +605,11 @@ export default class SmartAutoMoveNG extends Extension {
     async _handleTimeoutSync() {
         if (this._timeoutSyncSignal !== null) GLib.Source.remove(this._timeoutSyncSignal);
         this._timeoutSyncSignal = null;
-        await this._syncWindows();
+        try {
+            await this._syncWindows();
+        } catch (error) {
+            this.getLogger().error(`_handleTimeoutSync() failed: ${error}`);
+        }
         this._timeoutSyncSignal = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             this._syncFrequencyMs,
