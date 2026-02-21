@@ -225,7 +225,7 @@
                   </object>
                 </property>
                 <property name="subtitle" translatable="yes">Max value for X position.</property>
-                <property name="title" translatable="yes">PositionX: </property>
+                <property name="title" translatable="yes">Position X: </property>
                 <property name="tooltip-text" translatable="yes">Max value for X position.</property>
               </object>
             </child>
@@ -241,7 +241,7 @@
                   </object>
                 </property>
                 <property name="subtitle" translatable="yes">Max value for Y position.</property>
-                <property name="title" translatable="yes">PositionY: </property>
+                <property name="title" translatable="yes">Position Y: </property>
                 <property name="tooltip-text" translatable="yes">Max value for Y position.</property>
               </object>
             </child>
