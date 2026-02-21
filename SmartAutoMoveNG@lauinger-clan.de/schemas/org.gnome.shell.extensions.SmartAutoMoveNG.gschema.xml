@@ -91,5 +91,35 @@
       <summary>Ignore Monitor</summary>
       <description>Do not restore windows' monitor.</description>
     </key>
+    <key name="edit-saved-windows-workspace-max" type="i">
+      <default>4</default>
+      <summary>Edit-Dialog Workspace max value</summary>
+      <description>Workspace max value in the edit-saved-windows dialog.</description>
+    </key>
+    <key name="edit-saved-windows-monitor-max" type="i">
+      <default>1</default>
+      <summary>Edit-Dialog Monitor max value</summary>
+      <description>Monitor max value in the edit-saved-windows dialog.</description>
+    </key>
+    <key name="edit-saved-windows-position-x-max" type="i">
+      <default>1920</default>
+      <summary>Edit-Dialog Position X max value</summary>
+      <description>Position X max value in the edit-saved-windows dialog.</description>
+    </key>
+    <key name="edit-saved-windows-position-y-max" type="i">
+      <default>1080</default>
+      <summary>Edit-Dialog Position Y max value</summary>
+      <description>Position Y max value in the edit-saved-windows dialog.</description>
+    </key>
+    <key name="edit-saved-windows-width-max" type="i">
+      <default>1920</default>
+      <summary>Edit-Dialog Width max value</summary>
+      <description>Width max value in the edit-saved-windows dialog.</description>
+    </key>
+    <key name="edit-saved-windows-height-max" type="i">
+      <default>1080</default>
+      <summary>Edit-Dialog Height max value</summary>
+      <description>Height max value in the edit-saved-windows dialog.</description>
+    </key>
   </schema>
 </schemalist>

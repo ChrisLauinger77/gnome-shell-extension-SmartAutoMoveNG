@@ -17,6 +17,12 @@ export const SETTINGS_KEY_IGNORE_POSITION = "ignore-position";
 export const SETTINGS_KEY_IGNORE_WORKSPACE = "ignore-workspace";
 export const SETTINGS_KEY_IGNORE_MONITOR = "ignore-monitor";
 export const SETTINGS_KEY_OVERRIDES = "overrides";
+export const SETTINGS_KEY_MAX_WORKSPACE = "edit-saved-windows-workspace-max";
+export const SETTINGS_KEY_MAX_MONITOR = "edit-saved-windows-monitor-max";
+export const SETTINGS_KEY_MAX_POSITION_X = "edit-saved-windows-position-x-max";
+export const SETTINGS_KEY_MAX_POSITION_Y = "edit-saved-windows-position-y-max";
+export const SETTINGS_KEY_MAX_WIDTH = "edit-saved-windows-width-max";
+export const SETTINGS_KEY_MAX_HEIGHT = "edit-saved-windows-height-max";
 
 // sync mode enum values
 export const SYNC_MODE_IGNORE = 0;

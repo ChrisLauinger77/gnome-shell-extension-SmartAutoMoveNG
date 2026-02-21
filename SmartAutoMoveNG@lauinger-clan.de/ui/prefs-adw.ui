@@ -1,24 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <interface domain="SmartAutoMoveNG">
   <object class="AdwPreferencesPage" id="smartautomove_page1">
+    <property name="icon-name">preferences-system-symbolic</property>
     <property name="name">smartautomove_page1</property>
     <property name="title" translatable="yes">General</property>
-    <property name="icon-name">preferences-system-symbolic</property>
     <child>
       <object class="AdwPreferencesGroup" id="smartautomove_group1">
         <property name="title" translatable="yes">User Interface</property>
         <child>
           <object class="AdwSwitchRow" id="quicksettings-switch">
-            <property name="title" translatable="yes">Quick Settings</property>
             <property name="subtitle" translatable="yes">Show toggle and menu in Quick Settings.</property>
+            <property name="title" translatable="yes">Quick Settings</property>
             <property name="tooltip-text" translatable="yes">Show toggle and menu in Quick Settings.</property>
           </object>
         </child>
         <child>
           <object class="AdwComboRow" id="quicksettings-combo">
-            <property name="title" translatable="yes">Quick Settings toggle</property>
-            <property name="subtitle" translatable="yes">Usage of Quick Settings toggle</property>
-            <property name="tooltip-text" translatable="yes">Usage of Quick Settings toggle</property>
             <property name="model">
               <object class="GtkStringList">
                 <items>
@@ -30,12 +27,15 @@
                 </items>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Usage of Quick Settings toggle</property>
+            <property name="title" translatable="yes">Quick Settings toggle</property>
+            <property name="tooltip-text" translatable="yes">Usage of Quick Settings toggle</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="notifications-switch">
-            <property name="title" translatable="yes">Notifications</property>
             <property name="subtitle" translatable="yes">Allow the extension to show OSD notifications.</property>
+            <property name="title" translatable="yes">Notifications</property>
             <property name="tooltip-text" translatable="yes">Allow the extension to show OSD notifications.</property>
           </object>
         </child>
@@ -46,16 +46,13 @@
         <property name="title" translatable="yes">Settings</property>
         <child>
           <object class="AdwSwitchRow" id="debug-logging-switch">
-            <property name="title" translatable="yes">Debug Logging</property>
             <property name="subtitle" translatable="yes">Write detailed logs about extension behavior.</property>
+            <property name="title" translatable="yes">Debug Logging</property>
             <property name="tooltip-text" translatable="yes">Write detailed logs about extension behavior.</property>
           </object>
         </child>
         <child>
           <object class="AdwComboRow" id="sync-mode-combo">
-            <property name="title" translatable="yes">Default Synchronization Mode</property>
-            <property name="subtitle" translatable="yes">Default mode when synchronizing windows.</property>
-            <property name="tooltip-text" translatable="yes">Default mode when synchronizing windows.</property>
             <property name="model">
               <object class="GtkStringList">
                 <items>
@@ -64,117 +61,235 @@
                 </items>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Default mode when synchronizing windows.</property>
+            <property name="title" translatable="yes">Default Synchronization Mode</property>
+            <property name="tooltip-text" translatable="yes">Default mode when synchronizing windows.</property>
           </object>
         </child>
         <child>
           <object class="AdwSpinRow" id="match-threshold-spin">
-            <property name="title" translatable="yes">Match Threshold</property>
-            <property name="subtitle" translatable="yes">Minimum threshold for matching restored windows.</property>
-            <property name="tooltip-text" translatable="yes">Minimum threshold for matching restored windows.</property>
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">0</property>
+                <property name="page-increment">0.1</property>
+                <property name="step-increment">0.05</property>
                 <property name="upper">1</property>
                 <property name="value">0.7</property>
-                <property name="step-increment">0.05</property>
-                <property name="page-increment">0.1</property>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Minimum threshold for matching restored windows.</property>
+            <property name="title" translatable="yes">Match Threshold</property>
+            <property name="tooltip-text" translatable="yes">Minimum threshold for matching restored windows.</property>
           </object>
         </child>
         <child>
           <object class="AdwSpinRow" id="sync-frequency-spin">
-            <property name="title" translatable="yes">Sync Frequency (milliseconds)</property>
-            <property name="subtitle" translatable="yes">Frequency in milliseconds to synchronize changes to active windows into the in-memory store.</property>
-            <property name="tooltip-text" translatable="yes">Frequency in milliseconds to synchronize changes to active windows into the in-memory store.</property>
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">50</property>
+                <property name="page-increment">100</property>
+                <property name="step-increment">10</property>
                 <property name="upper">5000</property>
                 <property name="value">100</property>
-                <property name="step-increment">10</property>
-                <property name="page-increment">100</property>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Frequency in milliseconds to synchronize changes to active windows into the in-memory store.</property>
+            <property name="title" translatable="yes">Sync Frequency (milliseconds)</property>
+            <property name="tooltip-text" translatable="yes">Frequency in milliseconds to synchronize changes to active windows into the in-memory store.</property>
           </object>
         </child>
         <child>
           <object class="AdwSpinRow" id="save-frequency-spin">
-            <property name="title" translatable="yes">Save Frequency (milliseconds)</property>
-            <property name="subtitle" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
-            <property name="tooltip-text" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">200</property>
+                <property name="page-increment">1000</property>
+                <property name="step-increment">50</property>
                 <property name="upper">10000</property>
                 <property name="value">1000</property>
-                <property name="step-increment">50</property>
-                <property name="page-increment">1000</property>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
+            <property name="title" translatable="yes">Save Frequency (milliseconds)</property>
+            <property name="tooltip-text" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
           </object>
         </child>
         <child>
           <object class="AdwSpinRow" id="startup-delay-spin">
-            <property name="title" translatable="yes">Startup Delay (milliseconds)</property>
-            <property name="subtitle" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
-            <property name="tooltip-text" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
             <property name="adjustment">
               <object class="GtkAdjustment">
                 <property name="lower">500</property>
+                <property name="page-increment">1000</property>
+                <property name="step-increment">100</property>
                 <property name="upper">10000</property>
                 <property name="value">2500</property>
-                <property name="step-increment">100</property>
-                <property name="page-increment">1000</property>
               </object>
             </property>
+            <property name="subtitle" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
+            <property name="title" translatable="yes">Startup Delay (milliseconds)</property>
+            <property name="tooltip-text" translatable="yes">Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="freeze-saves-switch">
-            <property name="title" translatable="yes">Freeze Saves</property>
             <property name="subtitle" translatable="yes">Do not update saved window data.</property>
+            <property name="title" translatable="yes">Freeze Saves</property>
             <property name="tooltip-text" translatable="yes">Do not update saved window data.</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="activate-workspace-switch">
-            <property name="title" translatable="yes">Activate Workspace</property>
             <property name="subtitle" translatable="yes">Follow apps when they are moved to another workspace.</property>
+            <property name="title" translatable="yes">Activate Workspace</property>
             <property name="tooltip-text" translatable="yes">Follow apps when they are moved to another workspace.</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="ignore-position-switch">
+            <property name="subtitle" translatable="yes">Do not restore windows' position.</property>
             <property name="title" translatable="yes">Ignore Position</property>
-            <property name="subtitle" translatable="yes">Do not restore windows&apos; position.</property>
-            <property name="tooltip-text" translatable="yes">Do not restore windows&apos; position.</property>
+            <property name="tooltip-text" translatable="yes">Do not restore windows' position.</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="ignore-workspace-switch">
+            <property name="subtitle" translatable="yes">Do not restore windows' workspace.</property>
             <property name="title" translatable="yes">Ignore Workspace</property>
-            <property name="subtitle" translatable="yes">Do not restore windows&apos; workspace.</property>
-            <property name="tooltip-text" translatable="yes">Do not restore windows&apos; workspace.</property>
+            <property name="tooltip-text" translatable="yes">Do not restore windows' workspace.</property>
           </object>
         </child>
         <child>
           <object class="AdwSwitchRow" id="ignore-monitor-switch">
+            <property name="subtitle" translatable="yes">Do not restore windows' monitor.</property>
             <property name="title" translatable="yes">Ignore Monitor</property>
-            <property name="subtitle" translatable="yes">Do not restore windows&apos; monitor.</property>
-            <property name="tooltip-text" translatable="yes">Do not restore windows&apos; monitor.</property>
+            <property name="tooltip-text" translatable="yes">Do not restore windows' monitor.</property>
           </object>
         </child>
       </object>
     </child>
   </object>
   <object class="AdwPreferencesPage" id="smartautomove_page2">
+    <property name="icon-name">window-restore-symbolic</property>
     <property name="name">smartautomove_page2</property>
     <property name="title" translatable="yes">Saved Windows</property>
-    <property name="icon-name">window-restore-symbolic</property>
+    <child>
+      <object class="AdwPreferencesGroup" id="saved-windows-editor">
+        <property name="description" translatable="yes">Boundaries for Edit-dialog</property>
+        <property name="title" translatable="yes">Edit-Dialog</property>
+        <child>
+          <object class="AdwExpanderRow" id="saved-windows-editor-expander">
+            <property name="subtitle" translatable="yes">Click 'Save Preferences' to apply your changes.</property>
+            <property name="title" translatable="yes">Boundaries</property>
+            <property name="tooltip-text" translatable="yes">Click 'Save Preferences' to apply your changes.</property>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-workspace-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">1</property>
+                    <property name="step-increment">1</property>
+                    <property name="upper">9</property>
+                    <property name="value">1</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for workspace.</property>
+                <property name="title" translatable="yes">Workspace: </property>
+                <property name="tooltip-text" translatable="yes">Max value for workspace.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-monitor-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">1</property>
+                    <property name="step-increment">1</property>
+                    <property name="upper">9</property>
+                    <property name="value">1</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for monitor.</property>
+                <property name="title" translatable="yes">Monitor: </property>
+                <property name="tooltip-text" translatable="yes">Max value for monitor.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-positionX-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">100</property>
+                    <property name="step-increment">10</property>
+                    <property name="upper">7680</property>
+                    <property name="value">1920</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for X position.</property>
+                <property name="title" translatable="yes">PositionX: </property>
+                <property name="tooltip-text" translatable="yes">Max value for X position.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-positionY-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">100</property>
+                    <property name="step-increment">10</property>
+                    <property name="upper">4320</property>
+                    <property name="value">1080</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for Y position.</property>
+                <property name="title" translatable="yes">PositionY: </property>
+                <property name="tooltip-text" translatable="yes">Max value for Y position.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-width-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">100</property>
+                    <property name="step-increment">10</property>
+                    <property name="upper">7680</property>
+                    <property name="value">1920</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for width.</property>
+                <property name="title" translatable="yes">Width: </property>
+                <property name="tooltip-text" translatable="yes">Max value for width.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="saved-windows-editor-height-spin">
+                <property name="adjustment">
+                  <object class="GtkAdjustment">
+                    <property name="lower">0</property>
+                    <property name="page-increment">100</property>
+                    <property name="step-increment">10</property>
+                    <property name="upper">4320</property>
+                    <property name="value">1080</property>
+                  </object>
+                </property>
+                <property name="subtitle" translatable="yes">Max value for height.</property>
+                <property name="title" translatable="yes">Height: </property>
+                <property name="tooltip-text" translatable="yes">Max value for height.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwButtonRow" id="saved-windows-editor-save-button">
+                <property name="title" translatable="yes">Save Preferences</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="AdwPreferencesGroup" id="saved-windows-listbox">
-        <property name="title" translatable="yes"></property>
+        <property name="title" translatable="yes">Saved Windows</property>
+        <property name="description" translatable="yes">List of saved windows and their properties.</property>
         <child>
           <object class="AdwButtonRow" id="saved-windows-cleanup-button">
             <property name="title" translatable="yes">Cleanup Non-occupied Windows</property>
@@ -184,12 +299,13 @@
     </child>
   </object>
   <object class="AdwPreferencesPage" id="smartautomove_page3">
+    <property name="icon-name">dialog-warning-symbolic</property>
     <property name="name">smartautomove_page3</property>
     <property name="title" translatable="yes">Overrides</property>
-    <property name="icon-name">dialog-warning-symbolic</property>
     <child>
       <object class="AdwPreferencesGroup" id="overrides-listbox">
-        <property name="title" translatable="yes"></property>
+        <property name="title" translatable="yes">Overrides</property>
+        <property name="description" translatable="yes">List of application-specific overrides.</property>
         <child>
           <object class="AdwButtonRow" id="overrides-add-application-button">
             <property name="title" translatable="yes">Add Application</property>

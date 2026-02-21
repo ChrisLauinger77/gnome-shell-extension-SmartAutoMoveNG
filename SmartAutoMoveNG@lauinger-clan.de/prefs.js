@@ -3,6 +3,7 @@ import Adw from "gi://Adw";
 import Gtk from "gi://Gtk";
 import Gio from "gi://Gio";
 import GObject from "gi://GObject";
+import GLib from "gi://GLib";
 import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 import * as Common from "./lib/common.js";
@@ -81,6 +82,151 @@ const AppChooser = GObject.registerClass(
     }
 );
 
+const SavedWindowEditor = GObject.registerClass(
+    class SavedWindowEditor extends Adw.Window {
+        constructor(sw, settings, onSave = null, params = {}) {
+            super(params);
+            this._sw = sw;
+            this._settings = settings;
+            this._onSave = onSave;
+            this._toolbarView = new Adw.ToolbarView();
+            const adwheaderbar = new Adw.HeaderBar();
+            this._toolbarView.add_top_bar(adwheaderbar);
+            this.set_content(this._toolbarView);
+
+            const saveBtn = new Gtk.Button({
+                label: _("Save"),
+                css_classes: ["suggested-action"],
+            });
+            const cancelBtn = new Gtk.Button({ label: _("Cancel") });
+            adwheaderbar.pack_start(cancelBtn);
+            adwheaderbar.pack_end(saveBtn);
+
+            cancelBtn.connect("clicked", () => {
+                this.close();
+            });
+
+            saveBtn.connect("clicked", () => {
+                if (this._onSave) {
+                    this._onSave(this._collectEditedWindowData());
+                }
+                this.close();
+            });
+            this._fillContent();
+        }
+
+        _fillContent() {
+            const group = new Adw.PreferencesGroup({ title: _("Edit Saved Window") });
+            this._toolbarView.set_content(group);
+            const rowTitle = new Adw.EntryRow({ title: _("Title"), text: this._sw.title });
+            group.add(rowTitle);
+            const rowWorkspace = this._createSpinRow(
+                _("Workspace: "),
+                this._sw.workspace + 1,
+                {
+                    min: 1,
+                    max: this._settings.get_int(Common.SETTINGS_KEY_MAX_WORKSPACE),
+                },
+                1
+            );
+            group.add(rowWorkspace);
+            const rowOnAllWorkspaces = new Adw.SwitchRow({
+                title: _("On all workspaces: "),
+                active: this._sw.on_all_workspaces,
+            });
+            group.add(rowOnAllWorkspaces);
+            const rowMonitor = this._createSpinRow(_("Monitor: "), this._sw.monitor + 1, {
+                min: 1,
+                max: this._settings.get_int(Common.SETTINGS_KEY_MAX_MONITOR),
+            });
+            group.add(rowMonitor);
+            const rowPositionX = this._createSpinRow(
+                _("Position X: "),
+                this._sw.x,
+                {
+                    min: 0,
+                    max: this._settings.get_int(Common.SETTINGS_KEY_MAX_POSITION_X),
+                },
+                1
+            );
+            group.add(rowPositionX);
+            const rowPositionY = this._createSpinRow(_("Position Y: "), this._sw.y, {
+                min: 0,
+                max: this._settings.get_int(Common.SETTINGS_KEY_MAX_POSITION_Y),
+            });
+            group.add(rowPositionY);
+            const rowWidth = this._createSpinRow(_("Width: "), this._sw.width, {
+                min: 0,
+                max: this._settings.get_int(Common.SETTINGS_KEY_MAX_WIDTH),
+            });
+            group.add(rowWidth);
+            const rowHeight = this._createSpinRow(_("Height: "), this._sw.height, {
+                min: 0,
+                max: this._settings.get_int(Common.SETTINGS_KEY_MAX_HEIGHT),
+            });
+            group.add(rowHeight);
+            const rowMaximized = new Adw.SwitchRow({
+                title: _("Maximized") + ": ",
+                active: this._sw.maximized,
+            });
+            group.add(rowMaximized);
+            const rowFullscreen = new Adw.SwitchRow({
+                title: _("Fullscreen") + ": ",
+                active: this._sw.fullscreen,
+            });
+            group.add(rowFullscreen);
+            const rowAbove = new Adw.SwitchRow({
+                title: _("Always on Top") + ": ",
+                active: this._sw.above,
+            });
+            group.add(rowAbove);
+
+            this._entries = {
+                title: rowTitle,
+                workspace: rowWorkspace,
+                onAllWorkspaces: rowOnAllWorkspaces,
+                monitor: rowMonitor,
+                positionX: rowPositionX,
+                positionY: rowPositionY,
+                width: rowWidth,
+                height: rowHeight,
+                maximized: rowMaximized,
+                fullscreen: rowFullscreen,
+                above: rowAbove,
+            };
+        }
+
+        _createSpinRow(title, value, range, climbRate = 10) {
+            const row = new Adw.SpinRow({ title: title });
+            row.set_adjustment(new Gtk.Adjustment({ lower: range.min, upper: range.max, step_increment: 1 }));
+            row.set_value(value);
+            row.set_range(range.min, range.max);
+            row.set_climb_rate(climbRate);
+            return row;
+        }
+
+        _collectEditedWindowData() {
+            return {
+                title: this._entries.title.get_text(),
+                workspace: Math.max(0, Math.round(this._entries.workspace.get_value()) - 1),
+                on_all_workspaces: this._entries.onAllWorkspaces.get_active(),
+                monitor: Math.max(0, Math.round(this._entries.monitor.get_value()) - 1),
+                x: Math.round(this._entries.positionX.get_value()),
+                y: Math.round(this._entries.positionY.get_value()),
+                width: Math.round(this._entries.width.get_value()),
+                height: Math.round(this._entries.height.get_value()),
+                maximized: this._entries.maximized.get_active(),
+                fullscreen: this._entries.fullscreen.get_active(),
+                above: this._entries.above.get_active(),
+            };
+        }
+
+        show() {
+            super.show();
+        }
+    }
+);
+
 export default class SAMPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         window.search_enabled = true;
@@ -111,7 +257,7 @@ export default class SAMPreferences extends ExtensionPreferences {
 
         this._general(this.getSettings(), builder);
         const savedwindowsRows = [];
-        this._savedwindows(this.getSettings(), builder, savedwindowsRows);
+        this._savedwindows(this.getSettings(), builder, savedwindowsRows, page2);
         const overridesRows = [];
         this._overrides(this.getSettings(), builder, overridesRows, page3);
     }
@@ -152,16 +298,63 @@ export default class SAMPreferences extends ExtensionPreferences {
         }
     }
 
-    _savedwindows(settings, builder, list_rows) {
+    _saveSettings(settings, builder, adwrowSaveButton) {
+        const saved_windows_editor_workspace_widget = builder.get_object("saved-windows-editor-workspace-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_WORKSPACE, saved_windows_editor_workspace_widget.get_value());
+        const saved_windows_editor_monitor_widget = builder.get_object("saved-windows-editor-monitor-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_MONITOR, saved_windows_editor_monitor_widget.get_value());
+        const saved_windows_editor_x_widget = builder.get_object("saved-windows-editor-positionX-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_POSITION_X, saved_windows_editor_x_widget.get_value());
+        const saved_windows_editor_y_widget = builder.get_object("saved-windows-editor-positionY-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_POSITION_Y, saved_windows_editor_y_widget.get_value());
+        const saved_windows_editor_width_widget = builder.get_object("saved-windows-editor-width-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_WIDTH, saved_windows_editor_width_widget.get_value());
+        const saved_windows_editor_height_widget = builder.get_object("saved-windows-editor-height-spin");
+        settings.set_int(Common.SETTINGS_KEY_MAX_HEIGHT, saved_windows_editor_height_widget.get_value());
+        // Update status
+        adwrowSaveButton.set_sensitive(false);
+        adwrowSaveButton.set_title(_("Preferences Saved"));
+
+        // Reset status after a delay
+        GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3, () => {
+            adwrowSaveButton.set_title(_("Save Preferences"));
+            adwrowSaveButton.set_sensitive(true);
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    _savedwindows(settings, builder, list_rows, page) {
+        const saved_windows_editor_workspace_widget = builder.get_object("saved-windows-editor-workspace-spin");
+        saved_windows_editor_workspace_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_WORKSPACE));
+        const saved_windows_editor_monitor_widget = builder.get_object("saved-windows-editor-monitor-spin");
+        saved_windows_editor_monitor_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_MONITOR));
+        const saved_windows_editor_x_widget = builder.get_object("saved-windows-editor-positionX-spin");
+        saved_windows_editor_x_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_POSITION_X));
+        const saved_windows_editor_y_widget = builder.get_object("saved-windows-editor-positionY-spin");
+        saved_windows_editor_y_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_POSITION_Y));
+        const saved_windows_editor_width_widget = builder.get_object("saved-windows-editor-width-spin");
+        saved_windows_editor_width_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_WIDTH));
+        const saved_windows_editor_height_widget = builder.get_object("saved-windows-editor-height-spin");
+        saved_windows_editor_height_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_HEIGHT));
+        const saved_windows_editor_save_widget = builder.get_object("saved-windows-editor-save-button");
+        saved_windows_editor_save_widget.connect("activated", () => {
+            this._saveSettings(settings, builder, saved_windows_editor_save_widget);
+        });
         const saved_windows_list_widget = builder.get_object("saved-windows-listbox");
         const saved_windows_list_objects = [];
         const saved_windows_cleanup_widget = builder.get_object("saved-windows-cleanup-button");
         saved_windows_cleanup_widget.connect("activated", () => {
             this._cleanupNonOccupiedWindows(settings);
         });
-        this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows);
+        this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows, page);
         this.changedSavedWindowsSignal = settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
-            this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows);
+            this._loadSavedWindowsSetting(
+                settings,
+                saved_windows_list_widget,
+                saved_windows_list_objects,
+                list_rows,
+                page
+            );
         });
     }
 
@@ -320,8 +513,32 @@ export default class SAMPreferences extends ExtensionPreferences {
     _cleanupNonOccupiedWindows(settings) {
         Common.cleanupNonOccupiedWindows(settings);
     }
+    _edit_window(settings, wsh, page) {
+        const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
+        const sws = saved_windows[wsh];
+        const sw = sws.find((window) => !window.occupied);
+        if (!sw) return;
+        const editor = new SavedWindowEditor(
+            sw,
+            settings,
+            (newData) => {
+                Object.assign(sw, newData);
+                settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
+            },
+            {
+                title: _("Edit Saved Window"),
+                modal: true,
+                transient_for: page.get_root(),
+                hide_on_close: true,
+                width_request: 400,
+                height_request: 600,
+                resizable: false,
+            }
+        );
+        editor.show();
+    }
 
-    _addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows) {
+    _addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows, page) {
         const delete_widget = new Gtk.Button({
             valign: Gtk.Align.CENTER,
             css_classes: ["destructive-action"],
@@ -355,10 +572,23 @@ export default class SAMPreferences extends ExtensionPreferences {
             "clicked",
             this._override_any.bind(this, settings, wsh)
         );
+
+        const edit_window_widget = new Gtk.Button({
+            label: _("Edit"),
+            valign: Gtk.Align.CENTER,
+        });
+        edit_window_widget.set_tooltip_text(_("Edit Window - only allowed if the window is not occupied"));
+        edit_window_widget.set_icon_name("edit-symbolic");
+        row.add_suffix(edit_window_widget);
+        const edit_window_signal = edit_window_widget.connect(
+            "clicked",
+            this._edit_window.bind(this, settings, wsh, page)
+        );
         return {
             delete: [delete_signal, delete_widget],
             ignore: [override_signal, override_widget],
             ignore_any: [override_any_signal, override_any_widget],
+            edit: [edit_window_signal, edit_window_widget],
         };
     }
 
@@ -368,7 +598,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
     }
 
-    _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows) {
+    _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows, page) {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(saved_windows)) {
@@ -379,13 +609,14 @@ export default class SAMPreferences extends ExtensionPreferences {
                 row.set_title(wsh + " - " + sw.title);
                 row.set_tooltip_text(this._createSavedWindowsTooltip(sw, wsh));
                 if (!sw.occupied) row.set_subtitle(_("Not occupied"));
-                const widgets = this._addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows);
+                const widgets = this._addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows, page);
 
                 list_widget.add(row);
                 list_objects.push({
                     delete: widgets.delete,
                     ignore: widgets.ignore,
                     ignore_any: widgets.ignore_any,
+                    edit: widgets.edit,
                 });
             }
         }
