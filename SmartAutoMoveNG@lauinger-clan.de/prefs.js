@@ -556,7 +556,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             valign: Gtk.Align.CENTER,
         });
         override_widget.set_tooltip_text(_("OVERRIDE"));
-        override_widget.set_icon_name("application-add-symbolic");
+        override_widget.set_icon_name("dialog-warning-symbolic");
         row.add_suffix(override_widget);
         const override_signal = override_widget.connect("clicked", this._override.bind(this, settings, wsh, sw.title));
 
@@ -566,7 +566,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             css_classes: ["suggested-action"],
         });
         override_any_widget.set_tooltip_text(_("OVERRIDE (ANY)"));
-        override_any_widget.set_icon_name("application-add-symbolic");
+        override_any_widget.set_icon_name("dialog-warning-symbolic");
         row.add_suffix(override_any_widget);
         const override_any_signal = override_any_widget.connect(
             "clicked",
@@ -578,7 +578,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             valign: Gtk.Align.CENTER,
         });
         edit_window_widget.set_tooltip_text(_("Edit - only allowed if the window is not occupied"));
-        edit_window_widget.set_icon_name("edit-symbolic");
+        edit_window_widget.set_icon_name("document-edit-symbolic");
         row.add_suffix(edit_window_widget);
         const edit_window_signal = edit_window_widget.connect(
             "clicked",
