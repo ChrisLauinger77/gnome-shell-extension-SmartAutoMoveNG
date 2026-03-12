@@ -179,9 +179,9 @@ export default class SmartAutoMoveNG extends Extension {
         Main.wm._workspaceTracker._checkWorkspaces = this._prevCheckWorkspaces;
         this._debug("disable()");
         //remove timeout signals
-        GLib.Source.remove(this._timeoutSyncSignal);
+        if (this._timeoutSyncSignal !== null) GLib.Source.remove(this._timeoutSyncSignal);
         this._timeoutSyncSignal = null;
-        GLib.Source.remove(this._timeoutSaveSignal);
+        if (this._timeoutSaveSignal !== null) GLib.Source.remove(this._timeoutSaveSignal);
         this._timeoutSaveSignal = null;
         if (this._timeoutMoveWindowSignal !== null) GLib.Source.remove(this._timeoutMoveWindowSignal);
         this._timeoutMoveWindowSignal = null;
