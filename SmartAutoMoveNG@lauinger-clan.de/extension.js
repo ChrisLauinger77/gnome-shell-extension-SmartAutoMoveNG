@@ -377,6 +377,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _windowNewerThan(win, age) {
+        if (this._activeWindows === null) return false;
         const wh = this._windowHash(win);
 
         if (this._activeWindows.get(wh) === undefined) {
