@@ -345,7 +345,7 @@ export default class SmartAutoMoveNG extends Extension {
             //sandboxed_app_id: win.get_sandboxed_app_id(),
             //pid: win.get_pid(),
             //user_time: win.get_user_time(),
-            workspace: win.get_workspace() ? win.get_workspace().index() : null,
+            workspace: win.get_workspace().index(),
             // maximized: For GNOME 49+, only boolean is available. For older, bitmask.
             maximized: this._isGnome49OrHigher ? win.is_maximized() : win.get_maximized(),
             fullscreen: win.is_fullscreen(),
