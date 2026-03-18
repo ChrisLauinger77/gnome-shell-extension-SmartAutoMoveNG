@@ -123,8 +123,7 @@ export function findOverride(overrides, wsh, sw, threshold) {
 export function matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold) {
     const o = findOverride(overrides, wsh, { title: title }, 1);
 
-    let threshold = default_match_threshold;
-    if (o !== undefined && o.threshold !== undefined) threshold = o.threshold;
+    const threshold = o?.threshold ?? default_match_threshold;
 
     const [swi] = findSavedWindow(saved_windows, wsh, { title: title, occupied: false }, threshold);
 
