@@ -428,7 +428,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         const override = Common.findOverride(this._overrides, wsh, sw, threshold);
 
-        if (override !== undefined && override.action !== undefined) action = override.action;
+        if (override?.action !== undefined) action = override.action;
 
         return action;
     }
