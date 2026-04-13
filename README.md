@@ -2,6 +2,12 @@
 
 Forked from https://github.com/khimaros/smart-auto-move
 
+<div align="center">
+
+![Gnome Extensions Downloads](https://img.shields.io/gnome-extensions/dt/SmartAutoMoveNG@lauinger-clan.de) ![GNOME Shell](https://img.shields.io/badge/GNOME-45%20--%2050-blue?logo=gnome&logoColor=white) ![GitHub License](https://img.shields.io/github/license/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNg)
+
+</div>
+
 SmartAutoMoveNG
 is a Gnome Shell extension which keeps track of all application windows and restores them to the previous position, size, and workspace on restart. Supports Wayland.
 Dynamic workspaces are supported for GNOME 48 and later.
@@ -46,11 +52,11 @@ Most settings can be modified via the extension preferences dialog.
 
 ## Overtake settings from [smart-auto-move](https://github.com/khimaros/smart-auto-move) (the one this was forked from - only supported until GNOME 48)
 
--   dump the settings from "smart-auto-move" to a file:
+- dump the settings from "smart-auto-move" to a file:
 
 `$ dconf dump /org/gnome/shell/extensions/smart-auto-move/ > smart-auto-move.dconf`
 
--   load the dumped settings into "SmartAutoMoveNG":
+- load the dumped settings into "SmartAutoMoveNG":
 
 `$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < smart-auto-move.dconf`
 
