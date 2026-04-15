@@ -9,6 +9,7 @@
     "settings-schema": "org.gnome.shell.extensions.SmartAutoMoveNG",
     "donations": {
         "github": "ChrisLauinger77",
+        "kofi": "ChrisLauinger77",
         "paypal": "ChrisLauinger"
     },
     "version": 999,
