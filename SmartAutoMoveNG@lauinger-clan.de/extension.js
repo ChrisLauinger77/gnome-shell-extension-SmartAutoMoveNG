@@ -608,7 +608,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._timeoutSyncSignal = null;
         try {
             if (Main.screenShield?.active || Main.sessionMode?.isLocked) {
-                this.getLogger().warn("_handleTimeoutSync() skipped: screen shield active or session locked");
+                if (this._debugLogging)
+                    this.getLogger().warn("_handleTimeoutSync() skipped: screen shield active or session locked");
             } else {
                 await this._syncWindows();
             }
