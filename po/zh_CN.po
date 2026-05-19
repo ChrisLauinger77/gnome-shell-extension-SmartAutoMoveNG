@@ -87,11 +87,11 @@ msgstr "忽略显示器"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:724
 msgid "enabled"
-msgstr ""
+msgstr "已启用"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:726
 msgid "disabled"
-msgstr ""
+msgstr "已禁用"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:21
 msgid "Search..."
@@ -108,76 +108,76 @@ msgstr "取消"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:98
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:119
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:529
 msgid "Edit Saved Window"
-msgstr ""
+msgstr "编辑已保存的窗口"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:121
 msgid "Title"
-msgstr ""
+msgstr "标题"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:124
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:196
 msgid "Workspace: "
-msgstr ""
+msgstr "工作区："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:134
 msgid "On all workspaces: "
-msgstr ""
+msgstr "在所有工作区："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:138
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:212
 msgid "Monitor: "
-msgstr ""
+msgstr "显示器："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:144
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
 msgid "Position X: "
-msgstr ""
+msgstr "X 位置："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:153
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
 msgid "Position Y: "
-msgstr ""
+msgstr "Y 位置："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:158
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:260
 msgid "Width: "
-msgstr ""
+msgstr "宽度："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:163
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:276
 msgid "Height: "
-msgstr ""
+msgstr "高度："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:169
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Maximized"
-msgstr ""
+msgstr "最大化"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Fullscreen"
-msgstr ""
+msgstr "全屏"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:179
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Always on Top"
-msgstr ""
+msgstr "始终置顶"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:316
 msgid "Preferences Saved"
-msgstr ""
+msgstr "首选项已保存"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:320
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:282
 msgid "Save Preferences"
-msgstr ""
+msgstr "保存首选项"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:385
 msgid "Select app"
@@ -217,23 +217,23 @@ msgstr "自定义规则 (任意窗口)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:577
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:580
 msgid "Edit - only allowed if the window is not occupied"
-msgstr ""
+msgstr "编辑 - 仅当窗口未被占用时允许"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Position: "
-msgstr ""
+msgstr "位置："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
 msgid "Size: "
-msgstr ""
+msgstr "大小："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:611
 msgid "Not occupied"
@@ -272,24 +272,25 @@ msgstr "在系统快捷菜单中显示开关。"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:30
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:32
 msgid "Usage of Quick Settings toggle"
-msgstr ""
+msgstr "快捷设置开关的用途"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:32
 msgid ""
 "Enum - 0 Freeze Saves, 1 Activate Workspace, 2 Ignore Position, 3 Ignore "
 "Workspace, 4 Ignore Monitor"
 msgstr ""
+"枚举 - 0 暂停记录，1 激活工作区，2 忽略位置，3 忽略工作区，4 忽略显示器"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:36
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:38
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:37
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:37
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:39
 msgid "Allow the extension to show OSD notifications."
-msgstr ""
+msgstr "允许扩展显示 OSD 通知。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:41
 msgid "Startup Delay (ms)"
@@ -382,51 +383,51 @@ msgstr "不恢复窗口所在的显示器。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:96
 msgid "Edit-Dialog Workspace max value"
-msgstr ""
+msgstr "编辑对话框工作区最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:97
 msgid "Workspace max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的工作区最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:101
 msgid "Edit-Dialog Monitor max value"
-msgstr ""
+msgstr "编辑对话框显示器最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:102
 msgid "Monitor max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的显示器最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:106
 msgid "Edit-Dialog Position X max value"
-msgstr ""
+msgstr "编辑对话框 X 位置最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:107
 msgid "Position X max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的 X 位置最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:111
 msgid "Edit-Dialog Position Y max value"
-msgstr ""
+msgstr "编辑对话框 Y 位置最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:112
 msgid "Position Y max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的 Y 位置最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:116
 msgid "Edit-Dialog Width max value"
-msgstr ""
+msgstr "编辑对话框宽度最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:117
 msgid "Width max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的宽度最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:121
 msgid "Edit-Dialog Height max value"
-msgstr ""
+msgstr "编辑对话框高度最大值"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:122
 msgid "Height max value in the edit-saved-windows dialog."
-msgstr ""
+msgstr "编辑已保存窗口对话框中的高度最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:6
 msgid "General"
@@ -434,11 +435,11 @@ msgstr "常规"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:9
 msgid "User Interface"
-msgstr ""
+msgstr "用户界面"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:31
 msgid "Quick Settings toggle"
-msgstr ""
+msgstr "快捷设置开关"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:65
 msgid "Default Synchronization Mode"
@@ -458,58 +459,58 @@ msgstr "启动延迟 (毫秒)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
 msgid "Boundaries for Edit-dialog"
-msgstr ""
+msgstr "编辑对话框边界"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:178
 msgid "Edit-Dialog"
-msgstr ""
+msgstr "编辑对话框"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:181
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:183
 msgid "Click 'Save Preferences' to apply your changes."
-msgstr ""
+msgstr "点击“保存首选项”以应用更改。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:182
 msgid "Boundaries"
-msgstr ""
+msgstr "边界"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:195
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:197
 msgid "Max value for workspace."
-msgstr ""
+msgstr "工作区最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:211
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:213
 msgid "Max value for monitor."
-msgstr ""
+msgstr "显示器最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:227
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:229
 msgid "Max value for X position."
-msgstr ""
+msgstr "X 位置最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
 msgid "Max value for Y position."
-msgstr ""
+msgstr "Y 位置最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:261
 msgid "Max value for width."
-msgstr ""
+msgstr "宽度最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:275
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:277
 msgid "Max value for height."
-msgstr ""
+msgstr "高度最大值。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:292
 msgid "List of saved windows and their properties."
-msgstr ""
+msgstr "已保存窗口及其属性的列表。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:308
 msgid "List of application-specific overrides."
-msgstr ""
+msgstr "特定应用自定义规则的列表。"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:311
 msgid "Add Application"
