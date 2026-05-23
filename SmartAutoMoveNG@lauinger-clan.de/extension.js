@@ -468,10 +468,10 @@ export default class SmartAutoMoveNG extends Extension {
             sw.y = cw.y;
         }
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
+        if (sw.maximized) win.maximize();
         // NOTE: these additional move/maximize operations were needed in order to convince Firefox to stay where we put it.
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
+        if (sw.maximized) win.maximize();
         win.move_resize_frame(false, sw.x, sw.y, sw.width, sw.height);
 
         if (sw.fullscreen) win.make_fullscreen();
