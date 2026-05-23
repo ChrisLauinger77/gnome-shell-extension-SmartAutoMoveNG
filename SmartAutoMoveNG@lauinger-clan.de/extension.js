@@ -7,7 +7,7 @@ import Gio from "gi://Gio";
 import GObject from "gi://GObject";
 import St from "gi://St";
 
-import { Extension, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
+import { Extension, InjectionManager, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
@@ -118,8 +118,11 @@ const SmartAutoMoveNGIndicator = GObject.registerClass(
 //// EXTENSION CLASS
 export default class SmartAutoMoveNG extends Extension {
     enable() {
-        this._prevCheckWorkspaces = Main.wm._workspaceTracker._checkWorkspaces;
-        Main.wm._workspaceTracker._checkWorkspaces = this._getCheckWorkspaceOverride(this._prevCheckWorkspaces);
+        this._injectionManager = new InjectionManager();
+        this._injectionManager.overrideMethod(Main.wm._workspaceTracker, "_checkWorkspaces", (originalMethod) =>
+            this._getCheckWorkspaceOverride(originalMethod)
+        );
+
         this._activeWindows = new Map();
         this._settings = this.getSettings();
         this._indicator = null; // Quick Settings indicator see _onParamChangedUI
@@ -168,7 +171,9 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     disable() {
-        Main.wm._workspaceTracker._checkWorkspaces = this._prevCheckWorkspaces;
+        this._injectionManager.clear();
+        this._injectionManager = null;
+
         this._debug("disable()");
         //remove timeout signals
         if (this._timeoutSyncSignal !== null) GLib.Source.remove(this._timeoutSyncSignal);
