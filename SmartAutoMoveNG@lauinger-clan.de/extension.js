@@ -12,17 +12,10 @@ import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js"
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
 import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
-import { PACKAGE_VERSION } from "resource:///org/gnome/shell/misc/config.js";
 
 import * as Common from "./lib/common.js";
 
 const QuickSettingsMenu = Main.panel.statusArea.quickSettings;
-
-function isGnome49OrHigher() {
-    // GNOME Shell exports its version as a string, e.g. "49.0"
-    const majorVersion = Number.parseInt(PACKAGE_VERSION.split(".")[0], 10);
-    return majorVersion >= 49;
-}
 
 //quick settings
 const SmartAutoMoveNGMenuToggle = GObject.registerClass(
@@ -133,7 +126,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._finalMenuIcon = this._getMenuIcon();
         this._overrides = {};
         this._savedWindows = {};
-        this._isGnome49OrHigher = isGnome49OrHigher();
         this._onParamChangedDebugLogging();
 
         this._debug("enable()");
@@ -201,7 +193,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeWindows = null;
         this._indicator?.destroy();
         this._indicator = null;
-        this._isGnome49OrHigher = null;
     }
 
     _getCheckWorkspaceOverride(originalMethod) {
@@ -347,7 +338,7 @@ export default class SmartAutoMoveNG extends Extension {
             //user_time: win.get_user_time(),
             workspace: win.get_workspace().index(),
             // maximized: For GNOME 49+, only boolean is available. For older, bitmask.
-            maximized: this._isGnome49OrHigher ? win.is_maximized() : win.get_maximized(),
+            maximized: win.is_maximized(),
             fullscreen: win.is_fullscreen(),
             above: win.is_above(),
             monitor: win.get_monitor(),
@@ -732,11 +723,8 @@ export default class SmartAutoMoveNG extends Extension {
                 messagestate = _("disabled");
             }
             const finalmessage = `${this.metadata.name}\n${message} ${messagestate}`;
-            if (this._isGnome49OrHigher) {
-                Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
-            } else {
-                Main.osdWindowManager.show(-1, this._finalMenuIcon, finalmessage, null, null);
-            }
+
+            Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
         }
     }
 }
