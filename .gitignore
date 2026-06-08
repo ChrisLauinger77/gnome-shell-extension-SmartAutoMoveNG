@@ -3,3 +3,5 @@ smart-auto-move.dconf
 *.mo
 *.zip
 SmartAutoMove\@lauinger-clan.de/schemas/gschemas.compiled
+node_modules/
+package-lock.json
