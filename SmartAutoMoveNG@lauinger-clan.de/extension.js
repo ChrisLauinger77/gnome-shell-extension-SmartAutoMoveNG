@@ -408,6 +408,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _ensureSavedWindow(win) {
+        if (this._savedWindows === null) return;
         if (this._windowNewerThan(win, this._startupDelayMs)) return;
 
         if (this._freezeSaves) return;
@@ -493,10 +494,9 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _restoreWindow(win) {
+        if (this._savedWindows === null) return false;
         const wsh = this._windowSectionHash(win);
-
         // 'sw' is assigned once from matchedWindow and never reassigned
-
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
 
         if (swi !== undefined) return false;

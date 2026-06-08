@@ -125,10 +125,10 @@ Set the minimum window/title match threshold to 50%:
 $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/match-threshold 0.5
 ```
 
-Set the window synchronization (update/restore) frequency to 50ms:
+Set the window synchronization (update/restore) frequency to 150ms:
 
 ```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-frequency 50
+$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-frequency 150
 ```
 
 Default to ignoring windows unless explicitly defined. Restore all windows of the gnome-calculator app, all firefox windows except for the profile chooser, and Nautilus only if the window title is "Downloads":
