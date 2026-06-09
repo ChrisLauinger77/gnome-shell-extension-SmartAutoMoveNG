@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 11:56+0100\n"
+"POT-Creation-Date: 2026-06-11 18:12+0200\n"
 "PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
@@ -18,77 +18,77 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:35
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:55
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:16
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:174
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:291
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:275
 msgid "Saved Windows"
 msgstr "Сохраненные окна"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:44
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:295
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:279
 msgid "Cleanup Non-occupied Windows"
 msgstr "Очистка незанятых окон"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:49
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:46
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:53
 msgid "Settings"
 msgstr "Настройки"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:62
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:66
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:304
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:307
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:61
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:288
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:291
 msgid "Overrides"
 msgstr "Переопределить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:624
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:650
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:57
 msgid "Debug Logging"
 msgstr "Журнал"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:671
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:697
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:66
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:22
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:136
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:120
 msgid "Freeze Saves"
 msgstr "Заморозить Сохранить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:678
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:704
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:23
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:143
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:127
 msgid "Activate Workspace"
 msgstr "Активировать рабочее пространство"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:684
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:710
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:24
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:150
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:134
 msgid "Ignore Position"
 msgstr "Игнорировать позицию"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:690
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:716
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:157
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:141
 msgid "Ignore Workspace"
 msgstr "Игнорировать рабочее пространство"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:719
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:745
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:86
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:164
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:148
 msgid "Ignore Monitor"
 msgstr "Игнорировать монитор"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:724
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:750
 msgid "enabled"
 msgstr "включенный"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:726
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:752
 msgid "disabled"
 msgstr "инвалид"
 
@@ -110,7 +110,7 @@ msgid "Save"
 msgstr "Сохранить"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:119
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:529
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:525
 msgid "Edit Saved Window"
 msgstr "Редактировать сохраненное окно"
 
@@ -119,8 +119,8 @@ msgid "Title"
 msgstr "Заголовок"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:124
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:196
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:180
 msgid "Workspace: "
 msgstr "Рабочее пространство: "
 
@@ -129,120 +129,120 @@ msgid "On all workspaces: "
 msgstr "На всех рабочих пространствах: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:138
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:212
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:196
 msgid "Monitor: "
 msgstr "Монитор: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:144
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:212
 msgid "Position X: "
 msgstr "Позиция X: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:153
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:228
 msgid "Position Y: "
 msgstr "Позиция Y: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:158
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:260
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:244
 msgid "Width: "
 msgstr "Ширина: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:163
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:276
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:260
 msgid "Height: "
 msgstr "Высота: "
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:169
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "Maximized"
 msgstr "Развернуто"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "Fullscreen"
 msgstr "Полный экран"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:179
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "Always on Top"
 msgstr "Всегда поверх остальных"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:316
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:312
 msgid "Preferences Saved"
 msgstr "Настройки сохранены"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:320
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:282
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:316
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:266
 msgid "Save Preferences"
 msgstr "Сохранить настройки"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:385
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:381
 msgid "Select app"
 msgstr "Приложение"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:452
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:564
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:448
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:560
 msgid "ANY"
 msgstr "ЛЮБОЙ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:476
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:472
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:59
 msgid "IGNORE"
 msgstr "ИГНОРИРОВАТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:477
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:473
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:60
 msgid "RESTORE"
 msgstr "ВОССТАНОВИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:478
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:474
 msgid "DEFAULT"
 msgstr "ПО УМОЛЧАНИЮ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:495
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:546
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:491
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:542
 msgid "Delete"
 msgstr "Удалить"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:558
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:554
 msgid "OVERRIDE"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:568
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:564
 msgid "OVERRIDE (ANY)"
 msgstr "ПЕРЕОПРЕДЕЛИТЬ (ЛЮБОЙ)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:577
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:573
 msgid "Edit"
 msgstr "Редактировать"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:580
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:576
 msgid "Edit - only allowed if the window is not occupied"
 msgstr "Редактирование разрешено только если окно не занято"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "All"
 msgstr "Все"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "Position: "
 msgstr "Позиция: "
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:598
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:594
 msgid "Size: "
 msgstr "Размер: "
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:611
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:607
 msgid "Not occupied"
 msgstr "Не занято"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:665
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:660
 msgid "Reset Settings"
 msgstr "Сбросить настройки"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:671
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:666
 msgid "Reset all settings to default values"
 msgstr "Сбросить все настройки к значениям по умолчанию"
 
@@ -251,8 +251,8 @@ msgid "Persisted window data serialized to JSON."
 msgstr "Сохраненные данные окна сериализованы в JSON."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:22
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:49
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:51
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:56
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:58
 msgid "Write detailed logs about extension behavior."
 msgstr "Вести подробный журналы о поведении расширения."
 
@@ -268,8 +268,8 @@ msgid "Show toggle and menu in Quick Settings."
 msgstr "Показывать переключатель и меню в быстрых настройках."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:31
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:30
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:32
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:37
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:39
 msgid "Usage of Quick Settings toggle"
 msgstr "Использование переключателя быстрых настроек"
 
@@ -283,13 +283,13 @@ msgstr ""
 "монитор"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:36
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:38
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:45
 msgid "Notifications"
 msgstr "Уведомления"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:37
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:37
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:39
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:44
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:46
 msgid "Allow the extension to show OSD notifications."
 msgstr "Разрешить расширению показывать OSD-уведомления."
 
@@ -298,8 +298,8 @@ msgid "Startup Delay (ms)"
 msgstr "Задержка запуска (мсек)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:42
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:130
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:114
 msgid ""
 "Period of time in milliseconds to wait between seeing a window and writing "
 "it to the in-memory store."
@@ -308,139 +308,137 @@ msgstr ""
 "хранилище памяти."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:46
-msgid "Sync Frequency (ms)"
-msgstr "Частота синхронизации (мсек)"
+msgid "Save Frequency (ms)"
+msgstr "Частота сохранения (мсек)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:47
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:96
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:98
-msgid ""
-"Frequency in milliseconds to synchronize changes to active windows into the "
-"in-memory store."
-msgstr ""
-"Частота в миллисекундах для синхронизации изменений в активных окнах в "
-"хранилище памяти."
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:51
-msgid "Save Frequency (ms)"
-msgstr "Частота сохранения (мсек)"
-
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:52
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:112
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:114
 msgid "Frequency in milliseconds to persist the in-memory store to disk."
 msgstr "Частота в миллисекундах для сохранения содержимого памяти на диске."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:56
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:51
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:81
 msgid "Match Threshold"
 msgstr "Порог соответствия"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:57
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:52
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:80
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:82
 msgid "Minimum threshold for matching restored windows."
 msgstr "Минимальный порог для сопоставления восстановленных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:61
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:56
 msgid "Sync Mode"
 msgstr "Режим синхронизации"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:62
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:57
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:64
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:66
 msgid "Default mode when synchronizing windows."
 msgstr "Режим по умолчанию при синхронизации окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:67
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:62
 msgid "Overrides for restored window data."
 msgstr "Переопределения для восстановленных данных окна."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:72
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:137
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:67
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:119
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:121
 msgid "Do not update saved window data."
 msgstr "Не обновлять сохраненные данные окна."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:77
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:144
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:72
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:126
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:128
 msgid "Follow apps when they are moved to another workspace."
 msgstr ""
 "Отслеживайте приложения при их перемещении в другое рабочее пространство."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:82
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:151
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:77
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:133
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:135
 msgid "Do not restore windows' position."
 msgstr "Не восстанавливайте положение окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:87
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:156
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:158
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:82
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:140
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 msgid "Do not restore windows' workspace."
 msgstr "Не восстанавливайте окно рабочего пространства."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:92
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:163
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:87
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:147
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:149
 msgid "Do not restore windows' monitor."
 msgstr "Не восстанавливать монитор окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:96
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:91
 msgid "Edit-Dialog Workspace max value"
 msgstr "Максимальное значение рабочего пространства в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:97
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:92
 msgid "Workspace max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение рабочего пространства в диалоге редактирования "
 "сохраненных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:101
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:96
 msgid "Edit-Dialog Monitor max value"
 msgstr "Максимальное значение монитора в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:102
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:97
 msgid "Monitor max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение монитора в диалоге редактирования сохраненных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:106
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:101
 msgid "Edit-Dialog Position X max value"
 msgstr "Максимальное значение позиции X в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:107
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:102
 msgid "Position X max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение позиции X в диалоге редактирования сохраненных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:111
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:106
 msgid "Edit-Dialog Position Y max value"
 msgstr "Максимальное значение позиции Y в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:112
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:107
 msgid "Position Y max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение позиции Y в диалоге редактирования сохраненных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:116
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:111
 msgid "Edit-Dialog Width max value"
 msgstr "Максимальное значение ширины в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:117
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:112
 msgid "Width max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение ширины в диалоге редактирования сохраненных окон."
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:121
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:116
 msgid "Edit-Dialog Height max value"
 msgstr "Максимальное значение высоты в диалоге редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:122
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:117
 msgid "Height max value in the edit-saved-windows dialog."
 msgstr ""
 "Максимальное значение высоты в диалоге редактирования сохраненных окон."
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:126
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:20
+msgid "Move-on-create mode"
+msgstr "Режим перемещения при создании"
+
+#: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:127
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:19
+msgid "Use move-on-create mode. Windows will be moved when created."
+msgstr ""
+"Использовать режим перемещения при создании. Окна будут перемещаться при "
+"создании."
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:6
 msgid "General"
@@ -450,81 +448,81 @@ msgstr "Общий"
 msgid "User Interface"
 msgstr "Интерфейс пользователя"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:31
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:21
+msgid "Use move-on-create mode."
+msgstr "Использовать режим перемещения при создании."
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:38
 msgid "Quick Settings toggle"
 msgstr "Переключатель быстрых настроек"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:65
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:72
 msgid "Default Synchronization Mode"
 msgstr "Режим синхронизации по умолчанию"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
-msgid "Sync Frequency (milliseconds)"
-msgstr "Частота синхронизации (мсек)"
-
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Save Frequency (milliseconds)"
 msgstr "Частота сохранения (мсек)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:129
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Startup Delay (milliseconds)"
 msgstr "Задержка запуска (мсек)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:177
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:161
 msgid "Boundaries for Edit-dialog"
 msgstr "Границы диалога редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:178
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:162
 msgid "Edit-Dialog"
 msgstr "Диалог редактирования"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:181
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:183
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:165
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:167
 msgid "Click 'Save Preferences' to apply your changes."
 msgstr "Нажмите «Сохранить настройки», чтобы применить изменения."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:182
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:166
 msgid "Boundaries"
 msgstr "Границы"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:195
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:197
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:179
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:181
 msgid "Max value for workspace."
 msgstr "Максимальное значение для рабочего пространства."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:211
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:213
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:195
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:197
 msgid "Max value for monitor."
 msgstr "Максимальное значение для монитора."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:227
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:229
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:211
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:213
 msgid "Max value for X position."
 msgstr "Максимальное значение для позиции X."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:227
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:229
 msgid "Max value for Y position."
 msgstr "Максимальное значение для позиции Y."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:261
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:243
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:245
 msgid "Max value for width."
 msgstr "Максимальное значение для ширины."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:275
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:277
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:261
 msgid "Max value for height."
 msgstr "Максимальное значение для высоты."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:292
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:276
 msgid "List of saved windows and their properties."
 msgstr "Список сохраненных окон и их свойств."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:308
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:292
 msgid "List of application-specific overrides."
 msgstr "Список переопределений для отдельных приложений."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:311
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:295
 msgid "Add Application"
 msgstr "Добавить приложение"
