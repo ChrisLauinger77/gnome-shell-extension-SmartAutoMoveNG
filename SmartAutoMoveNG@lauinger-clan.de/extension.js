@@ -728,10 +728,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _sendOSDNotification(message, state) {
         if (this._notifications) {
-            let messagestate = _("enabled");
-            if (!state) {
-                messagestate = _("disabled");
-            }
+            const messagestate = state ? _("enabled") : _("disabled");
             const finalmessage = `${this.metadata.name}\n${message} ${messagestate}`;
 
             Main.osdWindowManager.showAll(this._finalMenuIcon, finalmessage, null, null);
