@@ -613,6 +613,11 @@ export default class SmartAutoMoveNG extends Extension {
         } catch (error) {
             this.getLogger().error(`_handleTimeoutSync() failed: ${error}`);
         }
+        if (!this._savedWindows) {
+            if (this._debugLogging)
+                this.getLogger().warn("_handleTimeoutSync() workaround to issue #73.");
+            return GLib.SOURCE_REMOVE;
+        }        
         this._timeoutSyncSignal = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             this._syncFrequencyMs,
