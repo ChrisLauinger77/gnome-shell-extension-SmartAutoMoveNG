@@ -1,5 +1,5 @@
 {
-    "name": "gnome-shell-extension-SmartAutoMoveNG",
+    "name": "gnome-shell-extension-smart-auto-move-ng",
     "version": "1.0.0",
     "description": "Smart Auto Move learns the position, size, and workspace of your application windows and restores them on subsequent launches. Supports Wayland.",
     "main": "SmartAutoMoveNG@lauinger-clan.de/extension.js",
