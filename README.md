@@ -125,12 +125,6 @@ Set the minimum window/title match threshold to 50%:
 $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/match-threshold 0.5
 ```
 
-Set the window synchronization (update/restore) frequency to 150ms:
-
-```
-$ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/sync-frequency 150
-```
-
 Default to ignoring windows unless explicitly defined. Restore all windows of the gnome-calculator app, all firefox windows except for the profile chooser, and Nautilus only if the window title is "Downloads":
 /
 
@@ -158,14 +152,20 @@ There are example configs in the `examples/` dir which can be loaded (N.B. while
 $ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < ./examples/default-restore.dconf
 ```
 
-You can backup your config (restore is the same as above):
+## Backup & Restore
+
+### Backup
+
+You can backup your config:
 
 ```
 $ dconf dump /org/gnome/shell/extensions/SmartAutoMoveNG/ > SmartAutoMoveNG.dconf
 ```
 
-The gsettings tool can also be used to manipulate these values:
+### Restore
+
+To restore the config from backup:
 
 ```
-$ gsettings --schemadir ./SmartAutoMoveNG@lauinger-clan.de/schemas/ set org.gnome.shell.extensions.SmartAutoMoveNG sync-mode 'RESTORE'
+$ dconf load /org/gnome/shell/extensions/SmartAutoMoveNG/ < SmartAutoMoveNG.dconf
 ```
