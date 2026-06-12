@@ -262,9 +262,18 @@ export default class SmartAutoMoveNG extends Extension {
 
     _cleanupWindowSignals() {
         if (this._windowCreatedSignal !== null) global.display.disconnect(this._windowCreatedSignal);
+        this._cleanupMappingWindowSignals();
+        this._cleanupTrackedWindowSignals();
+        this._cleanupPendingWindowSignals();
+    }
+
+    _cleanupMappingWindowSignals() {
         for (const window of this._mappingWindowSignals.keys()) {
             this._removeMappingWindow(window);
         }
+    }
+
+    _cleanupTrackedWindowSignals() {
         for (const [window, ids] of this._trackedWindows.entries()) {
             if (window) {
                 if (ids.provisionalTimeoutId !== null) {
@@ -282,25 +291,34 @@ export default class SmartAutoMoveNG extends Extension {
                 window.disconnect(ids.onallworkspaceschangeId);
             }
         }
+    }
+
+    _cleanupPendingWindowSignals() {
         for (const windows of this._pendingWindows.values()) {
             for (const win of windows) {
-                const signals = this._pendingWindowSignals.get(win);
-                if (signals && signals.unmanagedId !== null) {
-                    win.disconnect(signals.unmanagedId);
-                }
-                if (signals && signals.sizeChangedId !== null) {
-                    win.disconnect(signals.sizeChangedId);
-                }
-                if (signals && signals.minimizedId !== null) {
-                    win.disconnect(signals.minimizedId);
-                }
-                if (signals && signals.mappedId !== null) {
-                    win.disconnect(signals.mappedId);
-                }
-                if (signals && signals.timeoutId !== null) {
-                    GLib.Source.remove(signals.timeoutId);
-                }
+                this._disconnectPendingWindowSignals(win);
             }
+        }
+    }
+
+    _disconnectPendingWindowSignals(win) {
+        const signals = this._pendingWindowSignals.get(win);
+        if (!signals) return;
+        
+        if (signals.unmanagedId !== null) {
+            win.disconnect(signals.unmanagedId);
+        }
+        if (signals.sizeChangedId !== null) {
+            win.disconnect(signals.sizeChangedId);
+        }
+        if (signals.minimizedId !== null) {
+            win.disconnect(signals.minimizedId);
+        }
+        if (signals.mappedId !== null) {
+            win.disconnect(signals.mappedId);
+        }
+        if (signals.timeoutId !== null) {
+            GLib.Source.remove(signals.timeoutId);
         }
     }
 
