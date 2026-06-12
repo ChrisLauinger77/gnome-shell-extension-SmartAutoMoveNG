@@ -136,6 +136,15 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("enable()");
         this._restoreSettings();
 
+        this._moveWindowDelays = new Map();
+        this._activeRestores = new Map();
+        this._reservedSavedWindows = new Map();
+        this._pendingWindows = new Map();
+        this._pendingWindowSignals = new Map();
+        this._mappingWindowSignals = new Map();
+        this._windowTracker = Shell.WindowTracker.get_default();
+        this._startupSequenceChangedSignal = null;
+
         // Sync windows which might already be open before enabling the extension.
         this._syncWindows().catch((error) => {
             this.getLogger().error(`enable() failed: ${error}`);
@@ -143,7 +152,6 @@ export default class SmartAutoMoveNG extends Extension {
 
         this._timeoutSaveSignal = null;
         this._handleTimeoutSave();
-        this._timeoutMoveWindowSignal = null;
 
         this._settingSignals = [];
         this._savedWindowsCount = 0;
@@ -171,14 +179,18 @@ export default class SmartAutoMoveNG extends Extension {
             const id = this._settings.connect("changed::" + key, handler);
             this._settingSignals.push(id);
         }
-        this._pendingWindows = new Map();
-        this._pendingWindowSignals = new Map();
-        this._windowTracker = Shell.WindowTracker.get_default();
-        this._startupSequenceChangedSignal = null;
         // new method over window-created signal
         this._windowCreatedSignal = global.display.connect("window-created", (_display, window) => {
-            const mappedId = window.connect("notify::mapped", (metaWindow) => {
-                metaWindow.disconnect(mappedId);
+            const signals = {
+                mappedId: null,
+                unmanagedId: null,
+            };
+            signals.mappedId = window.connect("notify::mapped", (metaWindow) => {
+                const mappedId = signals.mappedId;
+                signals.mappedId = null;
+                if (mappedId !== null) metaWindow.disconnect(mappedId);
+                this._removeMappingWindow(metaWindow);
+                if (!metaWindow.mapped) return;
                 // check for pending
                 if (this._checkForPendingWindows(metaWindow)) {
                     this._debug(
@@ -191,6 +203,11 @@ export default class SmartAutoMoveNG extends Extension {
                     this.getLogger().error(`window-created handler failed: ${error}`);
                 });
             });
+            signals.unmanagedId = window.connect("unmanaged", () => {
+                signals.unmanagedId = null;
+                this._removeMappingWindow(window);
+            });
+            this._mappingWindowSignals.set(window, signals);
         });
     }
 
@@ -199,23 +216,31 @@ export default class SmartAutoMoveNG extends Extension {
         this._injectionManager.clear();
         this._injectionManager = null;
 
-        if (this._windowCreatedSignal !== null) global.display.disconnect(this._windowCreatedSignal);
+        this._cleanupWindowSignals();
         this._windowCreatedSignal = null;
-        for (const [window, ids] of this._trackedWindows.entries()) {
-            if (window) {
-                window.disconnect(ids.unmanagedId);
-                window.disconnect(ids.sizechangeId);
-                window.disconnect(ids.moveId);
-                window.disconnect(ids.titlechangeId);
-            }
+        if (this._startupSequenceChangedSignal !== null) {
+            this._windowTracker.disconnect(this._startupSequenceChangedSignal);
+            this._startupSequenceChangedSignal = null;
         }
         this._trackedWindows.clear();
         this._trackedWindows = null;
+        this._mappingWindowSignals.clear();
+        this._mappingWindowSignals = null;
+        this._pendingWindows.clear();
+        this._pendingWindows = null;
+        this._pendingWindowSignals.clear();
+        this._pendingWindowSignals = null;
         //remove timeout signals
         if (this._timeoutSaveSignal !== null) GLib.Source.remove(this._timeoutSaveSignal);
         this._timeoutSaveSignal = null;
-        if (this._timeoutMoveWindowSignal !== null) GLib.Source.remove(this._timeoutMoveWindowSignal);
-        this._timeoutMoveWindowSignal = null;
+        this._cancelActiveRestores();
+        this._moveWindowDelays.clear();
+        this._moveWindowDelays = null;
+        this._activeRestores.clear();
+        this._activeRestores = null;
+        this._reservedSavedWindows.clear();
+        this._reservedSavedWindows = null;
+        this._windowTracker = null;
         // remove setting Signals
         if (this._settingSignals) {
             for (const signal of this._settingSignals) {
@@ -237,6 +262,9 @@ export default class SmartAutoMoveNG extends Extension {
 
     _cleanupWindowSignals() {
         if (this._windowCreatedSignal !== null) global.display.disconnect(this._windowCreatedSignal);
+        for (const window of this._mappingWindowSignals.keys()) {
+            this._removeMappingWindow(window);
+        }
         for (const [window, ids] of this._trackedWindows.entries()) {
             if (window) {
                 if (ids.provisionalTimeoutId !== null) {
@@ -245,6 +273,7 @@ export default class SmartAutoMoveNG extends Extension {
                 window.disconnect(ids.unmanagedId);
                 window.disconnect(ids.sizechangeId);
                 window.disconnect(ids.moveId);
+                window.disconnect(ids.workspacechangeId);
                 window.disconnect(ids.titlechangeId);
             }
         }
@@ -254,11 +283,33 @@ export default class SmartAutoMoveNG extends Extension {
                 if (signals && signals.unmanagedId !== null) {
                     win.disconnect(signals.unmanagedId);
                 }
+                if (signals && signals.sizeChangedId !== null) {
+                    win.disconnect(signals.sizeChangedId);
+                }
+                if (signals && signals.minimizedId !== null) {
+                    win.disconnect(signals.minimizedId);
+                }
+                if (signals && signals.mappedId !== null) {
+                    win.disconnect(signals.mappedId);
+                }
                 if (signals && signals.timeoutId !== null) {
                     GLib.Source.remove(signals.timeoutId);
                 }
             }
         }
+    }
+
+    _removeMappingWindow(window) {
+        const signals = this._mappingWindowSignals?.get(window);
+        if (!signals) return;
+
+        if (signals.mappedId !== null) {
+            window.disconnect(signals.mappedId);
+        }
+        if (signals.unmanagedId !== null) {
+            window.disconnect(signals.unmanagedId);
+        }
+        this._mappingWindowSignals.delete(window);
     }
 
     _checkForPendingWindows(win) {
@@ -267,7 +318,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         // Check for peding windows with matching wmClass - seems to be the only way to detect windows which are still in the startup phase and not fully initialized yet (e.g. Firefox) and would otherwise be missed by the window-created signal - without this check, these windows would not be tracked and thus not restored on next open
         const isAppLoading = sequences.some((seq) => !seq.get_completed() && seq.get_wmclass() === wmClass);
-        if (isAppLoading) {
+        if (isAppLoading || !this._windowReady(win)) {
             this._debug(`App ${wmClass} is loading, adding to pending windows`);
 
             let pendingWindows = this._pendingWindows.get(wmClass);
@@ -280,19 +331,30 @@ export default class SmartAutoMoveNG extends Extension {
             if (!this._pendingWindowSignals.has(win)) {
                 const signals = {
                     unmanagedId: null,
+                    sizeChangedId: null,
+                    minimizedId: null,
+                    mappedId: null,
                     timeoutId: null,
+                    startupTimedOut: false,
                 };
                 signals.unmanagedId = win.connect("unmanaged", () => {
                     signals.unmanagedId = null;
                     this._removePendingWindow(wmClass, win);
                 });
+                signals.sizeChangedId = win.connect("size-changed", () => {
+                    this._trySyncPendingWindow(wmClass, win);
+                });
+                signals.minimizedId = win.connect("notify::minimized", () => {
+                    this._trySyncPendingWindow(wmClass, win);
+                });
+                signals.mappedId = win.connect("notify::mapped", () => {
+                    this._trySyncPendingWindow(wmClass, win);
+                });
                 signals.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 15000, () => {
                     signals.timeoutId = null;
-                    this._removePendingWindow(wmClass, win);
-                    this._debug(`Startup completion timed out for ${wmClass}. Moving pending window.`);
-                    this._syncWindow(win).catch((error) => {
-                        this.getLogger().error(`pending window timeout handler failed: ${error}`);
-                    });
+                    signals.startupTimedOut = true;
+                    this._debug(`Startup completion timed out for ${wmClass}. Waiting only for window readiness.`);
+                    this._trySyncPendingWindow(wmClass, win);
                     return GLib.SOURCE_REMOVE;
                 });
                 this._pendingWindowSignals.set(win, signals);
@@ -325,15 +387,27 @@ export default class SmartAutoMoveNG extends Extension {
 
             this._debug(`Loading for ${wmClass} officially completed. Moving pending windows.`);
             for (const win of pendingWindows) {
-                this._removePendingWindow(wmClass, win);
-                this._syncWindow(win).catch((error) => {
-                    this.getLogger().error(`window-created handler failed: ${error}`);
-                });
+                this._trySyncPendingWindow(wmClass, win);
             }
         }
 
         // If no windows are waiting for loading, clean up the global Tracker signal immediately to avoid unnecessary signal handling and potential memory leaks - by disconnecting the signal as soon as we know that no more windows are waiting for loading, we can ensure that we do not keep unnecessary references to the tracker or the signal handler, which could lead to memory leaks or other issues
         this._disconnectStartupTrackerIfIdle();
+    }
+
+    _trySyncPendingWindow(wmClass, win) {
+        const signals = this._pendingWindowSignals?.get(win);
+        if (!signals || !this._windowReady(win)) return;
+
+        const isAppLoading = this._windowTracker
+            .get_startup_sequences()
+            .some((sequence) => !sequence.get_completed() && sequence.get_wmclass() === wmClass);
+        if (isAppLoading && !signals.startupTimedOut) return;
+
+        this._removePendingWindow(wmClass, win);
+        this._syncWindow(win).catch((error) => {
+            this.getLogger().error(`pending window handler failed: ${error}`);
+        });
     }
 
     _removePendingWindow(wmClass, win) {
@@ -349,6 +423,15 @@ export default class SmartAutoMoveNG extends Extension {
         if (signals) {
             if (signals.unmanagedId !== null) {
                 win.disconnect(signals.unmanagedId);
+            }
+            if (signals.sizeChangedId !== null) {
+                win.disconnect(signals.sizeChangedId);
+            }
+            if (signals.minimizedId !== null) {
+                win.disconnect(signals.minimizedId);
+            }
+            if (signals.mappedId !== null) {
+                win.disconnect(signals.mappedId);
             }
             if (signals.timeoutId !== null) {
                 GLib.Source.remove(signals.timeoutId);
@@ -493,6 +576,7 @@ export default class SmartAutoMoveNG extends Extension {
             unmanagedId: null,
             sizechangeId: null,
             moveId: null,
+            workspacechangeId: null,
             titlechangeId: null,
             provisionalTimeoutId: null,
         };
@@ -513,6 +597,10 @@ export default class SmartAutoMoveNG extends Extension {
         });
         signals.moveId = win.connect("position-changed", () => {
             // update saved window data when window changes position - prevents wrong restore position on next open
+            this._ensureSavedWindow(win);
+        });
+        signals.workspacechangeId = win.connect("workspace-changed", () => {
+            // update saved window data when window moves to another workspace
             this._ensureSavedWindow(win);
         });
         signals.titlechangeId = win.connect("notify::title", () => {
@@ -631,6 +719,39 @@ export default class SmartAutoMoveNG extends Extension {
         sw.occupied = true;
     }
 
+    _reserveSavedWindow(wsh, swi) {
+        let reserved = this._reservedSavedWindows.get(wsh);
+        if (!reserved) {
+            reserved = new Set();
+            this._reservedSavedWindows.set(wsh, reserved);
+        }
+        if (reserved.has(swi)) return false;
+
+        reserved.add(swi);
+        return true;
+    }
+
+    _releaseSavedWindow(wsh, swi) {
+        const reserved = this._reservedSavedWindows?.get(wsh);
+        if (!reserved) return;
+
+        reserved.delete(swi);
+        if (reserved.size === 0) this._reservedSavedWindows.delete(wsh);
+    }
+
+    _matchedUnreservedWindow(wsh, title) {
+        const reserved = this._reservedSavedWindows.get(wsh);
+        if (!reserved?.size) {
+            return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold);
+        }
+
+        const savedWindows = {
+            ...this._savedWindows,
+            [wsh]: this._savedWindows[wsh].map((sw, swi) => (reserved.has(swi) ? { ...sw, occupied: true } : sw)),
+        };
+        return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold);
+    }
+
     _ensureSavedWindow(win) {
         if (this._windowNewerThan(win, this._startupDelayMs)) return;
 
@@ -667,6 +788,7 @@ export default class SmartAutoMoveNG extends Extension {
             win.stick();
             this._debug("_moveWindow to workspace: all workspaces");
         } else {
+            win.unstick();
             const workspaceManager = global.workspace_manager;
             // ensure we have the required number of workspaces
             for (let i = workspaceManager.n_workspaces; i <= workspace; i++) {
@@ -676,7 +798,7 @@ export default class SmartAutoMoveNG extends Extension {
             win.change_workspace_by_index(workspace, false);
             this._debug("_moveWindow to workspace: " + workspace);
             const ws = workspaceManager.get_workspace_by_index(workspace);
-            if (this._activateWorkspace && !ws.active) ws.activate(true);
+            if (this._activateWorkspace && !ws.active) ws.activate(global.get_current_time());
         }
     }
 
@@ -695,85 +817,139 @@ export default class SmartAutoMoveNG extends Extension {
             targetY = cw.y;
         }
         win.move_resize_frame(false, targetX, targetY, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
+        if (sw.maximized) win.maximize();
         // NOTE: these additional move/maximize operations were needed in order to convince Firefox to stay where we put it.
         win.move_resize_frame(false, targetX, targetY, sw.width, sw.height);
-        if (sw.maximized) win.maximize(sw.maximized);
+        if (sw.maximized) win.maximize();
         win.move_resize_frame(false, targetX, targetY, sw.width, sw.height);
 
         if (sw.fullscreen) win.make_fullscreen();
+        else win.unmake_fullscreen();
 
         if (sw.above) win.make_above();
+        else win.unmake_above();
         // give the window 500ms to react to the move/resize and update its state
-        await new Promise((resolve) => {
-            if (this._timeoutMoveWindowSignal !== null) GLib.Source.remove(this._timeoutMoveWindowSignal);
-            this._timeoutMoveWindowSignal = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
-                resolve();
+        const completed = await new Promise((resolve) => {
+            this._finishMoveWindowDelay(win);
+            const sourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+                const delay = this._moveWindowDelays.get(win);
+                if (delay?.sourceId === sourceId) {
+                    this._moveWindowDelays.delete(win);
+                }
+                resolve(true);
                 return GLib.SOURCE_REMOVE;
             });
+            this._moveWindowDelays.set(win, { sourceId, resolve });
         });
+        if (!completed) return null;
 
         const nsw = this._windowData(win);
 
         return nsw;
     }
 
+    _finishMoveWindowDelay(win, completed = true) {
+        const delay = this._moveWindowDelays.get(win);
+        if (!delay) return;
+
+        GLib.Source.remove(delay.sourceId);
+        this._moveWindowDelays.delete(win);
+        delay.resolve(completed);
+    }
+
+    _finishMoveWindowDelays(completed = true) {
+        for (const win of this._moveWindowDelays.keys()) {
+            this._finishMoveWindowDelay(win, completed);
+        }
+    }
+
+    _cancelActiveRestore(win, restore = this._activeRestores?.get(win)) {
+        if (!restore) return;
+
+        this._finishMoveWindowDelay(win, false);
+    }
+
+    _cancelActiveRestores() {
+        if (!this._activeRestores) return [];
+
+        const restores = [...this._activeRestores.entries()].map(([win, restore]) => ({
+            win,
+            restore,
+            completion: restore.completion,
+        }));
+        for (const [win, restore] of this._activeRestores) {
+            this._cancelActiveRestore(win, restore);
+        }
+        this._finishMoveWindowDelays(false);
+        return restores;
+    }
+
     async _restoreWindow(win) {
         const wsh = this._windowSectionHash(win);
-
-        // 'sw' is assigned once from matchedWindow and never reassigned
-
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
-
         if (swi !== undefined) return false;
-
-        if (!this._windowReady(win)) return true; // try again later
-
-        const [swiNew, sw] = Common.matchedWindow(
-            this._savedWindows,
-            this._overrides,
-            wsh,
-            this._windowTitle(win),
-            this._matchThreshold
-        );
+        const [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win));
         swi = swiNew;
-
         if (swi === undefined) return false;
-
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
-
         const action = this._findOverrideAction(win, 1);
         if (action !== Common.SYNC_MODE_RESTORE) return true;
+        if (!this._reserveSavedWindow(wsh, swi)) return null;
+        let resolveCompletion;
+        const restore = {
+            wsh,
+            swi,
+            unmanagedId: null,
+            unmanaged: false,
+            completion: new Promise((resolve) => {
+                resolveCompletion = resolve;
+            }),
+        };
+        restore.unmanagedId = win.connect("unmanaged", () => {
+            restore.unmanagedId = null;
+            restore.unmanaged = true;
+            this._cancelActiveRestore(win, restore);
+        });
+        this._activeRestores.set(win, restore);
 
-        // Claim the matched slot without teaching it geometry from a provisional startup window.
-        this._occupySavedWindow(win, swi);
+        try {
+            const pWinRepr = this._windowRepr(win);
+            const retryCount = 5; // give the window more chances to be in the correct state before giving up - seems to help Firefox
+            const moveWindow = async (attempt) => {
+                const nsw = await this._moveWindow(win, sw);
+                if (nsw === null) return null;
 
-        const pWinRepr = this._windowRepr(win);
-        const retryCount = 5; // give the window more chances to be in the correct state before giving up - seems to help Firefox
-        let nsw;
-        for (let i = 0; i < retryCount; i++) {
-            nsw = await this._moveWindow(win, sw);
+                if (this._ignorePosition || (sw.x === nsw.x && sw.y === nsw.y)) {
+                    const attemptText = attempt > 0 ? " (attempt " + (attempt + 1) + ")" : "";
+                    this.getLogger().log(
+                        `Position match after move${attemptText}: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
+                    );
+                    return nsw;
+                }
 
-            if (this._ignorePosition || (sw.x === nsw.x && sw.y === nsw.y)) {
-                const attemptText = i > 0 ? " (attempt " + (i + 1) + ")" : "";
-                this.getLogger().log(
-                    `Position match after move${attemptText}: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
-                );
-                this._trackWindow(win);
-                this._ensureSavedWindow(win);
-                break;
-            } else {
                 this.getLogger().warn(
                     `Position mismatch after move: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
                 );
+                if (attempt + 1 < retryCount) return moveWindow(attempt + 1);
+                return nsw;
+            };
+            const nsw = await moveWindow(0);
+            if (nsw === null) return null;
+
+            this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
+            this._occupySavedWindow(win, swi);
+            return true;
+        } finally {
+            this._releaseSavedWindow(wsh, swi);
+            if (restore.unmanagedId !== null) {
+                win.disconnect(restore.unmanagedId);
+                restore.unmanagedId = null;
             }
-
-            // if (!this._activateWorkspace) return true;
+            if (this._activeRestores?.get(win) === restore) {
+                this._activeRestores.delete(win);
+            }
+            resolveCompletion();
         }
-
-        this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
-
-        return true;
     }
 
     _cleanupWindows() {
@@ -813,7 +989,15 @@ export default class SmartAutoMoveNG extends Extension {
         const processWindow = async (index) => {
             if (index >= windows.length) return;
             const win = windows[index];
-            await this._syncWindow(win);
+            if (this._shouldSkipWindow(win)) {
+                await processWindow(index + 1);
+                return;
+            }
+            if (this._checkForPendingWindows(win)) {
+                await processWindow(index + 1);
+                return;
+            }
+            if (!(await this._syncWindow(win))) return;
             await processWindow(index + 1);
         };
 
@@ -821,10 +1005,13 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _syncWindow(win) {
-        if (this._shouldSkipWindow(win)) return;
+        if (this._shouldSkipWindow(win)) return true;
+        if (this._activeRestores.has(win)) return true;
         const restored = await this._restoreWindow(win);
+        if (restored === null) return this._activeRestores !== null;
         this._trackWindow(win);
         if (!restored) this._ensureSavedWindow(win);
+        return true;
     }
 
     //// SIGNAL HANDLERS
@@ -923,12 +1110,22 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _onParamChangedSavedWindows() {
+        const canceledRestores = this._cancelActiveRestores();
         this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         this._updateStats();
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
         }
         this._debug("_onParamChangedSavedWindows(): " + JSON.stringify(this._savedWindows));
+        Promise.all(canceledRestores.map(({ completion }) => completion)).then(() => {
+            if (!this._activeRestores) return;
+            for (const { win, restore } of canceledRestores) {
+                if (restore.unmanaged) continue;
+                this._syncWindow(win).catch((error) => {
+                    this.getLogger().error(`saved windows change handler failed: ${error}`);
+                });
+            }
+        });
     }
 
     _onParamChangedIgnoreMonitor() {
