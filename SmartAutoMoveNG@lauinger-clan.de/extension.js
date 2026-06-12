@@ -275,6 +275,11 @@ export default class SmartAutoMoveNG extends Extension {
                 window.disconnect(ids.moveId);
                 window.disconnect(ids.workspacechangeId);
                 window.disconnect(ids.titlechangeId);
+                window.disconnect(ids.abovechangeId);
+                window.disconnect(ids.fullscreenchangeId);
+                window.disconnect(ids.maximizedhorizontallychangeId);
+                window.disconnect(ids.maximizedverticallychangeId);
+                window.disconnect(ids.onallworkspaceschangeId);
             }
         }
         for (const windows of this._pendingWindows.values()) {
@@ -578,6 +583,11 @@ export default class SmartAutoMoveNG extends Extension {
             moveId: null,
             workspacechangeId: null,
             titlechangeId: null,
+            abovechangeId: null,
+            fullscreenchangeId: null,
+            maximizedhorizontallychangeId: null,
+            maximizedverticallychangeId: null,
+            onallworkspaceschangeId: null,
             provisionalTimeoutId: null,
         };
 
@@ -588,6 +598,7 @@ export default class SmartAutoMoveNG extends Extension {
             }
             this._activeWindows.delete(windowHash);
             this._trackedWindows.delete(win);
+            this._deoccupySavedWindow(windowHash);
             // Windows closed during the provisional period never update their saved geometry.
             this._cleanupWindows();
         });
@@ -605,6 +616,22 @@ export default class SmartAutoMoveNG extends Extension {
         });
         signals.titlechangeId = win.connect("notify::title", () => {
             // update saved window data when window changes title - allows to find the window again if it was opened with a generic title and only gets its real title later (e.g. terminals)
+            this._ensureSavedWindow(win);
+        });
+        signals.abovechangeId = win.connect("notify::above", () => {
+            // update saved window data when Always on Top changes
+            this._ensureSavedWindow(win);
+        });
+        signals.fullscreenchangeId = win.connect("notify::fullscreen", () => {
+            this._ensureSavedWindow(win);
+        });
+        signals.maximizedhorizontallychangeId = win.connect("notify::maximized-horizontally", () => {
+            this._ensureSavedWindow(win);
+        });
+        signals.maximizedverticallychangeId = win.connect("notify::maximized-vertically", () => {
+            this._ensureSavedWindow(win);
+        });
+        signals.onallworkspaceschangeId = win.connect("notify::on-all-workspaces", () => {
             this._ensureSavedWindow(win);
         });
         signals.provisionalTimeoutId = GLib.timeout_add(
@@ -753,6 +780,8 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _ensureSavedWindow(win) {
+        if (Main.screenShield?.active || Main.sessionMode?.isLocked) return;
+
         if (this._windowNewerThan(win, this._startupDelayMs)) return;
 
         if (this._freezeSaves) return;
@@ -893,7 +922,10 @@ export default class SmartAutoMoveNG extends Extension {
         if (swi === undefined) return false;
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
         const action = this._findOverrideAction(win, 1);
-        if (action !== Common.SYNC_MODE_RESTORE) return true;
+        if (action !== Common.SYNC_MODE_RESTORE) {
+            this._occupySavedWindow(win, swi);
+            return true;
+        }
         if (!this._reserveSavedWindow(wsh, swi)) return null;
         let resolveCompletion;
         const restore = {
@@ -949,6 +981,17 @@ export default class SmartAutoMoveNG extends Extension {
                 this._activeRestores.delete(win);
             }
             resolveCompletion();
+        }
+    }
+
+    _deoccupySavedWindow(windowHash) {
+        for (const sws of Object.values(this._savedWindows)) {
+            for (const sw of sws) {
+                if (sw.occupied && sw.hash === windowHash) {
+                    sw.occupied = false;
+                    this._debug("_deoccupySavedWindow() - deoccupy: " + JSON.stringify(sw));
+                }
+            }
         }
     }
 
@@ -1073,6 +1116,11 @@ export default class SmartAutoMoveNG extends Extension {
 
     _onParamChangedFreezeSaves() {
         this._freezeSaves = this._settings.get_boolean(Common.SETTINGS_KEY_FREEZE_SAVES);
+        if (!this._freezeSaves) {
+            for (const win of this._trackedWindows.keys()) {
+                this._ensureSavedWindow(win);
+            }
+        }
         this._sendOSDNotification(_("Freeze Saves"), this._freezeSaves);
         this._debug("_onParamChangedFreezeSaves(): " + this._freezeSaves);
     }
