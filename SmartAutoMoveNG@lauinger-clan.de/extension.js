@@ -304,7 +304,7 @@ export default class SmartAutoMoveNG extends Extension {
     _disconnectPendingWindowSignals(win) {
         const signals = this._pendingWindowSignals.get(win);
         if (!signals) return;
-        
+
         if (signals.unmanagedId !== null) {
             win.disconnect(signals.unmanagedId);
         }
@@ -971,7 +971,7 @@ export default class SmartAutoMoveNG extends Extension {
 
                 if (this._ignorePosition || (sw.x === nsw.x && sw.y === nsw.y)) {
                     const attemptText = attempt > 0 ? " (attempt " + (attempt + 1) + ")" : "";
-                    this.getLogger().log(
+                    this._debug(
                         `Position match after move${attemptText}: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
                     );
                     return nsw;
