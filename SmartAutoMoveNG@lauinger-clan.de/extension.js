@@ -473,7 +473,6 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _getCheckWorkspaceOverride(originalMethod) {
-        /* eslint-disable no-invalid-this */
         return function () {
             const keepAliveWorkspaces = [];
             let foundNonEmpty = false;
@@ -493,7 +492,6 @@ export default class SmartAutoMoveNG extends Extension {
                 keepAliveWorkspaces.forEach((ws) => delete ws._keepAliveId);
             }
         };
-        /* eslint-enable no-invalid-this */
     }
 
     _getMenuIcon() {
