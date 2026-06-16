@@ -138,6 +138,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         this._moveWindowDelays = new Map();
         this._activeRestores = new Map();
+        this._restoreSaveGuards = new Map();
         this._reservedSavedWindows = new Map();
         this._pendingWindows = new Map();
         this._pendingWindowSignals = new Map();
@@ -236,6 +237,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._moveWindowDelays = null;
         this._activeRestores.clear();
         this._activeRestores = null;
+        this._clearRestoreSaveGuards();
+        this._restoreSaveGuards = null;
         this._reservedSavedWindows.clear();
         this._reservedSavedWindows = null;
         this._windowTracker = null;
@@ -612,6 +615,7 @@ export default class SmartAutoMoveNG extends Extension {
             }
             this._activeWindows.delete(windowHash);
             this._trackedWindows.delete(win);
+            this._clearRestoreSaveGuard(win);
             this._deoccupySavedWindow(windowHash);
             // Windows closed during the provisional period never update their saved geometry.
             this._cleanupWindows();
@@ -826,6 +830,8 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (this._freezeSaves) return;
 
+        if (this._activeRestores.has(win) || this._restoreSaveGuards.has(win)) return;
+
         const wsh = this._windowSectionHash(win);
         if (wsh === null) return;
 
@@ -942,6 +948,35 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
+    _setRestoreSaveGuard(win) {
+        this._clearRestoreSaveGuard(win);
+
+        const sourceId = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT,
+            Math.max(this._startupDelayMs, 1000),
+            () => {
+                this._restoreSaveGuards.delete(win);
+                return GLib.SOURCE_REMOVE;
+            }
+        );
+        this._restoreSaveGuards.set(win, sourceId);
+    }
+
+    _clearRestoreSaveGuard(win) {
+        const sourceId = this._restoreSaveGuards?.get(win);
+        if (sourceId === undefined) return;
+
+        GLib.Source.remove(sourceId);
+        this._restoreSaveGuards.delete(win);
+    }
+
+    _clearRestoreSaveGuards() {
+        for (const sourceId of this._restoreSaveGuards.values()) {
+            GLib.Source.remove(sourceId);
+        }
+        this._restoreSaveGuards.clear();
+    }
+
     _cancelActiveRestore(win, restore = this._activeRestores?.get(win)) {
         if (!restore) return;
 
@@ -1001,16 +1036,18 @@ export default class SmartAutoMoveNG extends Extension {
                 const nsw = await this._moveWindow(win, sw);
                 if (nsw === null) return null;
 
-                if (this._ignorePosition || (sw.x === nsw.x && sw.y === nsw.y)) {
+                const positionMatches = this._ignorePosition || (sw.x === nsw.x && sw.y === nsw.y);
+                const sizeMatches = sw.width === nsw.width && sw.height === nsw.height;
+                if (positionMatches && sizeMatches) {
                     const attemptText = attempt > 0 ? " (attempt " + (attempt + 1) + ")" : "";
                     this._debug(
-                        `Position match after move${attemptText}: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
+                        `Geometry match after move${attemptText}: expected (${sw.x}, ${sw.y}, ${sw.width}x${sw.height}), got (${nsw.x}, ${nsw.y}, ${nsw.width}x${nsw.height}) for window ${pWinRepr}`
                     );
                     return nsw;
                 }
 
                 this.getLogger().warn(
-                    `Position mismatch after move: expected (${sw.x}, ${sw.y}), got (${nsw.x}, ${nsw.y}) for window ${pWinRepr}`
+                    `Geometry mismatch after move: expected (${sw.x}, ${sw.y}, ${sw.width}x${sw.height}), got (${nsw.x}, ${nsw.y}, ${nsw.width}x${nsw.height}) for window ${pWinRepr}`
                 );
                 if (attempt + 1 < retryCount) return moveWindow(attempt + 1);
                 return nsw;
@@ -1020,6 +1057,7 @@ export default class SmartAutoMoveNG extends Extension {
 
             this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
             this._occupySavedWindow(win, swi);
+            this._setRestoreSaveGuard(win);
             return true;
         } finally {
             this._releaseSavedWindow(wsh, swi);
