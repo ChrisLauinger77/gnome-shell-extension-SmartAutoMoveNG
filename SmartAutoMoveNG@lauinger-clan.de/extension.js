@@ -838,12 +838,19 @@ export default class SmartAutoMoveNG extends Extension {
         this._removeSavedWindowFromOtherSections(this._windowHash(win), wsh);
 
         if (!this._updateSavedWindow(win)) {
-            const [swi] = this._matchingSavedWindow(win);
+            const [swi, sw] = this._matchingSavedWindow(win);
             if (swi !== undefined) {
-                this._debug(`_ensureSavedWindow() - skipped duplicate app slot: ${swi}, ${this._windowRepr(win)}`);
-                return;
+                if (sw.occupied) {
+                    this._debug(`_ensureSavedWindow() - skipped occupied app slot: ${swi}, ${this._windowRepr(win)}`);
+                    return;
+                }
+                const current = this._windowData(win);
+                if (this._windowDataEqual(sw, current)) return;
+                this._savedWindows[wsh][swi] = current;
+                this._debug("_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current));
+            } else {
+                this._pushSavedWindow(win);
             }
-            this._pushSavedWindow(win);
         }
     }
 
