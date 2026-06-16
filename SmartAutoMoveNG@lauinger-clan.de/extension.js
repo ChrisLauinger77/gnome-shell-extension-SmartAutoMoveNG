@@ -633,8 +633,8 @@ export default class SmartAutoMoveNG extends Extension {
             this._ensureSavedWindow(win);
         });
         signals.titlechangeId = win.connect("notify::title", () => {
-            // update saved window data when window changes title - allows to find the window again if it was opened with a generic title and only gets its real title later (e.g. terminals)
-            this._ensureSavedWindow(win);
+            // try restore when a generic title becomes matchable, then save if no restore applies
+            this._syncWindowWithErrorLogging(win, "title change handler");
         });
         signals.wmclasschangeId = win.connect("notify::wm-class", () => {
             // update saved window data when WM_CLASS is populated or corrected after mapping
@@ -1109,6 +1109,12 @@ export default class SmartAutoMoveNG extends Extension {
         this._trackWindow(win);
         if (!restored) this._ensureSavedWindow(win);
         return true;
+    }
+
+    _syncWindowWithErrorLogging(win, context) {
+        this._syncWindow(win).catch((error) => {
+            this.getLogger().error(`${context} failed: ${error}`);
+        });
     }
 
     //// SIGNAL HANDLERS
