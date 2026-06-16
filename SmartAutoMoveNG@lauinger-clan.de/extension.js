@@ -199,9 +199,7 @@ export default class SmartAutoMoveNG extends Extension {
                     return;
                 }
                 // end check for pending
-                this._syncWindow(window).catch((error) => {
-                    this.getLogger().error(`window-created handler failed: ${error}`);
-                });
+                this._syncWindowWithErrorLogging(window, "window-created handler");
             });
             signals.unmanagedId = window.connect("unmanaged", () => {
                 signals.unmanagedId = null;
@@ -429,9 +427,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (isAppLoading && !signals.startupTimedOut) return;
 
         this._removePendingWindow(wmClass, win);
-        this._syncWindow(win).catch((error) => {
-            this.getLogger().error(`pending window handler failed: ${error}`);
-        });
+        this._syncWindowWithErrorLogging(win, "pending window handler");
     }
 
     _removePendingWindow(wmClass, win) {
@@ -1229,9 +1225,7 @@ export default class SmartAutoMoveNG extends Extension {
             if (!this._activeRestores) return;
             for (const { win, restore } of canceledRestores) {
                 if (restore.unmanaged) continue;
-                this._syncWindow(win).catch((error) => {
-                    this.getLogger().error(`saved windows change handler failed: ${error}`);
-                });
+                this._syncWindowWithErrorLogging(win, "saved windows change handler");
             }
         });
     }
