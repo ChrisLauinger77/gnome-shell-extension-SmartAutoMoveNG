@@ -284,6 +284,7 @@ export default class SmartAutoMoveNG extends Extension {
                 window.disconnect(ids.moveId);
                 window.disconnect(ids.workspacechangeId);
                 window.disconnect(ids.titlechangeId);
+                window.disconnect(ids.wmclasschangeId);
                 window.disconnect(ids.abovechangeId);
                 window.disconnect(ids.fullscreenchangeId);
                 window.disconnect(ids.maximizedhorizontallychangeId);
@@ -599,6 +600,7 @@ export default class SmartAutoMoveNG extends Extension {
             moveId: null,
             workspacechangeId: null,
             titlechangeId: null,
+            wmclasschangeId: null,
             abovechangeId: null,
             fullscreenchangeId: null,
             maximizedhorizontallychangeId: null,
@@ -632,6 +634,10 @@ export default class SmartAutoMoveNG extends Extension {
         });
         signals.titlechangeId = win.connect("notify::title", () => {
             // update saved window data when window changes title - allows to find the window again if it was opened with a generic title and only gets its real title later (e.g. terminals)
+            this._ensureSavedWindow(win);
+        });
+        signals.wmclasschangeId = win.connect("notify::wm-class", () => {
+            // update saved window data when WM_CLASS is populated or corrected after mapping
             this._ensureSavedWindow(win);
         });
         signals.abovechangeId = win.connect("notify::above", () => {
@@ -750,6 +756,24 @@ export default class SmartAutoMoveNG extends Extension {
         return true;
     }
 
+    _removeSavedWindowFromOtherSections(windowHash, currentWsh) {
+        for (const wsh of Object.keys(this._savedWindows)) {
+            if (wsh === currentWsh) continue;
+
+            const keptWindows = [];
+            for (const sw of this._savedWindows[wsh]) {
+                if (sw.hash === windowHash) {
+                    this._debug("_removeSavedWindowFromOtherSections() - removed stale: " + JSON.stringify(sw));
+                } else {
+                    keptWindows.push(sw);
+                }
+            }
+
+            if (keptWindows.length > 0) this._savedWindows[wsh] = keptWindows;
+            else delete this._savedWindows[wsh];
+        }
+    }
+
     _occupySavedWindow(win, swi) {
         const wsh = this._windowSectionHash(win);
         const sw = this._savedWindows[wsh][swi];
@@ -805,6 +829,11 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._windowNewerThan(win, this._startupDelayMs)) return;
 
         if (this._freezeSaves) return;
+
+        const wsh = this._windowSectionHash(win);
+        if (wsh === null) return;
+
+        this._removeSavedWindowFromOtherSections(this._windowHash(win), wsh);
 
         if (!this._updateSavedWindow(win)) {
             const [swi] = this._matchingSavedWindow(win);
