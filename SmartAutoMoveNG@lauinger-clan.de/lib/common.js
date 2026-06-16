@@ -133,6 +133,16 @@ export function matchedWindow(saved_windows, overrides, wsh, title, default_matc
     return [swi, sw];
 }
 
+export function matchingSavedWindow(saved_windows, wsh) {
+    if (!Object.hasOwn(saved_windows, wsh)) {
+        return [undefined, undefined];
+    }
+
+    const [swi, sw] = saved_windows[wsh].entries().next().value ?? [];
+
+    return [swi, sw];
+}
+
 export function cleanupNonOccupiedWindows(settings) {
     const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
     for (const wsh of Object.keys(saved_windows)) {

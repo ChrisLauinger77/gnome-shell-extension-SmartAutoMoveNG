@@ -797,6 +797,10 @@ export default class SmartAutoMoveNG extends Extension {
         return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold);
     }
 
+    _matchingSavedWindow(win) {
+        return Common.matchingSavedWindow(this._savedWindows, this._windowSectionHash(win));
+    }
+
     _ensureSavedWindow(win) {
         if (Main.screenShield?.active || Main.sessionMode?.isLocked) return;
 
@@ -805,6 +809,11 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._freezeSaves) return;
 
         if (!this._updateSavedWindow(win)) {
+            const [swi] = this._matchingSavedWindow(win);
+            if (swi !== undefined) {
+                this._debug(`_ensureSavedWindow() - skipped duplicate app slot: ${swi}, ${this._windowRepr(win)}`);
+                return;
+            }
             this._pushSavedWindow(win);
         }
     }
