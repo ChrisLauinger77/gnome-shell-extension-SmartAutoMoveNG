@@ -34,6 +34,8 @@ inside the directory with that exact name.
 - `examples/`: example dconf configurations.
 - `docs/`: screenshots used by the README.
 - `.github/workflows/`: CI, release, and stale issue automation.
+- `gnome-extension-review.md`: local checklist summarizing GNOME Shell
+  Extensions Review Guidelines for changes intended for extensions.gnome.org.
 - `smartautomoveng.sh`: helper script for packaging, installing, uploading, and
   updating translations.
 
@@ -58,6 +60,9 @@ Notes:
 
 ## Coding Conventions
 
+- Check `gnome-extension-review.md` when changing runtime, preferences,
+  metadata, schema, packaging, or user-data behavior that may affect
+  extensions.gnome.org review.
 - Use modern GJS ES modules and imports consistent with the existing files.
 - Prefer constants from `lib/common.js` for settings keys and sync-mode values.
 - Keep settings schema keys, UI widget bindings, and common constants aligned.
