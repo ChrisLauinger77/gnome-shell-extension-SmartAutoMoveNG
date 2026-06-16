@@ -77,6 +77,9 @@ Notes:
   `disable()`.
 - Window identity is heuristic. Matching uses window section hash
   (`get_wm_class()`), title similarity, occupied state, and override thresholds.
+- The intended model is one saved window slot per app/window section hash. Do
+  not add multi-window saved slots for the same app unless the maintainer
+  explicitly changes that behavior.
 - Saved windows and overrides are persisted as JSON strings in GSettings; invalid
   JSON will break preferences and runtime loading.
 - Workspace handling includes an override of
