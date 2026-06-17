@@ -364,6 +364,7 @@ export default class SmartAutoMoveNG extends Extension {
                 };
                 signals.unmanagedId = win.connect("unmanaged", () => {
                     signals.unmanagedId = null;
+                    this._deoccupySavedWindow(this._windowHash(win));
                     this._removePendingWindow(wmClass, win);
                 });
                 signals.sizeChangedId = win.connect("size-changed", () => {
