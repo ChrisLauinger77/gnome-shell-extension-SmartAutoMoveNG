@@ -18,7 +18,7 @@ assertScore(
         title: "user@host: ~/src/github.com/user/gnome-shell-extension-SmartAutoMoveNG",
         occupied: false,
     },
-    0.625
+    0.5857142857142857
 );
 
 assertScore({ title: "user@host: ~", occupied: false }, { title: "user@host: ~", occupied: false }, 1);
@@ -168,4 +168,52 @@ assertMatchedWindow(
         title: "user@host: ~/src/github.com/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNG",
         occupied: false,
     }
+);
+
+function assertMatchingSavedWindow(saved_windows, wsh, want_swi, want_sw) {
+    const [swi, sw] = Common.matchingSavedWindow(saved_windows, wsh);
+    console.assert(want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw), {
+        want_swi: want_swi,
+        swi: swi,
+        want_sw: want_sw,
+        sw: sw,
+        saved_windows: saved_windows,
+        wsh: wsh,
+    });
+}
+
+assertMatchingSavedWindow(
+    {
+        firefox: [{ title: "GMail - user@gmail.com (1)", occupied: true }],
+    },
+    "firefox",
+    0,
+    { title: "GMail - user@gmail.com (1)", occupied: true }
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [{ title: "GMail - user@gmail.com (1)", occupied: false }],
+    },
+    "firefox",
+    0,
+    { title: "GMail - user@gmail.com (1)", occupied: false }
+);
+
+assertMatchingSavedWindow(
+    {
+        "org.gnome.Nautilus": [{ title: "Documents", occupied: true }],
+    },
+    "org.gnome.Nautilus",
+    0,
+    { title: "Documents", occupied: true }
+);
+
+assertMatchingSavedWindow(
+    {
+        "org.gnome.Nautilus": [{ title: "Documents", occupied: true }],
+    },
+    "firefox",
+    undefined,
+    undefined
 );

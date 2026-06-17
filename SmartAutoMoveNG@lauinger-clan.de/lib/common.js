@@ -7,7 +7,6 @@ export const SETTINGS_KEY_QUICKSETTINGS = "quicksettings";
 export const SETTINGS_KEY_QUICKSETTINGSTOGGLE = "quicksettings-usage";
 export const SETTINGS_KEY_NOTIFICATIONS = "notifications";
 export const SETTINGS_KEY_STARTUP_DELAY = "startup-delay";
-export const SETTINGS_KEY_SYNC_FREQUENCY = "sync-frequency";
 export const SETTINGS_KEY_SAVE_FREQUENCY = "save-frequency";
 export const SETTINGS_KEY_MATCH_THRESHOLD = "match-threshold";
 export const SETTINGS_KEY_SYNC_MODE = "sync-mode";
@@ -130,6 +129,16 @@ export function matchedWindow(saved_windows, overrides, wsh, title, default_matc
     if (swi === undefined) return [undefined, undefined];
 
     const sw = saved_windows[wsh][swi];
+
+    return [swi, sw];
+}
+
+export function matchingSavedWindow(saved_windows, wsh) {
+    if (!Object.hasOwn(saved_windows, wsh)) {
+        return [undefined, undefined];
+    }
+
+    const [swi, sw] = saved_windows[wsh].entries().next().value ?? [];
 
     return [swi, sw];
 }
