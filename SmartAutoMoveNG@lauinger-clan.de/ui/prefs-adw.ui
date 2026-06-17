@@ -83,22 +83,6 @@
           </object>
         </child>
         <child>
-          <object class="AdwSpinRow" id="save-frequency-spin">
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">500</property>
-                <property name="page-increment">1000</property>
-                <property name="step-increment">50</property>
-                <property name="upper">10000</property>
-                <property name="value">1000</property>
-              </object>
-            </property>
-            <property name="subtitle" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
-            <property name="title" translatable="yes">Save Frequency (milliseconds)</property>
-            <property name="tooltip-text" translatable="yes">Frequency in milliseconds to persist the in-memory store to disk.</property>
-          </object>
-        </child>
-        <child>
           <object class="AdwSpinRow" id="startup-delay-spin">
             <property name="adjustment">
               <object class="GtkAdjustment">
