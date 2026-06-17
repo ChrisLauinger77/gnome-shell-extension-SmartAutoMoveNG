@@ -41,11 +41,6 @@
       <summary>Startup Delay (ms)</summary>
       <description>Period of time in milliseconds to wait between seeing a window and writing it to the in-memory store.</description>
     </key>
-    <key name="save-frequency" type="i">
-      <default>1000</default>
-      <summary>Save Frequency (ms)</summary>
-      <description>Frequency in milliseconds to persist the in-memory store to disk.</description>
-    </key>
     <key name="match-threshold" type="d">
       <default>0.7</default>
       <summary>Match Threshold</summary>

@@ -243,9 +243,6 @@ export default class SAMPreferences extends ExtensionPreferences {
         matchthresholdspin.set_climb_rate(0.05);
         matchthresholdspin.set_digits(2);
         matchthresholdspin.set_numeric(true);
-        const savefrequencyspin = builder.get_object("save-frequency-spin");
-        savefrequencyspin.set_climb_rate(50);
-        savefrequencyspin.set_numeric(true);
         const startupdelayspin = builder.get_object("startup-delay-spin");
         startupdelayspin.set_climb_rate(100);
         startupdelayspin.set_numeric(true);
@@ -267,7 +264,6 @@ export default class SAMPreferences extends ExtensionPreferences {
             [Common.SETTINGS_KEY_NOTIFICATIONS, "notifications-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],
-            [Common.SETTINGS_KEY_SAVE_FREQUENCY, "save-frequency-spin", "value"],
             [Common.SETTINGS_KEY_STARTUP_DELAY, "startup-delay-spin", "value"],
             [Common.SETTINGS_KEY_FREEZE_SAVES, "freeze-saves-switch", "active"],
             [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, "activate-workspace-switch", "active"],
@@ -627,7 +623,6 @@ export default class SAMPreferences extends ExtensionPreferences {
                 Common.SETTINGS_KEY_NOTIFICATIONS,
                 Common.SETTINGS_KEY_SYNC_MODE,
                 Common.SETTINGS_KEY_MATCH_THRESHOLD,
-                Common.SETTINGS_KEY_SAVE_FREQUENCY,
                 Common.SETTINGS_KEY_STARTUP_DELAY,
                 Common.SETTINGS_KEY_FREEZE_SAVES,
                 Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,

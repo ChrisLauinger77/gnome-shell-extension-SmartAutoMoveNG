@@ -17,6 +17,7 @@ import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
 import * as Common from "./lib/common.js";
 
 const QuickSettingsMenu = Main.panel.statusArea.quickSettings;
+const SAVE_DEBOUNCE_MS = 1000;
 
 //quick settings
 const SmartAutoMoveNGMenuToggle = GObject.registerClass(
@@ -145,14 +146,12 @@ export default class SmartAutoMoveNG extends Extension {
         this._mappingWindowSignals = new Map();
         this._windowTracker = Shell.WindowTracker.get_default();
         this._startupSequenceChangedSignal = null;
+        this._timeoutSaveSignal = null;
 
         // Sync windows which might already be open before enabling the extension.
         this._syncWindows().catch((error) => {
             this.getLogger().error(`enable() failed: ${error}`);
         });
-
-        this._timeoutSaveSignal = null;
-        this._handleTimeoutSave();
 
         this._settingSignals = [];
         this._savedWindowsCount = 0;
@@ -165,7 +164,6 @@ export default class SmartAutoMoveNG extends Extension {
             [Common.SETTINGS_KEY_QUICKSETTINGSTOGGLE, this._onParamChangedUI.bind(this)],
             [Common.SETTINGS_KEY_NOTIFICATIONS, this._onParamChangedUI.bind(this)],
             [Common.SETTINGS_KEY_STARTUP_DELAY, this._onParamChangedStartupDelay.bind(this)],
-            [Common.SETTINGS_KEY_SAVE_FREQUENCY, this._onParamChangedSaveFrequency.bind(this)],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, this._onParamChangedMatchThreshold.bind(this)],
             [Common.SETTINGS_KEY_SYNC_MODE, this._onParamChangedSyncMode.bind(this)],
             [Common.SETTINGS_KEY_FREEZE_SAVES, this._onParamChangedFreezeSaves.bind(this)],
@@ -544,7 +542,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._quickSettings = null;
         this._notifications = null;
         this._startupDelayMs = null;
-        this._saveFrequencyMs = null;
         this._matchThreshold = null;
         this._syncMode = null;
         this._freezeSaves = null;
@@ -559,7 +556,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("_restoreSettings()");
         this._onParamChangedDebugLogging();
         this._onParamChangedStartupDelay();
-        this._onParamChangedSaveFrequency();
         this._onParamChangedMatchThreshold();
         this._onParamChangedSyncMode();
         this._onParamChangedFreezeSaves();
@@ -743,6 +739,7 @@ export default class SmartAutoMoveNG extends Extension {
         const sw = this._windowData(win);
         this._savedWindows[wsh].push(sw);
         this._debug("_pushSavedWindow() - pushed: " + JSON.stringify(sw));
+        this._queueSaveSettings();
         return true;
     }
 
@@ -754,6 +751,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._windowDataEqual(this._savedWindows[wsh][swi], sw)) return true;
         this._savedWindows[wsh][swi] = sw;
         this._debug("_updateSavedWindow() - updated: " + swi + ", " + JSON.stringify(sw));
+        this._queueSaveSettings();
         return true;
     }
 
@@ -762,16 +760,21 @@ export default class SmartAutoMoveNG extends Extension {
             if (wsh === currentWsh) continue;
 
             const keptWindows = [];
+            let removed = false;
             for (const sw of this._savedWindows[wsh]) {
                 if (sw.hash === windowHash) {
+                    removed = true;
                     this._debug("_removeSavedWindowFromOtherSections() - removed stale: " + JSON.stringify(sw));
                 } else {
                     keptWindows.push(sw);
                 }
             }
 
+            if (!removed) continue;
+
             if (keptWindows.length > 0) this._savedWindows[wsh] = keptWindows;
             else delete this._savedWindows[wsh];
+            this._queueSaveSettings();
         }
     }
 
@@ -785,6 +788,7 @@ export default class SmartAutoMoveNG extends Extension {
         sw.sequence = current.sequence;
         sw.title = current.title;
         sw.occupied = true;
+        this._queueSaveSettings();
     }
 
     _reserveSavedWindow(wsh, swi) {
@@ -849,6 +853,7 @@ export default class SmartAutoMoveNG extends Extension {
                 if (this._windowDataEqual(sw, current)) return;
                 this._savedWindows[wsh][swi] = current;
                 this._debug("_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current));
+                this._queueSaveSettings();
             } else {
                 this._pushSavedWindow(win);
             }
@@ -1086,6 +1091,7 @@ export default class SmartAutoMoveNG extends Extension {
                 if (sw.occupied && sw.hash === windowHash) {
                     sw.occupied = false;
                     this._debug("_deoccupySavedWindow() - deoccupy: " + JSON.stringify(sw));
+                    this._queueSaveSettings();
                 }
             }
         }
@@ -1105,6 +1111,7 @@ export default class SmartAutoMoveNG extends Extension {
                 if (sw.occupied && !found.has(sw.hash)) {
                     sw.occupied = false;
                     this._debug("_cleanupWindows() - deoccupy: " + JSON.stringify(sw));
+                    this._queueSaveSettings();
                 }
             }
         }
@@ -1161,16 +1168,18 @@ export default class SmartAutoMoveNG extends Extension {
 
     //// SIGNAL HANDLERS
 
-    _handleTimeoutSave() {
-        if (this._timeoutSaveSignal !== null) GLib.Source.remove(this._timeoutSaveSignal);
-        this._timeoutSaveSignal = null;
-        this._saveSettings();
+    _queueSaveSettings() {
+        if (this._timeoutSaveSignal) return;
+
         this._timeoutSaveSignal = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
-            this._saveFrequencyMs,
-            this._handleTimeoutSave.bind(this)
+            SAVE_DEBOUNCE_MS,
+            () => {
+                this._timeoutSaveSignal = null;
+                this._saveSettings();
+                return GLib.SOURCE_REMOVE;
+            }
         );
-        return GLib.SOURCE_CONTINUE;
     }
 
     _onParamChangedDebugLogging() {
@@ -1199,11 +1208,6 @@ export default class SmartAutoMoveNG extends Extension {
     _onParamChangedStartupDelay() {
         this._startupDelayMs = this._settings.get_int(Common.SETTINGS_KEY_STARTUP_DELAY);
         this._debug("_onParamChangedStartupDelay(): " + this._startupDelayMs);
-    }
-
-    _onParamChangedSaveFrequency() {
-        this._saveFrequencyMs = this._settings.get_int(Common.SETTINGS_KEY_SAVE_FREQUENCY);
-        this._debug("_onParamChangedSaveFrequency(): " + this._saveFrequencyMs);
     }
 
     _onParamChangedMatchThreshold() {

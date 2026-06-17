@@ -7,7 +7,6 @@ export const SETTINGS_KEY_QUICKSETTINGS = "quicksettings";
 export const SETTINGS_KEY_QUICKSETTINGSTOGGLE = "quicksettings-usage";
 export const SETTINGS_KEY_NOTIFICATIONS = "notifications";
 export const SETTINGS_KEY_STARTUP_DELAY = "startup-delay";
-export const SETTINGS_KEY_SAVE_FREQUENCY = "save-frequency";
 export const SETTINGS_KEY_MATCH_THRESHOLD = "match-threshold";
 export const SETTINGS_KEY_SYNC_MODE = "sync-mode";
 export const SETTINGS_KEY_FREEZE_SAVES = "freeze-saves";
