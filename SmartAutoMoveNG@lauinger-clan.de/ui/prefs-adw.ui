@@ -263,6 +263,12 @@
             <property name="title" translatable="yes">Cleanup Non-occupied Windows</property>
           </object>
         </child>
+        <child>
+          <object class="AdwButtonRow" id="saved-windows-cleanup-stale-button">
+            <property name="title" translatable="yes">Cleanup Stale Windows</property>
+            <property name="subtitle" translatable="yes">Remove non-occupied saved windows not seen for 30 days.</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>

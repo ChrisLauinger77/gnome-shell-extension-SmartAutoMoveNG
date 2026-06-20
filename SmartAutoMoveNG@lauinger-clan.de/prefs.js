@@ -338,6 +338,10 @@ export default class SAMPreferences extends ExtensionPreferences {
         saved_windows_cleanup_widget.connect("activated", () => {
             this._cleanupNonOccupiedWindows(settings);
         });
+        const saved_windows_cleanup_stale_widget = builder.get_object("saved-windows-cleanup-stale-button");
+        saved_windows_cleanup_stale_widget.connect("activated", () => {
+            this._cleanupStaleSavedWindows(settings);
+        });
         this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows, page);
         this.changedSavedWindowsSignal = settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
             this._loadSavedWindowsSetting(
@@ -505,6 +509,11 @@ export default class SAMPreferences extends ExtensionPreferences {
     _cleanupNonOccupiedWindows(settings) {
         Common.cleanupNonOccupiedWindows(settings);
     }
+
+    _cleanupStaleSavedWindows(settings) {
+        Common.cleanupStaleSavedWindows(settings);
+    }
+
     _edit_window(settings, wsh, page) {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         const sws = saved_windows[wsh];
@@ -587,7 +596,8 @@ export default class SAMPreferences extends ExtensionPreferences {
     _createSavedWindowsTooltip(sw, wsh) {
         const checkMark = "\u2713";
         const heavyCross = "\u2718";
-        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
+        const lastSeen = sw.last_seen !== undefined ? new Date(sw.last_seen).toLocaleDateString() : _("Unknown");
+        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${_("Last Seen: ")}${lastSeen}\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows, page) {

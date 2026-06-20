@@ -26,6 +26,9 @@ export const SETTINGS_KEY_MAX_HEIGHT = "edit-saved-windows-height-max";
 export const SYNC_MODE_IGNORE = 0;
 export const SYNC_MODE_RESTORE = 1;
 
+export const STALE_SAVED_WINDOW_DAYS = 30;
+export const STALE_SAVED_WINDOW_MS = STALE_SAVED_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+
 function levensteinDistance(a, b) {
     const m = [],
         min = Math.min;
@@ -147,6 +150,21 @@ export function cleanupNonOccupiedWindows(settings) {
     for (const wsh of Object.keys(saved_windows)) {
         const sws = saved_windows[wsh];
         saved_windows[wsh] = sws.filter((sw) => sw.occupied);
+        if (saved_windows[wsh].length < 1) {
+            delete saved_windows[wsh];
+        }
+    }
+
+    settings.set_string(SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
+}
+
+export function cleanupStaleSavedWindows(settings, maxAgeMs = STALE_SAVED_WINDOW_MS, now = Date.now()) {
+    const cutoff = now - maxAgeMs;
+    const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
+
+    for (const wsh of Object.keys(saved_windows)) {
+        const sws = saved_windows[wsh];
+        saved_windows[wsh] = sws.filter((sw) => sw.occupied || sw.last_seen === undefined || sw.last_seen >= cutoff);
         if (saved_windows[wsh].length < 1) {
             delete saved_windows[wsh];
         }

@@ -39,6 +39,9 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             const submenu = new PopupMenu.PopupMenuItem(_("Cleanup Non-occupied Windows"));
             submenu.connect("activate", Common.cleanupNonOccupiedWindows.bind(this, _settings));
             popupMenuExpander.menu.addMenuItem(submenu);
+            const staleSubmenu = new PopupMenu.PopupMenuItem(_("Cleanup Stale Windows"));
+            staleSubmenu.connect("activate", Common.cleanupStaleSavedWindows.bind(this, _settings));
+            popupMenuExpander.menu.addMenuItem(staleSubmenu);
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 const settingsItem = this.menu.addAction(_("Settings"), () => {
@@ -700,6 +703,7 @@ export default class SmartAutoMoveNG extends Extension {
             width: win_rect.width,
             height: win_rect.height,
             occupied: true,
+            last_seen: Date.now(),
         };
     }
 
@@ -788,6 +792,7 @@ export default class SmartAutoMoveNG extends Extension {
         sw.sequence = current.sequence;
         sw.title = current.title;
         sw.occupied = true;
+        sw.last_seen = current.last_seen;
         this._queueSaveSettings();
     }
 

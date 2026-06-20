@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 17:15+0200\n"
+"POT-Creation-Date: 2026-06-20 14:15+0200\n"
 "PO-Revision-Date: 2025-12-25 15:47+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Poedit 3.6\n"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:37
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:57
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:60
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:16
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:142
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:259
@@ -32,64 +32,69 @@ msgstr "已保存的窗口"
 msgid "Cleanup Non-occupied Windows"
 msgstr "清除未打开的窗口"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:44
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:268
+msgid "Cleanup Stale Windows"
+msgstr "清理过期窗口"
+
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:47
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:46
 msgid "Settings"
 msgstr "设置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:57
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:60
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:56
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:272
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:275
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:278
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:281
 msgid "Overrides"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1188
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1193
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:21
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:50
 msgid "Debug Logging"
 msgstr "调试日志"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1230
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1235
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:61
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:22
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:104
 msgid "Freeze Saves"
 msgstr "暂停记录"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1237
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1242
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:66
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:23
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:111
 msgid "Activate Workspace"
 msgstr "激活工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1243
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1248
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:71
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:24
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:118
 msgid "Ignore Position"
 msgstr "忽略位置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1249
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1254
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:76
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:25
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:125
 msgid "Ignore Workspace"
 msgstr "忽略工作区"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1286
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1291
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:81
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:26
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:132
 msgid "Ignore Monitor"
 msgstr "忽略显示器"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1291
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1296
 msgid "enabled"
 msgstr "已启用"
 
-#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1291
+#: SmartAutoMoveNG@lauinger-clan.de/extension.js:1296
 msgid "disabled"
 msgstr "已禁用"
 
@@ -111,7 +116,7 @@ msgid "Save"
 msgstr "保存"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:119
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:521
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:530
 msgid "Edit Saved Window"
 msgstr "编辑已保存的窗口"
 
@@ -120,7 +125,7 @@ msgid "Title"
 msgstr "标题"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:124
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:164
 msgid "Workspace: "
 msgstr "工作区："
@@ -130,7 +135,7 @@ msgid "On all workspaces: "
 msgstr "在所有工作区："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:138
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:180
 msgid "Monitor: "
 msgstr "显示器："
@@ -156,17 +161,17 @@ msgid "Height: "
 msgstr "高度："
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:169
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "Maximized"
 msgstr "最大化"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:174
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "Fullscreen"
 msgstr "全屏"
 
 #: SmartAutoMoveNG@lauinger-clan.de/prefs.js:179
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "Always on Top"
 msgstr "始终置顶"
 
@@ -179,71 +184,79 @@ msgstr "首选项已保存"
 msgid "Save Preferences"
 msgstr "保存首选项"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:377
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:381
 msgid "Select app"
 msgstr "选择应用"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:444
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:556
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:448
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:565
 msgid "ANY"
 msgstr "任意"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:468
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:472
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:59
 msgid "IGNORE"
 msgstr "忽略"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:469
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:473
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:60
 msgid "RESTORE"
 msgstr "恢复"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:470
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:474
 msgid "DEFAULT"
 msgstr "默认"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:487
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:538
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:491
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:547
 msgid "Delete"
 msgstr "删除"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:550
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:559
 msgid "OVERRIDE"
 msgstr "自定义规则"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:560
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:569
 msgid "OVERRIDE (ANY)"
 msgstr "自定义规则 (任意窗口)"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:569
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:578
 msgid "Edit"
 msgstr "编辑"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:572
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:581
 msgid "Edit - only allowed if the window is not occupied"
 msgstr "编辑 - 仅当窗口未被占用时允许"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:599
+msgid "Unknown"
+msgstr "未知"
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "All"
 msgstr "全部"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "Position: "
 msgstr "位置："
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:590
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
 msgid "Size: "
 msgstr "大小："
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:603
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:600
+msgid "Last Seen: "
+msgstr "上次显示："
+
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:613
 msgid "Not occupied"
 msgstr "当前未打开"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:655
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:665
 msgid "Reset Settings"
 msgstr "重置设置"
 
-#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:661
+#: SmartAutoMoveNG@lauinger-clan.de/prefs.js:671
 msgid "Reset all settings to default values"
 msgstr "将所有设置重置为默认值"
 
@@ -478,10 +491,14 @@ msgstr "高度最大值。"
 msgid "List of saved windows and their properties."
 msgstr "已保存窗口及其属性的列表。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:276
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:269
+msgid "Remove non-occupied saved windows not seen for 30 days."
+msgstr "移除 30 天未显示的未占用已保存窗口。"
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:282
 msgid "List of application-specific overrides."
 msgstr "特定应用自定义规则的列表。"
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:279
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:285
 msgid "Add Application"
 msgstr "添加应用程序"
