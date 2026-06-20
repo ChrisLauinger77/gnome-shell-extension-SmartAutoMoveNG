@@ -217,3 +217,86 @@ assertMatchingSavedWindow(
     undefined,
     undefined
 );
+
+function createStringSetting(initialValue) {
+    let value = initialValue;
+
+    return {
+        get_string() {
+            return value;
+        },
+        get_int() {
+            return 30;
+        },
+        set_string(_key, newValue) {
+            value = newValue;
+        },
+    };
+}
+
+{
+    const dayMs = 24 * 60 * 60 * 1000;
+    const now = 40 * dayMs;
+    const settings = createStringSetting(
+        JSON.stringify({
+            old: [{ title: "Old", occupied: false, last_seen: now - 31 * dayMs }],
+            recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+            occupied: [{ title: "Occupied", occupied: true, last_seen: now - 31 * dayMs }],
+            unknown: [{ title: "No timestamp", occupied: false }],
+        })
+    );
+
+    Common.cleanupStaleSavedWindows(settings, 30, now);
+
+    console.assert(
+        settings.get_string() ===
+            JSON.stringify({
+                recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+                occupied: [{ title: "Occupied", occupied: true, last_seen: now - 31 * dayMs }],
+                unknown: [{ title: "No timestamp", occupied: false }],
+            }),
+        settings.get_string()
+    );
+}
+
+{
+    const dayMs = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const settings = createStringSetting(
+        JSON.stringify({
+            old: [{ title: "Old", occupied: false, last_seen: now - 31 * dayMs }],
+            recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+        })
+    );
+
+    Common.cleanupStaleSavedWindows(settings, {}, {});
+
+    console.assert(
+        settings.get_string() ===
+            JSON.stringify({
+                recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+            }),
+        settings.get_string()
+    );
+}
+
+{
+    const dayMs = 24 * 60 * 60 * 1000;
+    const now = 40 * dayMs;
+    const settings = createStringSetting(
+        JSON.stringify({
+            recent: [{ title: "Recent", occupied: false, last_seen: now - dayMs / 2 }],
+            old: [{ title: "Old", occupied: false, last_seen: now - 2 * dayMs }],
+        })
+    );
+
+    Common.cleanupStaleSavedWindows(settings, -1, now);
+
+    console.assert(
+        settings.get_string() ===
+            JSON.stringify({
+                recent: [{ title: "Recent", occupied: false, last_seen: now - dayMs / 2 }],
+            }),
+        settings.get_string()
+    );
+}

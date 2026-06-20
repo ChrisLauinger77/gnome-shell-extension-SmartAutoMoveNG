@@ -243,6 +243,9 @@ export default class SAMPreferences extends ExtensionPreferences {
         matchthresholdspin.set_climb_rate(0.05);
         matchthresholdspin.set_digits(2);
         matchthresholdspin.set_numeric(true);
+        const stalewindowdaysspin = builder.get_object("stale-window-days-spin");
+        stalewindowdaysspin.set_climb_rate(1);
+        stalewindowdaysspin.set_numeric(true);
         const startupdelayspin = builder.get_object("startup-delay-spin");
         startupdelayspin.set_climb_rate(100);
         startupdelayspin.set_numeric(true);
@@ -264,6 +267,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             [Common.SETTINGS_KEY_NOTIFICATIONS, "notifications-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],
+            [Common.SETTINGS_KEY_STALE_WINDOW_DAYS, "stale-window-days-spin", "value"],
             [Common.SETTINGS_KEY_STARTUP_DELAY, "startup-delay-spin", "value"],
             [Common.SETTINGS_KEY_FREEZE_SAVES, "freeze-saves-switch", "active"],
             [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, "activate-workspace-switch", "active"],
@@ -337,6 +341,10 @@ export default class SAMPreferences extends ExtensionPreferences {
         const saved_windows_cleanup_widget = builder.get_object("saved-windows-cleanup-button");
         saved_windows_cleanup_widget.connect("activated", () => {
             this._cleanupNonOccupiedWindows(settings);
+        });
+        const saved_windows_cleanup_stale_widget = builder.get_object("saved-windows-cleanup-stale-button");
+        saved_windows_cleanup_stale_widget.connect("activated", () => {
+            this._cleanupStaleSavedWindows(settings);
         });
         this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows, page);
         this.changedSavedWindowsSignal = settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
@@ -505,6 +513,11 @@ export default class SAMPreferences extends ExtensionPreferences {
     _cleanupNonOccupiedWindows(settings) {
         Common.cleanupNonOccupiedWindows(settings);
     }
+
+    _cleanupStaleSavedWindows(settings) {
+        Common.cleanupStaleSavedWindows(settings);
+    }
+
     _edit_window(settings, wsh, page) {
         const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
         const sws = saved_windows[wsh];
@@ -587,7 +600,8 @@ export default class SAMPreferences extends ExtensionPreferences {
     _createSavedWindowsTooltip(sw, wsh) {
         const checkMark = "\u2713";
         const heavyCross = "\u2718";
-        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
+        const lastSeen = sw.last_seen !== undefined ? new Date(sw.last_seen).toLocaleDateString() : _("Unknown");
+        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}\n${_("Last Seen: ")}${lastSeen}`;
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows, page) {
@@ -623,6 +637,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 Common.SETTINGS_KEY_NOTIFICATIONS,
                 Common.SETTINGS_KEY_SYNC_MODE,
                 Common.SETTINGS_KEY_MATCH_THRESHOLD,
+                Common.SETTINGS_KEY_STALE_WINDOW_DAYS,
                 Common.SETTINGS_KEY_STARTUP_DELAY,
                 Common.SETTINGS_KEY_FREEZE_SAVES,
                 Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,
