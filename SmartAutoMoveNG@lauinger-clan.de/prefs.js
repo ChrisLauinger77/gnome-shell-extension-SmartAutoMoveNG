@@ -637,6 +637,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 Common.SETTINGS_KEY_NOTIFICATIONS,
                 Common.SETTINGS_KEY_SYNC_MODE,
                 Common.SETTINGS_KEY_MATCH_THRESHOLD,
+                Common.SETTINGS_KEY_STALE_WINDOW_DAYS,
                 Common.SETTINGS_KEY_STARTUP_DELAY,
                 Common.SETTINGS_KEY_FREEZE_SAVES,
                 Common.SETTINGS_KEY_ACTIVATE_WORKSPACE,

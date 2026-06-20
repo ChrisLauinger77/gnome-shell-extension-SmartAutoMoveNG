@@ -1093,10 +1093,12 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _deoccupySavedWindow(windowHash) {
+        const lastSeen = Date.now();
         for (const sws of Object.values(this._savedWindows)) {
             for (const sw of sws) {
                 if (sw.occupied && sw.hash === windowHash) {
                     sw.occupied = false;
+                    sw.last_seen = lastSeen;
                     this._debug("_deoccupySavedWindow() - deoccupy: " + JSON.stringify(sw));
                     this._queueSaveSettings();
                 }
@@ -1106,6 +1108,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _cleanupWindows() {
         const found = new Map();
+        const lastSeen = Date.now();
 
         for (const actor of global.get_window_actors()) {
             const win = actor.get_meta_window();
@@ -1117,6 +1120,7 @@ export default class SmartAutoMoveNG extends Extension {
             for (const sw of sws) {
                 if (sw.occupied && !found.has(sw.hash)) {
                     sw.occupied = false;
+                    sw.last_seen = lastSeen;
                     this._debug("_cleanupWindows() - deoccupy: " + JSON.stringify(sw));
                     this._queueSaveSettings();
                 }
