@@ -89,7 +89,7 @@
                 <property name="lower">1</property>
                 <property name="page-increment">30</property>
                 <property name="step-increment">1</property>
-                <property name="upper">3650</property>
+                <property name="upper">365</property>
                 <property name="value">30</property>
               </object>
             </property>

@@ -37,10 +37,14 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             const popupMenuExpander = new PopupMenu.PopupSubMenuMenuItem(_("Saved Windows"));
             this.menu.addMenuItem(popupMenuExpander);
             const submenu = new PopupMenu.PopupMenuItem(_("Cleanup Non-occupied Windows"));
-            submenu.connect("activate", Common.cleanupNonOccupiedWindows.bind(this, _settings));
+            submenu.connect("activate", () => {
+                extension._flushQueuedSaveSettings();
+                Common.cleanupNonOccupiedWindows(_settings);
+            });
             popupMenuExpander.menu.addMenuItem(submenu);
             const staleSubmenu = new PopupMenu.PopupMenuItem(_("Cleanup Stale Windows"));
             staleSubmenu.connect("activate", () => {
+                extension._flushQueuedSaveSettings();
                 Common.cleanupStaleSavedWindows(_settings);
             });
             popupMenuExpander.menu.addMenuItem(staleSubmenu);
@@ -232,9 +236,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._pendingWindows = null;
         this._pendingWindowSignals.clear();
         this._pendingWindowSignals = null;
-        //remove timeout signals
-        if (this._timeoutSaveSignal !== null) GLib.Source.remove(this._timeoutSaveSignal);
-        this._timeoutSaveSignal = null;
         this._cancelActiveRestores();
         this._moveWindowDelays.clear();
         this._moveWindowDelays = null;
@@ -256,7 +257,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._overridesCount = null;
         this._finalMenuIcon = null;
 
-        this._saveSettings();
+        this._flushQueuedSaveSettings();
         this._cleanupSettings();
         this._activeWindows = null;
         this._indicator?.destroy();
@@ -585,6 +586,15 @@ export default class SmartAutoMoveNG extends Extension {
         this._debug("_saveSettings()");
         this._dumpSavedWindows();
         this._settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
+    }
+
+    _flushQueuedSaveSettings() {
+        if (this._timeoutSaveSignal !== null) {
+            GLib.Source.remove(this._timeoutSaveSignal);
+            this._timeoutSaveSignal = null;
+        }
+
+        this._saveSettings();
     }
 
     //// WINDOW UTILITIES

@@ -48,6 +48,7 @@
     </key>
     <key name="stale-window-days" type="i">
       <default>30</default>
+      <range min="1" max="365" />
       <summary>Stale Window Threshold</summary>
       <description>Days without seeing a saved window before it can be removed as stale.</description>
     </key>

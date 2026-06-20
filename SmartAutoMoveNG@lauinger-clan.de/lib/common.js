@@ -29,6 +29,8 @@ export const SYNC_MODE_RESTORE = 1;
 
 export const STALE_SAVED_WINDOW_DAYS = 30;
 export const STALE_SAVED_WINDOW_MS = STALE_SAVED_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+export const STALE_SAVED_WINDOW_DAYS_MIN = 1;
+export const STALE_SAVED_WINDOW_DAYS_MAX = 365;
 
 function levensteinDistance(a, b) {
     const m = [],
@@ -162,6 +164,7 @@ export function cleanupNonOccupiedWindows(settings) {
 export function cleanupStaleSavedWindows(settings, maxAgeDays = settings.get_int(SETTINGS_KEY_STALE_WINDOW_DAYS), now = Date.now()) {
     if (typeof maxAgeDays !== "number") maxAgeDays = settings.get_int(SETTINGS_KEY_STALE_WINDOW_DAYS);
     if (typeof now !== "number") now = Date.now();
+    maxAgeDays = Math.min(Math.max(maxAgeDays, STALE_SAVED_WINDOW_DAYS_MIN), STALE_SAVED_WINDOW_DAYS_MAX);
 
     const cutoff = now - maxAgeDays * 24 * 60 * 60 * 1000;
     const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
