@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 14:25+0200\n"
+"POT-Creation-Date: 2026-06-20 14:31+0200\n"
 "PO-Revision-Date: 2026-06-10 18:14+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -32,7 +32,7 @@ msgid "Cleanup Non-occupied Windows"
 msgstr "Nicht besetzte Fenster aufräumen"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:284
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:285
 msgid "Cleanup Stale Windows"
 msgstr "Veraltete Fenster aufräumen"
 
@@ -43,8 +43,8 @@ msgstr "Einstellungen"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:60
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:61
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:294
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:297
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:295
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:298
 msgid "Overrides"
 msgstr "Überschreibungen"
 
@@ -516,17 +516,21 @@ msgstr "Maximalwert für die Höhe."
 msgid "List of saved windows and their properties."
 msgstr "Liste der gespeicherten Fenster und ihrer Eigenschaften."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:285
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:280
+msgid "Remove saved windows that are not currently occupied by an open window."
+msgstr "Gespeicherte Fenster entfernen, die derzeit nicht von einem offenen Fenster belegt sind."
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:286
 msgid ""
 "Remove non-occupied saved windows older than the stale window threshold."
 msgstr ""
 "Nicht besetzte gespeicherte Fenster entfernen, die älter als der "
 "Schwellenwert für veraltete Fenster sind."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:298
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:299
 msgid "List of application-specific overrides."
 msgstr "Liste der anwendungsspezifischen Überschreibungen."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:301
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:302
 msgid "Add Application"
 msgstr "Anwendung hinzufügen"

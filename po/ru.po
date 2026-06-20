@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 14:25+0200\n"
+"POT-Creation-Date: 2026-06-20 14:31+0200\n"
 "PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgid "Cleanup Non-occupied Windows"
 msgstr "Очистка незанятых окон"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:42
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:284
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:285
 msgid "Cleanup Stale Windows"
 msgstr "Очистка устаревших окон"
 
@@ -43,8 +43,8 @@ msgstr "Настройки"
 
 #: SmartAutoMoveNG@lauinger-clan.de/extension.js:60
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:61
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:294
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:297
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:295
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:298
 msgid "Overrides"
 msgstr "Переопределить"
 
@@ -515,16 +515,19 @@ msgstr "Максимальное значение для высоты."
 msgid "List of saved windows and their properties."
 msgstr "Список сохраненных окон и их свойств."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:285
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:280
+msgid "Remove saved windows that are not currently occupied by an open window."
+msgstr "Удалить сохраненные окна, которые сейчас не заняты открытым окном."
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:286
 msgid ""
 "Remove non-occupied saved windows older than the stale window threshold."
-msgstr ""
-"Удалить незанятые сохраненные окна старше порога устаревания окна."
+msgstr "Удалить незанятые сохраненные окна старше порога устаревания окна."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:298
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:299
 msgid "List of application-specific overrides."
 msgstr "Список переопределений для отдельных приложений."
 
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:301
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:302
 msgid "Add Application"
 msgstr "Добавить приложение"

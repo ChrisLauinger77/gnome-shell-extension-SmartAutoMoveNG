@@ -601,7 +601,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         const checkMark = "\u2713";
         const heavyCross = "\u2718";
         const lastSeen = sw.last_seen !== undefined ? new Date(sw.last_seen).toLocaleDateString() : _("Unknown");
-        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${_("Last Seen: ")}${lastSeen}\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}`;
+        return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}\n${_("Last Seen: ")}${lastSeen}`;
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows, page) {

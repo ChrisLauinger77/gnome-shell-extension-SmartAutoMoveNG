@@ -277,6 +277,7 @@
         <child>
           <object class="AdwButtonRow" id="saved-windows-cleanup-button">
             <property name="title" translatable="yes">Cleanup Non-occupied Windows</property>
+            <property name="tooltip-text" translatable="yes">Remove saved windows that are not currently occupied by an open window.</property>
           </object>
         </child>
         <child>
