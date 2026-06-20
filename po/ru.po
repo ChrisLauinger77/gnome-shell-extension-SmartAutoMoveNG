@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 14:31+0200\n"
+"POT-Creation-Date: 2026-06-20 14:35+0200\n"
 "PO-Revision-Date: 2025-11-08 12:03+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: RU <LL@li.org>\n"
@@ -332,7 +332,6 @@ msgid "Minimum threshold for matching restored windows."
 msgstr "Минимальный порог для сопоставления восстановленных окон."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:51
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
 msgid "Stale Window Threshold"
 msgstr "Порог устаревания окна"
 
@@ -459,6 +458,10 @@ msgstr "Переключатель быстрых настроек"
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:65
 msgid "Default Synchronization Mode"
 msgstr "Режим синхронизации по умолчанию"
+
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
+msgid "Stale Window Threshold (days)"
+msgstr "Порог устаревания окна (дни)"
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Startup Delay (milliseconds)"

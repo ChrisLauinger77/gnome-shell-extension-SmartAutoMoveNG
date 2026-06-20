@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 14:31+0200\n"
+"POT-Creation-Date: 2026-06-20 14:35+0200\n"
 "PO-Revision-Date: 2026-06-10 18:14+0200\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -331,7 +331,6 @@ msgid "Minimum threshold for matching restored windows."
 msgstr "Mindestschwelle für die Übereinstimmung wiederhergestellter Fenster."
 
 #: SmartAutoMoveNG@lauinger-clan.de/schemas/org.gnome.shell.extensions.SmartAutoMoveNG.gschema.xml:51
-#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
 msgid "Stale Window Threshold"
 msgstr "Schwellenwert für veraltete Fenster"
 
@@ -460,6 +459,10 @@ msgstr "Schnelleinstellungen-Umschalter"
 msgid "Default Synchronization Mode"
 msgstr "Standard-Synchronisationsmodus"
 
+#: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:97
+msgid "Stale Window Threshold (days)"
+msgstr "Schwellenwert für veraltete Fenster (Tage)"
+
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:113
 msgid "Startup Delay (milliseconds)"
 msgstr "Startverzögerung (Millisekunden)"
@@ -518,7 +521,9 @@ msgstr "Liste der gespeicherten Fenster und ihrer Eigenschaften."
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:280
 msgid "Remove saved windows that are not currently occupied by an open window."
-msgstr "Gespeicherte Fenster entfernen, die derzeit nicht von einem offenen Fenster belegt sind."
+msgstr ""
+"Gespeicherte Fenster entfernen, die derzeit nicht von einem offenen Fenster "
+"belegt sind."
 
 #: SmartAutoMoveNG@lauinger-clan.de/ui/prefs-adw.ui:286
 msgid ""

@@ -258,3 +258,24 @@ function createStringSetting(initialValue) {
         settings.get_string()
     );
 }
+
+{
+    const dayMs = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const settings = createStringSetting(
+        JSON.stringify({
+            old: [{ title: "Old", occupied: false, last_seen: now - 31 * dayMs }],
+            recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+        })
+    );
+
+    Common.cleanupStaleSavedWindows(settings, {}, {});
+
+    console.assert(
+        settings.get_string() ===
+            JSON.stringify({
+                recent: [{ title: "Recent", occupied: false, last_seen: now - 29 * dayMs }],
+            }),
+        settings.get_string()
+    );
+}

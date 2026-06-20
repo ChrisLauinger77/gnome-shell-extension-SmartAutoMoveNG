@@ -40,7 +40,9 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
             submenu.connect("activate", Common.cleanupNonOccupiedWindows.bind(this, _settings));
             popupMenuExpander.menu.addMenuItem(submenu);
             const staleSubmenu = new PopupMenu.PopupMenuItem(_("Cleanup Stale Windows"));
-            staleSubmenu.connect("activate", Common.cleanupStaleSavedWindows.bind(this, _settings));
+            staleSubmenu.connect("activate", () => {
+                Common.cleanupStaleSavedWindows(_settings);
+            });
             popupMenuExpander.menu.addMenuItem(staleSubmenu);
             try {
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
