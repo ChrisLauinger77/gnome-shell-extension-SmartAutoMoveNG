@@ -225,6 +225,9 @@ function createStringSetting(initialValue) {
         get_string() {
             return value;
         },
+        get_int() {
+            return 30;
+        },
         set_string(_key, newValue) {
             value = newValue;
         },
@@ -243,7 +246,7 @@ function createStringSetting(initialValue) {
         })
     );
 
-    Common.cleanupStaleSavedWindows(settings, 30 * dayMs, now);
+    Common.cleanupStaleSavedWindows(settings, 30, now);
 
     console.assert(
         settings.get_string() ===

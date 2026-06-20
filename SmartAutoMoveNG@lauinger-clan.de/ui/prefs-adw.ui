@@ -83,6 +83,22 @@
           </object>
         </child>
         <child>
+          <object class="AdwSpinRow" id="stale-window-days-spin">
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="lower">1</property>
+                <property name="page-increment">30</property>
+                <property name="step-increment">1</property>
+                <property name="upper">3650</property>
+                <property name="value">30</property>
+              </object>
+            </property>
+            <property name="subtitle" translatable="yes">Days without seeing a saved window before it can be removed as stale.</property>
+            <property name="title" translatable="yes">Stale Window Threshold</property>
+            <property name="tooltip-text" translatable="yes">Days without seeing a saved window before it can be removed as stale.</property>
+          </object>
+        </child>
+        <child>
           <object class="AdwSpinRow" id="startup-delay-spin">
             <property name="adjustment">
               <object class="GtkAdjustment">
@@ -266,7 +282,7 @@
         <child>
           <object class="AdwButtonRow" id="saved-windows-cleanup-stale-button">
             <property name="title" translatable="yes">Cleanup Stale Windows</property>
-            <property name="subtitle" translatable="yes">Remove non-occupied saved windows not seen for 30 days.</property>
+            <property name="tooltip-text" translatable="yes">Remove non-occupied saved windows older than the stale window threshold.</property>
           </object>
         </child>
       </object>

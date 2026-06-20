@@ -21,6 +21,7 @@ export const SETTINGS_KEY_MAX_POSITION_X = "edit-saved-windows-position-x-max";
 export const SETTINGS_KEY_MAX_POSITION_Y = "edit-saved-windows-position-y-max";
 export const SETTINGS_KEY_MAX_WIDTH = "edit-saved-windows-width-max";
 export const SETTINGS_KEY_MAX_HEIGHT = "edit-saved-windows-height-max";
+export const SETTINGS_KEY_STALE_WINDOW_DAYS = "stale-window-days";
 
 // sync mode enum values
 export const SYNC_MODE_IGNORE = 0;
@@ -158,8 +159,8 @@ export function cleanupNonOccupiedWindows(settings) {
     settings.set_string(SETTINGS_KEY_SAVED_WINDOWS, JSON.stringify(saved_windows));
 }
 
-export function cleanupStaleSavedWindows(settings, maxAgeMs = STALE_SAVED_WINDOW_MS, now = Date.now()) {
-    const cutoff = now - maxAgeMs;
+export function cleanupStaleSavedWindows(settings, maxAgeDays = settings.get_int(SETTINGS_KEY_STALE_WINDOW_DAYS), now = Date.now()) {
+    const cutoff = now - maxAgeDays * 24 * 60 * 60 * 1000;
     const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
 
     for (const wsh of Object.keys(saved_windows)) {

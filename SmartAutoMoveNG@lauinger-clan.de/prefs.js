@@ -243,6 +243,9 @@ export default class SAMPreferences extends ExtensionPreferences {
         matchthresholdspin.set_climb_rate(0.05);
         matchthresholdspin.set_digits(2);
         matchthresholdspin.set_numeric(true);
+        const stalewindowdaysspin = builder.get_object("stale-window-days-spin");
+        stalewindowdaysspin.set_climb_rate(1);
+        stalewindowdaysspin.set_numeric(true);
         const startupdelayspin = builder.get_object("startup-delay-spin");
         startupdelayspin.set_climb_rate(100);
         startupdelayspin.set_numeric(true);
@@ -264,6 +267,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             [Common.SETTINGS_KEY_NOTIFICATIONS, "notifications-switch", "active"],
             [Common.SETTINGS_KEY_SYNC_MODE, "sync-mode-combo", "selected"],
             [Common.SETTINGS_KEY_MATCH_THRESHOLD, "match-threshold-spin", "value"],
+            [Common.SETTINGS_KEY_STALE_WINDOW_DAYS, "stale-window-days-spin", "value"],
             [Common.SETTINGS_KEY_STARTUP_DELAY, "startup-delay-spin", "value"],
             [Common.SETTINGS_KEY_FREEZE_SAVES, "freeze-saves-switch", "active"],
             [Common.SETTINGS_KEY_ACTIVATE_WORKSPACE, "activate-workspace-switch", "active"],
