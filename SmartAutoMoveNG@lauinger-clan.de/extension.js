@@ -830,15 +830,15 @@ export default class SmartAutoMoveNG extends Extension {
 
     _matchedUnreservedWindow(wsh, title) {
         const reserved = this._reservedSavedWindows.get(wsh);
-        if (!reserved?.size) {
-            return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold);
+        if (reserved?.size) {
+            const savedWindows = {
+                ...this._savedWindows,
+                [wsh]: this._savedWindows[wsh].map((sw, swi) => (reserved.has(swi) ? { ...sw, occupied: true } : sw)),
+            };
+            return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold);
         }
 
-        const savedWindows = {
-            ...this._savedWindows,
-            [wsh]: this._savedWindows[wsh].map((sw, swi) => (reserved.has(swi) ? { ...sw, occupied: true } : sw)),
-        };
-        return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold);
+        return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold);
     }
 
     _matchingSavedWindow(win) {
@@ -869,7 +869,9 @@ export default class SmartAutoMoveNG extends Extension {
                 const current = this._windowData(win);
                 if (this._windowDataEqual(sw, current)) return;
                 this._savedWindows[wsh][swi] = current;
-                this._debug("_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current));
+                this._debug(
+                    "_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current)
+                );
                 this._queueSaveSettings();
             } else {
                 this._pushSavedWindow(win);
@@ -981,14 +983,10 @@ export default class SmartAutoMoveNG extends Extension {
     _setRestoreSaveGuard(win) {
         this._clearRestoreSaveGuard(win);
 
-        const sourceId = GLib.timeout_add(
-            GLib.PRIORITY_DEFAULT,
-            Math.max(this._startupDelayMs, 1000),
-            () => {
-                this._restoreSaveGuards.delete(win);
-                return GLib.SOURCE_REMOVE;
-            }
-        );
+        const sourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, Math.max(this._startupDelayMs, 1000), () => {
+            this._restoreSaveGuards.delete(win);
+            return GLib.SOURCE_REMOVE;
+        });
         this._restoreSaveGuards.set(win, sourceId);
     }
 
@@ -1192,15 +1190,11 @@ export default class SmartAutoMoveNG extends Extension {
     _queueSaveSettings() {
         if (this._timeoutSaveSignal) return;
 
-        this._timeoutSaveSignal = GLib.timeout_add(
-            GLib.PRIORITY_DEFAULT,
-            SAVE_DEBOUNCE_MS,
-            () => {
-                this._timeoutSaveSignal = null;
-                this._saveSettings();
-                return GLib.SOURCE_REMOVE;
-            }
-        );
+        this._timeoutSaveSignal = GLib.timeout_add(GLib.PRIORITY_DEFAULT, SAVE_DEBOUNCE_MS, () => {
+            this._timeoutSaveSignal = null;
+            this._saveSettings();
+            return GLib.SOURCE_REMOVE;
+        });
     }
 
     _onParamChangedDebugLogging() {

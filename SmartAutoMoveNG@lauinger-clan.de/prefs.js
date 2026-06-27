@@ -600,7 +600,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     _createSavedWindowsTooltip(sw, wsh) {
         const checkMark = "\u2713";
         const heavyCross = "\u2718";
-        const lastSeen = sw.last_seen !== undefined ? new Date(sw.last_seen).toLocaleDateString() : _("Unknown");
+        const lastSeen = sw.last_seen === undefined ? _("Unknown") : new Date(sw.last_seen).toLocaleDateString();
         return `${wsh} - ${sw.title}\n${_("Workspace: ")}${sw.on_all_workspaces ? _("All") : sw.workspace + 1}\n${_("Monitor: ")}${sw.monitor + 1}\n${_("Position: ")}(${sw.x},${sw.y})\n${_("Size: ")}(${sw.width}x${sw.height})\n${sw.maximized ? _("Maximized") + checkMark : _("Maximized") + heavyCross}\n${sw.fullscreen ? _("Fullscreen") + checkMark : _("Fullscreen") + heavyCross}\n${sw.above ? _("Always on Top") + checkMark : _("Always on Top") + heavyCross}\n${_("Last Seen: ")}${lastSeen}`;
     }
 
@@ -614,7 +614,7 @@ export default class SAMPreferences extends ExtensionPreferences {
                 list_rows.push(row);
                 row.set_title(wsh + " - " + sw.title);
                 row.set_tooltip_text(this._createSavedWindowsTooltip(sw, wsh));
-                if (!sw.occupied) row.set_subtitle(_("Not occupied"));
+                if (sw.occupied === false) row.set_subtitle(_("Not occupied"));
                 const widgets = this._addSavedWindowsWidgets(settings, row, sw, wsh, swi, sws, saved_windows, page);
 
                 list_widget.add(row);
