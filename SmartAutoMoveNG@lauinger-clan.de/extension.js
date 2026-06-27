@@ -262,7 +262,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeWindows = null;
         this._indicator?.destroy();
         this._indicator = null;
-        this._isGnome49OrHigher = null;
     }
 
     _cleanupWindowSignals() {
@@ -523,22 +522,6 @@ export default class SmartAutoMoveNG extends Extension {
             const sws = this._savedWindows[wsh];
             this._debug("_dumpSavedwindows(): " + wsh + " " + JSON.stringify(sws));
         }
-    }
-
-    _dumpCurrentWindows() {
-        for (const actor of global.get_window_actors()) {
-            const win = actor.get_meta_window();
-            this._dumpWindow(win);
-        }
-    }
-
-    _dumpWindow(win) {
-        this._debug("_dumpWindow(): " + this._windowRepr(win));
-    }
-
-    _dumpState() {
-        this._dumpSavedWindows();
-        this._dumpCurrentWindows();
     }
 
     //// SETTINGS
