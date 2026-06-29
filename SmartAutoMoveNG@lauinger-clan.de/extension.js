@@ -823,10 +823,10 @@ export default class SmartAutoMoveNG extends Extension {
 
     _releaseSavedWindow(wsh, swi) {
         const reserved = this._reservedSavedWindows?.get(wsh);
-        if (!reserved) return;
-
-        reserved.delete(swi);
-        if (reserved.size === 0) this._reservedSavedWindows.delete(wsh);
+        if (reserved) {
+            reserved.delete(swi);
+            if (reserved.size === 0) this._reservedSavedWindows.delete(wsh);
+        }
     }
 
     _matchedUnreservedWindow(wsh, title) {
@@ -862,21 +862,21 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (!this._updateSavedWindow(win)) {
             const [swi, sw] = this._matchingSavedWindow(win);
-            if (swi !== undefined) {
-                if (sw.occupied) {
-                    this._debug(`_ensureSavedWindow() - skipped occupied app slot: ${swi}, ${this._windowRepr(win)}`);
-                    return;
-                }
-                const current = this._windowData(win);
-                if (this._windowDataEqual(sw, current)) return;
-                this._savedWindows[wsh][swi] = current;
-                this._debug(
-                    "_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current)
-                );
-                this._queueSaveSettings();
-            } else {
+            if (swi === undefined) {
                 this._pushSavedWindow(win);
+                return;
             }
+            if (sw.occupied) {
+                this._debug(`_ensureSavedWindow() - skipped occupied app slot: ${swi}, ${this._windowRepr(win)}`);
+                return;
+            }
+            const current = this._windowData(win);
+            if (this._windowDataEqual(sw, current)) return;
+            this._savedWindows[wsh][swi] = current;
+            this._debug(
+                "_ensureSavedWindow() - replaced unoccupied app slot: " + swi + ", " + JSON.stringify(current)
+            );
+            this._queueSaveSettings();
         }
     }
 
