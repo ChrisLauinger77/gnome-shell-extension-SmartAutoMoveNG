@@ -154,7 +154,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._pendingWindowSignals = new Map();
         this._mappingWindowSignals = new Map();
         this._windowTracker = Shell.WindowTracker.get_default();
-        this._startupSequenceChangedSignal = null;
+        this._startupTrackerConnected = false;
         this._timeoutSaveSignal = null;
         this._timeoutIds = new Set();
 
@@ -223,9 +223,9 @@ export default class SmartAutoMoveNG extends Extension {
 
         this._cleanupWindowSignals();
         this._windowCreatedSignal = null;
-        if (this._startupSequenceChangedSignal !== null) {
+        if (this._startupTrackerConnected) {
             this._windowTracker.disconnectObject(this);
-            this._startupSequenceChangedSignal = null;
+            this._startupTrackerConnected = false;
         }
         this._trackedWindows.clear();
         this._trackedWindows = null;
@@ -385,8 +385,8 @@ export default class SmartAutoMoveNG extends Extension {
             }
 
             // If we do not listen to the sequence-completed signal of the startup notification tracker, we would not be able to detect when the app has finished loading and thus would not know when to try to restore the window - by listening to the signal, we can trigger a restore attempt as soon as the app has finished loading, which seems to be more reliable than using timeouts or other heuristics
-            if (this._startupSequenceChangedSignal === null) {
-                this._startupSequenceChangedSignal = this._windowTracker.connectObject(
+            if (!this._startupTrackerConnected) {
+                this._windowTracker.connectObject(
                     "startup-sequence-changed",
                     (_tracker, sequence) => {
                         if (sequence.get_completed()) {
@@ -395,6 +395,7 @@ export default class SmartAutoMoveNG extends Extension {
                     },
                     this
                 );
+                this._startupTrackerConnected = true;
             }
             return true;
         } else {
@@ -466,9 +467,9 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _disconnectStartupTrackerIfIdle() {
-        if (this._pendingWindows?.size === 0 && this._startupSequenceChangedSignal !== null) {
-            this._windowTracker.disconnect(this._startupSequenceChangedSignal);
-            this._startupSequenceChangedSignal = null;
+        if (this._pendingWindows?.size === 0 && this._startupTrackerConnected) {
+            this._windowTracker.disconnectObject(this);
+            this._startupTrackerConnected = false;
         }
     }
 
