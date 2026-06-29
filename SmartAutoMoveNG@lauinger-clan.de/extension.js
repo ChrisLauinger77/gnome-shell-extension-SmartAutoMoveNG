@@ -156,13 +156,13 @@ export default class SmartAutoMoveNG extends Extension {
         this._windowTracker = Shell.WindowTracker.get_default();
         this._startupSequenceChangedSignal = null;
         this._timeoutSaveSignal = null;
+        this._timeoutIds = new Set();
 
         // Sync windows which might already be open before enabling the extension.
         this._syncWindows().catch((error) => {
             this.getLogger().error(`enable() failed: ${error}`);
         });
 
-        this._settingSignals = [];
         this._savedWindowsCount = 0;
         this._overridesCount = 0;
         this._updateStats();
@@ -184,11 +184,10 @@ export default class SmartAutoMoveNG extends Extension {
             [Common.SETTINGS_KEY_IGNORE_MONITOR, this._onParamChangedIgnoreMonitor.bind(this)],
         ];
         for (const [key, handler] of signalMap) {
-            const id = this._settings.connect("changed::" + key, handler);
-            this._settingSignals.push(id);
+            this._settings.connectObject("changed::" + key, handler, this);
         }
         // new method over window-created signal
-        this._windowCreatedSignal = global.display.connect("window-created", (_display, window) => {
+        this._windowCreatedSignal = global.display.connectObject("window-created", (_display, window) => {
             const signals = {
                 mappedId: null,
                 unmanagedId: null,
@@ -214,7 +213,7 @@ export default class SmartAutoMoveNG extends Extension {
                 this._removeMappingWindow(window);
             });
             this._mappingWindowSignals.set(window, signals);
-        });
+        }, this);
     }
 
     disable() {
@@ -225,7 +224,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._cleanupWindowSignals();
         this._windowCreatedSignal = null;
         if (this._startupSequenceChangedSignal !== null) {
-            this._windowTracker.disconnect(this._startupSequenceChangedSignal);
+            this._windowTracker.disconnectObject(this);
             this._startupSequenceChangedSignal = null;
         }
         this._trackedWindows.clear();
@@ -246,18 +245,14 @@ export default class SmartAutoMoveNG extends Extension {
         this._reservedSavedWindows.clear();
         this._reservedSavedWindows = null;
         this._windowTracker = null;
-        // remove setting Signals
-        if (this._settingSignals) {
-            for (const signal of this._settingSignals) {
-                this._settings.disconnect(signal);
-            }
-        }
-        this._settingSignals = null;
+        this._settings.disconnectObject(this);
         this._savedWindowsCount = null;
         this._overridesCount = null;
         this._finalMenuIcon = null;
 
         this._flushQueuedSaveSettings();
+        this._clearTimeouts();
+        this._timeoutIds = null;
         this._cleanupSettings();
         this._activeWindows = null;
         this._indicator?.destroy();
@@ -265,7 +260,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _cleanupWindowSignals() {
-        if (this._windowCreatedSignal !== null) global.display.disconnect(this._windowCreatedSignal);
+        if (this._windowCreatedSignal !== null) global.display.disconnectObject(this);
         this._cleanupMappingWindowSignals();
         this._cleanupTrackedWindowSignals();
         this._cleanupPendingWindowSignals();
@@ -281,7 +276,7 @@ export default class SmartAutoMoveNG extends Extension {
         for (const [window, ids] of this._trackedWindows.entries()) {
             if (window) {
                 if (ids.provisionalTimeoutId !== null) {
-                    GLib.Source.remove(ids.provisionalTimeoutId);
+                    this._removeTimeout(ids.provisionalTimeoutId);
                 }
                 window.disconnect(ids.unmanagedId);
                 window.disconnect(ids.sizechangeId);
@@ -323,7 +318,7 @@ export default class SmartAutoMoveNG extends Extension {
             win.disconnect(signals.mappedId);
         }
         if (signals.timeoutId !== null) {
-            GLib.Source.remove(signals.timeoutId);
+            this._removeTimeout(signals.timeoutId);
         }
     }
 
@@ -379,7 +374,7 @@ export default class SmartAutoMoveNG extends Extension {
                 signals.mappedId = win.connect("notify::mapped", () => {
                     this._trySyncPendingWindow(wmClass, win);
                 });
-                signals.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 15000, () => {
+                signals.timeoutId = this._addTimeout(GLib.PRIORITY_DEFAULT, 15000, () => {
                     signals.timeoutId = null;
                     signals.startupTimedOut = true;
                     this._debug(`Startup completion timed out for ${wmClass}. Waiting only for window readiness.`);
@@ -391,13 +386,14 @@ export default class SmartAutoMoveNG extends Extension {
 
             // If we do not listen to the sequence-completed signal of the startup notification tracker, we would not be able to detect when the app has finished loading and thus would not know when to try to restore the window - by listening to the signal, we can trigger a restore attempt as soon as the app has finished loading, which seems to be more reliable than using timeouts or other heuristics
             if (this._startupSequenceChangedSignal === null) {
-                this._startupSequenceChangedSignal = this._windowTracker.connect(
+                this._startupSequenceChangedSignal = this._windowTracker.connectObject(
                     "startup-sequence-changed",
                     (_tracker, sequence) => {
                         if (sequence.get_completed()) {
                             this._onStartupSequenceCompleted(sequence);
                         }
-                    }
+                    },
+                    this
                 );
             }
             return true;
@@ -461,7 +457,7 @@ export default class SmartAutoMoveNG extends Extension {
                 win.disconnect(signals.mappedId);
             }
             if (signals.timeoutId !== null) {
-                GLib.Source.remove(signals.timeoutId);
+                this._removeTimeout(signals.timeoutId);
             }
             this._pendingWindowSignals.delete(win);
         }
@@ -571,9 +567,30 @@ export default class SmartAutoMoveNG extends Extension {
         this._settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
     }
 
+    _addTimeout(priority, interval, callback) {
+        const sourceId = GLib.timeout_add(priority, interval, () => {
+            this._timeoutIds?.delete(sourceId);
+            return callback();
+        });
+        this._timeoutIds.add(sourceId);
+        return sourceId;
+    }
+
+    _removeTimeout(sourceId) {
+        if (!this._timeoutIds?.delete(sourceId)) return;
+        GLib.Source.remove(sourceId);
+    }
+
+    _clearTimeouts() {
+        for (const sourceId of this._timeoutIds) {
+            GLib.Source.remove(sourceId);
+        }
+        this._timeoutIds.clear();
+    }
+
     _flushQueuedSaveSettings() {
         if (this._timeoutSaveSignal !== null) {
-            GLib.Source.remove(this._timeoutSaveSignal);
+            this._removeTimeout(this._timeoutSaveSignal);
             this._timeoutSaveSignal = null;
         }
 
@@ -605,7 +622,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         signals.unmanagedId = win.connect("unmanaged", () => {
             if (signals.provisionalTimeoutId !== null) {
-                GLib.Source.remove(signals.provisionalTimeoutId);
+                this._removeTimeout(signals.provisionalTimeoutId);
                 signals.provisionalTimeoutId = null;
             }
             this._activeWindows.delete(windowHash);
@@ -651,7 +668,7 @@ export default class SmartAutoMoveNG extends Extension {
         signals.onallworkspaceschangeId = win.connect("notify::on-all-workspaces", () => {
             this._ensureSavedWindow(win);
         });
-        signals.provisionalTimeoutId = GLib.timeout_add(
+        signals.provisionalTimeoutId = this._addTimeout(
             GLib.PRIORITY_DEFAULT,
             Math.max(1, this._startupDelayMs + 1),
             () => {
@@ -931,7 +948,7 @@ export default class SmartAutoMoveNG extends Extension {
         // give the window 500ms to react to the move/resize and update its state
         const completed = await new Promise((resolve) => {
             this._finishMoveWindowDelay(win);
-            const sourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+            const sourceId = this._addTimeout(GLib.PRIORITY_DEFAULT, 500, () => {
                 const delay = this._moveWindowDelays.get(win);
                 if (delay?.sourceId === sourceId) {
                     this._moveWindowDelays.delete(win);
@@ -952,7 +969,7 @@ export default class SmartAutoMoveNG extends Extension {
         const delay = this._moveWindowDelays.get(win);
         if (!delay) return;
 
-        GLib.Source.remove(delay.sourceId);
+        this._removeTimeout(delay.sourceId);
         this._moveWindowDelays.delete(win);
         delay.resolve(completed);
     }
@@ -966,7 +983,7 @@ export default class SmartAutoMoveNG extends Extension {
     _setRestoreSaveGuard(win) {
         this._clearRestoreSaveGuard(win);
 
-        const sourceId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, Math.max(this._startupDelayMs, 1000), () => {
+        const sourceId = this._addTimeout(GLib.PRIORITY_DEFAULT, Math.max(this._startupDelayMs, 1000), () => {
             this._restoreSaveGuards.delete(win);
             return GLib.SOURCE_REMOVE;
         });
@@ -977,13 +994,13 @@ export default class SmartAutoMoveNG extends Extension {
         const sourceId = this._restoreSaveGuards?.get(win);
         if (sourceId === undefined) return;
 
-        GLib.Source.remove(sourceId);
+        this._removeTimeout(sourceId);
         this._restoreSaveGuards.delete(win);
     }
 
     _clearRestoreSaveGuards() {
         for (const sourceId of this._restoreSaveGuards.values()) {
-            GLib.Source.remove(sourceId);
+            this._removeTimeout(sourceId);
         }
         this._restoreSaveGuards.clear();
     }
@@ -1173,7 +1190,7 @@ export default class SmartAutoMoveNG extends Extension {
     _queueSaveSettings() {
         if (this._timeoutSaveSignal) return;
 
-        this._timeoutSaveSignal = GLib.timeout_add(GLib.PRIORITY_DEFAULT, SAVE_DEBOUNCE_MS, () => {
+        this._timeoutSaveSignal = this._addTimeout(GLib.PRIORITY_DEFAULT, SAVE_DEBOUNCE_MS, () => {
             this._timeoutSaveSignal = null;
             this._saveSettings();
             return GLib.SOURCE_REMOVE;
