@@ -9,6 +9,8 @@ import { ExtensionPreferences, gettext as _ } from "resource:///org/gnome/Shell/
 import * as Common from "./lib/common.js";
 
 const AppChooser = GObject.registerClass(
+    // The matching class name is intentional for GObject registration.
+    // eslint-disable-next-line no-shadow
     class AppChooser extends Adw.Window {
         constructor(params = {}) {
             super(params);
@@ -83,6 +85,8 @@ const AppChooser = GObject.registerClass(
 );
 
 const SavedWindowEditor = GObject.registerClass(
+    // The matching class name is intentional for GObject registration.
+    // eslint-disable-next-line no-shadow
     class SavedWindowEditor extends Adw.Window {
         constructor(sw, settings, onSave = null, params = {}) {
             super(params);

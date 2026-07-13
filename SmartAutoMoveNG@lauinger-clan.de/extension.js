@@ -21,6 +21,8 @@ const SAVE_DEBOUNCE_MS = 1000;
 
 //quick settings
 const SmartAutoMoveNGMenuToggle = GObject.registerClass(
+    // The matching class name is intentional for GObject registration.
+    // eslint-disable-next-line no-shadow
     class SmartAutoMoveNGMenuToggle extends QuickSettings.QuickMenuToggle {
         constructor(extension) {
             const { _settings } = extension;
@@ -100,6 +102,8 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
 );
 
 const SmartAutoMoveNGIndicator = GObject.registerClass(
+    // The matching class name is intentional for GObject registration.
+    // eslint-disable-next-line no-shadow
     class SmartAutoMoveNGIndicator extends QuickSettings.SystemIndicator {
         constructor(extension) {
             super();
