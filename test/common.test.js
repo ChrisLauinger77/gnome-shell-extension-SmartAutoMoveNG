@@ -1,6 +1,6 @@
 "use strict";
 
-import * as Common from "../lib/common.js";
+import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 
 function assertScore(sw, query, want_score) {
     const score = Common.scoreWindow(sw, query);

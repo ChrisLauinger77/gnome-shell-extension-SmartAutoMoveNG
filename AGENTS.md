@@ -28,7 +28,7 @@ inside the directory with that exact name.
   `prefs.js`.
 - `SmartAutoMoveNG@lauinger-clan.de/metadata.json`: extension metadata,
   supported shell versions, release version, gettext domain, and schema id.
-- `SmartAutoMoveNG@lauinger-clan.de/test/common.test.js`: lightweight assertion
+- `test/common.test.js`: lightweight assertion
   coverage for the pure helpers in `lib/common.js`.
 - `po/`: gettext template and translations.
 - `examples/`: example dconf configurations.
@@ -102,7 +102,7 @@ Before finishing changes, run the validations that match the edit:
 
 - JavaScript changes: `npm run lint`.
 - Shared matching logic: run or extend
-  `SmartAutoMoveNG@lauinger-clan.de/test/common.test.js` with the available GJS
+  `test/common.test.js` with the available GJS
   setup, or explain if local GJS execution is not available.
 - Schema, metadata, packaging, icon, UI, or translation changes:
   `./smartautomoveng.sh zip`.
