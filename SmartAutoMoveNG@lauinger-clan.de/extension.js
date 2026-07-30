@@ -859,6 +859,15 @@ export default class SmartAutoMoveNG extends Extension {
 
         if (this._activeRestores.has(win) || this._restoreSaveGuards.has(win)) return;
 
+        // a window that is being unmanaged has already lost its workspace: mutter's
+        // meta_window_unmanage() calls set_workspace_state(window, FALSE, NULL), which
+        // emits workspace-changed and notify::on-all-workspaces before the "unmanaged"
+        // handler gets to stop tracking it. there is nothing worth saving at that point,
+        // and _windowData() would throw on win.get_workspace().index().
+        // sticky windows are unaffected - get_workspace() returns the active workspace
+        // when on_all_workspaces is set.
+        if (win.get_workspace() === null) return;
+
         const wsh = this._windowSectionHash(win);
         if (wsh === null) return;
 
