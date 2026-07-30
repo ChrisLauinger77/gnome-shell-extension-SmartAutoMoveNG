@@ -72,11 +72,23 @@ const AppChooser = GObject.registerClass(
 
         showChooser() {
             return new Promise((resolve) => {
-                const signalId = this.selectBtn.connect("clicked", () => {
-                    this.close();
-                    this.selectBtn.disconnect(signalId);
-                    const row = this.listBox.get_selected_row();
+                const signalIds = {
+                    select: null,
+                    close: null,
+                };
+                const finish = (row) => {
+                    this.selectBtn.disconnect(signalIds.select);
+                    this.disconnect(signalIds.close);
                     resolve(row);
+                };
+                signalIds.select = this.selectBtn.connect("clicked", () => {
+                    const selectedRow = this.listBox.get_selected_row();
+                    finish(selectedRow);
+                    this.close();
+                });
+                signalIds.close = this.connect("close-request", () => {
+                    finish(null);
+                    return false;
                 });
                 this.present();
             });
@@ -254,13 +266,20 @@ export default class SAMPreferences extends ExtensionPreferences {
         startupdelayspin.set_climb_rate(100);
         startupdelayspin.set_numeric(true);
         this._rebuildOverrides = true; // do we need to rebuild the overrides list?
-        this._addResetButton(window, this.getSettings());
+        const settings = this.getSettings();
+        this._addResetButton(window, settings);
 
-        this._general(this.getSettings(), builder);
+        this._general(settings, builder);
         const savedwindowsRows = [];
-        this._savedwindows(this.getSettings(), builder, savedwindowsRows, page2);
+        const changedSavedWindowsSignal = this._savedwindows(settings, builder, savedwindowsRows, page2);
         const overridesRows = [];
-        this._overrides(this.getSettings(), builder, overridesRows, page3);
+        const [changedOverridesSignal, appChooser] = this._overrides(settings, builder, overridesRows, page3);
+        window.connect("close-request", () => {
+            settings.disconnect(changedSavedWindowsSignal);
+            settings.disconnect(changedOverridesSignal);
+            appChooser.destroy();
+            return false;
+        });
     }
 
     _general(settings, builder) {
@@ -351,7 +370,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             this._cleanupStaleSavedWindows(settings);
         });
         this._loadSavedWindowsSetting(settings, saved_windows_list_widget, saved_windows_list_objects, list_rows, page);
-        this.changedSavedWindowsSignal = settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
+        return settings.connect("changed::" + Common.SETTINGS_KEY_SAVED_WINDOWS, () => {
             this._loadSavedWindowsSetting(
                 settings,
                 saved_windows_list_widget,
@@ -409,9 +428,10 @@ export default class SAMPreferences extends ExtensionPreferences {
             }
         });
         this._loadOverridesSetting(settings, overrides_list_widget, overrides_list_objects, list_rows);
-        this.changedOverridesSignal = settings.connect("changed::" + Common.SETTINGS_KEY_OVERRIDES, () => {
+        const changedOverridesSignal = settings.connect("changed::" + Common.SETTINGS_KEY_OVERRIDES, () => {
             this._loadOverridesSetting(settings, overrides_list_widget, overrides_list_objects, list_rows);
         });
+        return [changedOverridesSignal, myAppChooser];
     }
 
     _clearListWidget(list_widget, list_objects, list_rows) {
@@ -538,7 +558,6 @@ export default class SAMPreferences extends ExtensionPreferences {
                 title: _("Edit Saved Window"),
                 modal: true,
                 transient_for: page.get_root(),
-                hide_on_close: true,
                 width_request: 400,
                 height_request: 600,
                 resizable: false,
