@@ -4,7 +4,7 @@
     "description": "Smart Auto Move NG learns the position, size, and workspace of your application windows and restores them on subsequent launches. Supports Wayland.\n\nDynamic workspaces are supported for GNOME 48 and later.\n\nFor more control, set the default behavior to IGNORE and then selectively RESTORE only desired apps.\n\nForked from https://github.com/khimaros/smart-auto-move",
     "uuid": "SmartAutoMoveNG@lauinger-clan.de",
     "shell-version": [
-        "50"
+        "50", "51"
     ],
     "original-author": "khimaros",
     "url": "https://github.com/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNG",
@@ -15,5 +15,5 @@
         "paypal": "ChrisLauinger"
     },
     "version": 999,
-    "version-name": "50.16"
+    "version-name": "51.0"
 }
