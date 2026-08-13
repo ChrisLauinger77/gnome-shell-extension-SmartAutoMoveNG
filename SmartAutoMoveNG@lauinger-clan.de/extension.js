@@ -145,6 +145,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._finalMenuIcon = this._getMenuIcon();
         this._overrides = {};
         this._savedWindows = {};
+        this._invalidJsonSettings = new Set();
         this._onParamChangedDebugLogging();
 
         this._debug("enable()");
@@ -540,6 +541,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._ignoreWorkspace = null;
         this._overrides = null;
         this._savedWindows = null;
+        this._invalidJsonSettings = null;
     }
 
     _restoreSettings() {
@@ -561,15 +563,20 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _saveSettings() {
-        const newOverrides = JSON.stringify(this._overrides);
-        this._settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
+        if (!this._invalidJsonSettings.has(Common.SETTINGS_KEY_OVERRIDES)) {
+            const newOverrides = JSON.stringify(this._overrides);
+            this._settings.set_string(Common.SETTINGS_KEY_OVERRIDES, newOverrides);
+        }
 
-        const oldSavedWindows = this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS);
-        const newSavedWindows = JSON.stringify(this._savedWindows);
-        if (oldSavedWindows === newSavedWindows) return;
-        this._debug("_saveSettings()");
-        this._dumpSavedWindows();
-        this._settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
+        if (!this._invalidJsonSettings.has(Common.SETTINGS_KEY_SAVED_WINDOWS)) {
+            const oldSavedWindows = this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS);
+            const newSavedWindows = JSON.stringify(this._savedWindows);
+            if (oldSavedWindows !== newSavedWindows) {
+                this._debug("_saveSettings()");
+                this._dumpSavedWindows();
+                this._settings.set_string(Common.SETTINGS_KEY_SAVED_WINDOWS, newSavedWindows);
+            }
+        }
     }
 
     _addTimeout(priority, interval, callback) {
@@ -1284,7 +1291,7 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _onParamChangedOverrides() {
-        this._overrides = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        this._overrides = this._readJsonSetting(Common.SETTINGS_KEY_OVERRIDES);
         this._updateStats();
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
@@ -1294,7 +1301,7 @@ export default class SmartAutoMoveNG extends Extension {
 
     _onParamChangedSavedWindows() {
         const canceledRestores = this._cancelActiveRestores();
-        this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
+        this._savedWindows = this._readJsonSetting(Common.SETTINGS_KEY_SAVED_WINDOWS);
         this._updateStats();
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
@@ -1313,6 +1320,20 @@ export default class SmartAutoMoveNG extends Extension {
         this._ignoreMonitor = this._settings.get_boolean(Common.SETTINGS_KEY_IGNORE_MONITOR);
         this._debug("_onParamChangedIgnoreMonitor(): " + this._ignoreMonitor);
         this._sendOSDNotification(_("Ignore Monitor"), this._ignoreMonitor);
+    }
+
+    _readJsonSetting(key) {
+        let parseFailed = false;
+        const value = Common.parseJsonObject(this._settings.get_string(key), (error) => {
+            parseFailed = true;
+            this.getLogger().error(`Invalid JSON in ${key}; using an empty object: ${error.message}`);
+        });
+        if (parseFailed) {
+            this._invalidJsonSettings.add(key);
+        } else {
+            this._invalidJsonSettings.delete(key);
+        }
+        return value;
     }
 
     _sendOSDNotification(message, state) {

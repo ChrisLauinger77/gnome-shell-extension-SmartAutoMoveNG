@@ -2,6 +2,19 @@
 
 import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 
+console.assert(JSON.stringify(Common.parseJsonObject('{"window": []}')) === '{"window":[]}');
+
+let parseError = null;
+console.assert(
+    JSON.stringify(
+        Common.parseJsonObject("not JSON", (error) => {
+            parseError = error;
+        })
+    ) === "{}"
+);
+console.assert(parseError instanceof SyntaxError);
+console.assert(JSON.stringify(Common.parseJsonObject("[]")) === "{}");
+
 function assertScore(sw, query, want_score) {
     const score = Common.scoreWindow(sw, query);
     console.assert(want_score === score, {
@@ -232,6 +245,24 @@ function createStringSetting(initialValue) {
             value = newValue;
         },
     };
+}
+
+{
+    const malformedValue = '{"window":';
+    const settings = createStringSetting(malformedValue);
+
+    Common.cleanupNonOccupiedWindows(settings);
+
+    console.assert(settings.get_string() === malformedValue, settings.get_string());
+}
+
+{
+    const malformedValue = '{"window":';
+    const settings = createStringSetting(malformedValue);
+
+    Common.cleanupStaleSavedWindows(settings);
+
+    console.assert(settings.get_string() === malformedValue, settings.get_string());
 }
 
 {
