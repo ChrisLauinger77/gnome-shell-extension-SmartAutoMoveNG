@@ -816,7 +816,8 @@ export default class SmartAutoMoveNG extends Extension {
         const detectedWindowRole = Common.pictureInPictureWindowRole(
             this._windowSectionHash(win),
             win.get_role(),
-            win.get_window_type() === Meta.WindowType.UTILITY,
+            win.get_window_type() === Meta.WindowType.NORMAL,
+            win.is_skip_taskbar(),
             win.is_above(),
             win.is_on_all_workspaces(),
             this._windowTitle(win)
