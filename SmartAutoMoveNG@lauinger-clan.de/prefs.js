@@ -561,11 +561,10 @@ export default class SAMPreferences extends ExtensionPreferences {
         Common.cleanupStaleSavedWindows(settings);
     }
 
-    _edit_window(settings, wsh, page) {
+    _edit_window(settings, wsh, swi, page) {
         const saved_windows = this._readJsonSetting(settings, Common.SETTINGS_KEY_SAVED_WINDOWS);
-        const sws = saved_windows[wsh];
-        const sw = sws.find((window) => !window.occupied);
-        if (!sw) return;
+        const sw = saved_windows[wsh]?.[swi];
+        if (!sw || sw.occupied) return;
         const editor = new SavedWindowEditor(
             sw,
             settings,
@@ -623,13 +622,14 @@ export default class SAMPreferences extends ExtensionPreferences {
         const edit_window_widget = new Gtk.Button({
             label: _("Edit"),
             valign: Gtk.Align.CENTER,
+            sensitive: !sw.occupied,
         });
         edit_window_widget.set_tooltip_text(_("Edit - only allowed if the window is not occupied"));
         edit_window_widget.set_icon_name("document-edit-symbolic");
         row.add_suffix(edit_window_widget);
         const edit_window_signal = edit_window_widget.connect(
             "clicked",
-            this._edit_window.bind(this, settings, wsh, page)
+            this._edit_window.bind(this, settings, wsh, swi, page)
         );
         return {
             delete: [delete_signal, delete_widget],
