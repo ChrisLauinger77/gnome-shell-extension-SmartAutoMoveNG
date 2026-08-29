@@ -530,6 +530,41 @@ console.assert(
         "Library"
     )
 );
+console.assert(
+    !Common.hasSavedPictureInPictureTitle(
+        {
+            gimp: [
+                {
+                    title: "GNU Image Manipulation Program",
+                    occupied: true,
+                    window_role: pictureInPictureRole,
+                },
+            ],
+        },
+        "gimp",
+        "GNU Image Manipulation Program"
+    )
+);
+
+{
+    const savedWindows = {
+        gimp: [{ title: "GNU Image Manipulation Program", window_role: pictureInPictureRole }],
+        geary: [{ title: "Inbox", window_role: "firefox-picture-in-picture" }],
+        firefox: [{ title: "Bild-im-Bild", window_role: pictureInPictureRole }],
+        chromium: [{ title: "Video", window_role: pictureInPictureRole }],
+    };
+    console.assert(Common.cleanupInvalidPictureInPictureRoles(savedWindows));
+    console.assert(
+        JSON.stringify(savedWindows) ===
+            JSON.stringify({
+                gimp: [{ title: "GNU Image Manipulation Program" }],
+                geary: [{ title: "Inbox" }],
+                firefox: [{ title: "Bild-im-Bild", window_role: pictureInPictureRole }],
+                chromium: [{ title: "Video", window_role: pictureInPictureRole }],
+            })
+    );
+    console.assert(!Common.cleanupInvalidPictureInPictureRoles(savedWindows));
+}
 
 function createStringSetting(initialValue) {
     let value = initialValue;
