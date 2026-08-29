@@ -145,6 +145,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._finalMenuIcon = this._getMenuIcon();
         this._overrides = {};
         this._savedWindows = {};
+        this._timeoutSaveSignal = null;
+        this._timeoutIds = new Set();
         this._onParamChangedDebugLogging();
 
         this._debug("enable()");
@@ -162,8 +164,6 @@ export default class SmartAutoMoveNG extends Extension {
         this._provisionalPictureInPictureWindows = new Map();
         this._windowTracker = Shell.WindowTracker.get_default();
         this._startupTrackerConnected = false;
-        this._timeoutSaveSignal = null;
-        this._timeoutIds = new Set();
 
         // Sync windows which might already be open before enabling the extension.
         this._syncWindows().catch((error) => {
@@ -1206,7 +1206,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (swi !== undefined) return false;
         let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole);
         let nonPersistent = false;
-        if (swiNew === undefined) {
+        if (swiNew === undefined && win.get_transient_for() === null) {
             [swiNew, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
             nonPersistent = swiNew !== undefined;
         }
@@ -1473,6 +1473,7 @@ export default class SmartAutoMoveNG extends Extension {
     _onParamChangedSavedWindows() {
         const canceledRestores = this._cancelActiveRestores();
         this._savedWindows = JSON.parse(this._settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
+        if (Common.cleanupInvalidPictureInPictureRoles(this._savedWindows)) this._queueSaveSettings();
         this._updateStats();
         if (this._quickSettings) {
             this._indicator.menuToggle.setMenuTitleAndHeader(this._savedWindowsCount, this._overridesCount);
