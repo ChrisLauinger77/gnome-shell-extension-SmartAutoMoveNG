@@ -153,6 +153,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._moveWindowDelays = new Map();
         this._activeRestores = new Map();
         this._restoreSaveGuards = new Map();
+        this._nonPersistentWindows = new Set();
         this._reservedSavedWindows = new Map();
         this._pendingWindows = new Map();
         this._pendingWindowSignals = new Map();
@@ -246,6 +247,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeRestores = null;
         this._clearRestoreSaveGuards();
         this._restoreSaveGuards = null;
+        this._nonPersistentWindows.clear();
+        this._nonPersistentWindows = null;
         this._reservedSavedWindows.clear();
         this._reservedSavedWindows = null;
         this._windowTracker = null;
@@ -633,6 +636,7 @@ export default class SmartAutoMoveNG extends Extension {
             this._activeWindows.delete(windowHash);
             this._trackedWindows.delete(win);
             this._clearRestoreSaveGuard(win);
+            this._nonPersistentWindows.delete(win);
             this._deoccupySavedWindow(windowHash);
             // Windows closed during the provisional period never update their saved geometry.
             this._cleanupWindows();
@@ -833,17 +837,25 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _matchedUnreservedWindow(wsh, title) {
+    _matchedWindow(wsh, title, occupied) {
         const reserved = this._reservedSavedWindows.get(wsh);
         if (reserved?.size) {
             const savedWindows = {
                 ...this._savedWindows,
                 [wsh]: this._savedWindows[wsh].map((sw, swi) => (reserved.has(swi) ? { ...sw, occupied: true } : sw)),
             };
-            return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold);
+            return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold, occupied);
         }
 
-        return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold);
+        return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold, occupied);
+    }
+
+    _matchedUnreservedWindow(wsh, title) {
+        return this._matchedWindow(wsh, title, false);
+    }
+
+    _matchedOccupiedWindow(wsh, title) {
+        return this._matchedWindow(wsh, title, true);
     }
 
     _matchingSavedWindow(win) {
@@ -852,6 +864,8 @@ export default class SmartAutoMoveNG extends Extension {
 
     _ensureSavedWindow(win) {
         if (Main.screenShield?.active || Main.sessionMode?.isLocked) return;
+
+        if (this._nonPersistentWindows.has(win)) return;
 
         if (this._windowNewerThan(win, this._startupDelayMs)) return;
 
@@ -1041,19 +1055,27 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _restoreWindow(win) {
+        if (this._nonPersistentWindows.has(win)) return true;
+
         const wsh = this._windowSectionHash(win);
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
         if (swi !== undefined) return false;
-        const [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win));
+        let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win));
+        let nonPersistent = false;
+        if (swiNew === undefined) {
+            [swiNew, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win));
+            nonPersistent = swiNew !== undefined;
+        }
         swi = swiNew;
         if (swi === undefined) return false;
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
         const action = this._findOverrideAction(win, 1);
         if (action !== Common.SYNC_MODE_RESTORE) {
+            if (nonPersistent) return false;
             this._occupySavedWindow(win, swi);
             return true;
         }
-        if (!this._reserveSavedWindow(wsh, swi)) return null;
+        if (!nonPersistent && !this._reserveSavedWindow(wsh, swi)) return null;
         let resolveCompletion;
         const restore = {
             wsh,
@@ -1098,11 +1120,15 @@ export default class SmartAutoMoveNG extends Extension {
             if (nsw === null) return null;
 
             this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
-            this._occupySavedWindow(win, swi);
+            if (nonPersistent) {
+                this._nonPersistentWindows.add(win);
+            } else {
+                this._occupySavedWindow(win, swi);
+            }
             this._setRestoreSaveGuard(win);
             return true;
         } finally {
-            this._releaseSavedWindow(wsh, swi);
+            if (!nonPersistent) this._releaseSavedWindow(wsh, swi);
             if (restore.unmanagedId !== null) {
                 win.disconnect(restore.unmanagedId);
                 restore.unmanagedId = null;
