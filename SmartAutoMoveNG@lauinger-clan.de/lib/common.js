@@ -105,6 +105,16 @@ export function isChromiumWindow(wsh) {
     );
 }
 
+export function firefoxPictureInPictureEvidence(
+    skipTaskbar,
+    canMaximize,
+    canMinimize,
+    hasTransientParent,
+    decorated
+) {
+    return !hasTransientParent && (skipTaskbar || (!canMaximize && !canMinimize) || decorated === false);
+}
+
 export function pictureInPictureWindowRole(
     wsh,
     nativeRole,

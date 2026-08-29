@@ -834,8 +834,13 @@ export default class SmartAutoMoveNG extends Extension {
             this._windowSectionHash(win),
             win.get_role(),
             win.get_window_type() === Meta.WindowType.NORMAL,
-            win.get_transient_for() === null &&
-                (win.is_skip_taskbar() || (!win.can_maximize() && !win.can_minimize())),
+            Common.firefoxPictureInPictureEvidence(
+                win.is_skip_taskbar(),
+                win.can_maximize(),
+                win.can_minimize(),
+                win.get_transient_for() !== null,
+                win.decorated
+            ),
             win.is_above(),
             win.is_on_all_workspaces(),
             this._windowTitle(win)

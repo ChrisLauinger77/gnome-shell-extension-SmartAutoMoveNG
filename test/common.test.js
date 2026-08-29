@@ -4,6 +4,10 @@ import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 
 const pictureInPictureRole = Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
 
+console.assert(Common.firefoxPictureInPictureEvidence(false, true, true, false, false));
+console.assert(!Common.firefoxPictureInPictureEvidence(false, true, true, false, true));
+console.assert(!Common.firefoxPictureInPictureEvidence(false, false, false, true, false));
+
 console.assert(
     Common.pictureInPictureWindowRole(
         "firefox",
