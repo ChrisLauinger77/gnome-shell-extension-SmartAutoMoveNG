@@ -158,6 +158,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._pendingWindows = new Map();
         this._pendingWindowSignals = new Map();
         this._mappingWindowSignals = new Map();
+        this._provisionalPictureInPictureWindows = new Map();
         this._windowTracker = Shell.WindowTracker.get_default();
         this._startupTrackerConnected = false;
         this._timeoutSaveSignal = null;
@@ -236,6 +237,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._trackedWindows = null;
         this._mappingWindowSignals.clear();
         this._mappingWindowSignals = null;
+        this._provisionalPictureInPictureWindows.clear();
+        this._provisionalPictureInPictureWindows = null;
         this._pendingWindows.clear();
         this._pendingWindows = null;
         this._pendingWindowSignals.clear();
@@ -271,6 +274,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._cleanupMappingWindowSignals();
         this._cleanupTrackedWindowSignals();
         this._cleanupPendingWindowSignals();
+        this._cleanupProvisionalPictureInPictureSignals();
     }
 
     _cleanupMappingWindowSignals() {
@@ -306,6 +310,22 @@ export default class SmartAutoMoveNG extends Extension {
                 this._disconnectPendingWindowSignals(win);
             }
         }
+    }
+
+    _cleanupProvisionalPictureInPictureSignals() {
+        for (const window of this._provisionalPictureInPictureWindows.keys()) {
+            this._removeProvisionalPictureInPictureWindow(window);
+        }
+    }
+
+    _removeProvisionalPictureInPictureWindow(win) {
+        const signals = this._provisionalPictureInPictureWindows?.get(win);
+        if (!signals) return;
+
+        for (const signalId of Object.values(signals)) {
+            if (signalId !== null) win.disconnect(signalId);
+        }
+        this._provisionalPictureInPictureWindows.delete(win);
     }
 
     _disconnectPendingWindowSignals(win) {
@@ -610,6 +630,8 @@ export default class SmartAutoMoveNG extends Extension {
     _trackWindow(win) {
         if (this._trackedWindows.has(win)) return;
 
+        this._removeProvisionalPictureInPictureWindow(win);
+
         const windowHash = this._windowHash(win);
         this._activeWindows.set(windowHash, Date.now());
 
@@ -702,6 +724,36 @@ export default class SmartAutoMoveNG extends Extension {
             }
         );
         this._trackedWindows.set(win, signals);
+    }
+
+    _trackProvisionalPictureInPictureWindow(win) {
+        if (this._provisionalPictureInPictureWindows.has(win) || this._trackedWindows.has(win)) return;
+
+        const wsh = this._windowSectionHash(win);
+        if (!Common.isFirefoxWindow(wsh) && !Common.isChromiumWindow(wsh)) return;
+
+        const signals = {
+            unmanagedId: null,
+            titlechangeId: null,
+            wmclasschangeId: null,
+            abovechangeId: null,
+            onallworkspaceschangeId: null,
+        };
+        const retryIfPictureInPicture = () => {
+            if (this._windowRole(win) !== Common.WINDOW_ROLE_PICTURE_IN_PICTURE) return;
+
+            this._removeProvisionalPictureInPictureWindow(win);
+            this._syncWindowWithErrorLogging(win, "provisional PiP state change handler");
+        };
+        signals.unmanagedId = win.connect("unmanaged", () => {
+            signals.unmanagedId = null;
+            this._removeProvisionalPictureInPictureWindow(win);
+        });
+        signals.titlechangeId = win.connect("notify::title", retryIfPictureInPicture);
+        signals.wmclasschangeId = win.connect("notify::wm-class", retryIfPictureInPicture);
+        signals.abovechangeId = win.connect("notify::above", retryIfPictureInPicture);
+        signals.onallworkspaceschangeId = win.connect("notify::on-all-workspaces", retryIfPictureInPicture);
+        this._provisionalPictureInPictureWindows.set(win, signals);
     }
 
     _windowTitle(win) {
@@ -1255,6 +1307,7 @@ export default class SmartAutoMoveNG extends Extension {
             if (index >= windows.length) return;
             const win = windows[index];
             if (this._shouldSkipWindow(win)) {
+                this._trackProvisionalPictureInPictureWindow(win);
                 await processWindow(index + 1);
                 return;
             }
@@ -1270,7 +1323,10 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _syncWindow(win) {
-        if (this._shouldSkipWindow(win)) return true;
+        if (this._shouldSkipWindow(win)) {
+            this._trackProvisionalPictureInPictureWindow(win);
+            return true;
+        }
         if (this._activeRestores.has(win)) return true;
         const restored = await this._restoreWindow(win);
         if (restored === null) return this._activeRestores !== null;
