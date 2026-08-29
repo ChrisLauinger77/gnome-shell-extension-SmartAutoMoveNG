@@ -148,8 +148,24 @@ assertFoundOverride(
     { action: 1, threshold: 0.3 }
 );
 
-function assertMatchedWindow(saved_windows, overrides, wsh, title, default_match_threshold, want_swi, want_sw) {
-    const [swi, sw] = Common.matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold);
+function assertMatchedWindow(
+    saved_windows,
+    overrides,
+    wsh,
+    title,
+    default_match_threshold,
+    want_swi,
+    want_sw,
+    occupied = false
+) {
+    const [swi, sw] = Common.matchedWindow(
+        saved_windows,
+        overrides,
+        wsh,
+        title,
+        default_match_threshold,
+        occupied
+    );
     console.assert(want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw), {
         want_swi: want_swi,
         swi: swi,
@@ -160,6 +176,7 @@ function assertMatchedWindow(saved_windows, overrides, wsh, title, default_match
         wsh: wsh,
         title: title,
         default_match_threshold: default_match_threshold,
+        occupied: occupied,
     });
 }
 
@@ -181,6 +198,31 @@ assertMatchedWindow(
         title: "user@host: ~/src/github.com/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNG",
         occupied: false,
     }
+);
+
+assertMatchedWindow(
+    {
+        "gnome-terminal-server": [{ title: "user@host: ~/src", occupied: true }],
+    },
+    { "gnome-terminal-server": [{ action: 1, threshold: 0.3 }] },
+    "gnome-terminal-server",
+    "user@host: ~",
+    0.7,
+    0,
+    { title: "user@host: ~/src", occupied: true },
+    true
+);
+
+assertMatchedWindow(
+    {
+        "gnome-terminal-server": [{ title: "user@host: ~/src", occupied: true }],
+    },
+    { "gnome-terminal-server": [{ action: 1, threshold: 0.3 }] },
+    "gnome-terminal-server",
+    "user@host: ~",
+    0.7,
+    undefined,
+    undefined
 );
 
 function assertMatchingSavedWindow(saved_windows, wsh, want_swi, want_sw) {
