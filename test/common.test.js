@@ -5,8 +5,15 @@ import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 const pictureInPictureRole = Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
 
 console.assert(
-    Common.pictureInPictureWindowRole("firefox", "PictureInPicture", false, false, false, false, "Bild-in-Bild") ===
-        pictureInPictureRole
+    Common.pictureInPictureWindowRole(
+        "firefox",
+        "PictureInPicture",
+        false,
+        false,
+        false,
+        false,
+        "Bild-in-Bild"
+    ) === pictureInPictureRole
 );
 console.assert(
     Common.pictureInPictureWindowRole("firefox-esr", null, true, true, false, false, "Bild-in-Bild") ===
@@ -16,33 +23,57 @@ console.assert(
     Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "Bild-im-Bild") ===
         pictureInPictureRole
 );
-console.assert(Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "Mozilla Firefox") === null);
-console.assert(Common.pictureInPictureWindowRole("firefox", null, true, false, false, false, "Library") === null);
-console.assert(Common.pictureInPictureWindowRole("firefox", null, false, true, false, false, "Popup") === null);
+console.assert(
+    Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "Mozilla Firefox") === null
+);
+console.assert(
+    Common.pictureInPictureWindowRole("firefox", null, true, false, false, false, "Library") === null
+);
+console.assert(Common.pictureInPictureWindowRole("firefox", null, false, false, false, false, "Popup") === null);
 console.assert(Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "") === null);
 console.assert(
-    Common.pictureInPictureWindowRole("google-chrome", null, true, true, true, true, "Picture in picture") ===
+    Common.pictureInPictureWindowRole("google-chrome", null, true, false, true, true, "Picture in picture") ===
         pictureInPictureRole
 );
 console.assert(
-    Common.pictureInPictureWindowRole("chromium", "PictureInPictureWindow", false, false, false, false, "Video") ===
+    Common.pictureInPictureWindowRole(
+        "chromium",
+        "PictureInPictureWindow",
+        false,
+        false,
+        false,
+        false,
+        "Video"
+    ) === pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("Brave-browser", null, true, false, true, true, "Video") ===
         pictureInPictureRole
 );
 console.assert(
-    Common.pictureInPictureWindowRole("Brave-browser", null, true, true, true, true, "Video") === pictureInPictureRole
-);
-console.assert(
-    Common.pictureInPictureWindowRole("microsoft-edge-stable", null, true, true, true, true, "Video") ===
+    Common.pictureInPictureWindowRole("microsoft-edge-stable", null, true, false, true, true, "Video") ===
         pictureInPictureRole
 );
-console.assert(Common.pictureInPictureWindowRole("Opera", null, true, true, true, true, "Video") === pictureInPictureRole);
 console.assert(
-    Common.pictureInPictureWindowRole("vivaldi-stable", null, true, true, true, true, "Video") === pictureInPictureRole
+    Common.pictureInPictureWindowRole("Opera", null, true, false, true, true, "Video") === pictureInPictureRole
 );
-console.assert(Common.pictureInPictureWindowRole("google-chrome", null, true, true, true, false, "Video") === null);
 console.assert(
-    Common.pictureInPictureWindowRole("org.gnome.Nautilus", "PictureInPicture", true, true, true, true, "Video") ===
-        null
+    Common.pictureInPictureWindowRole("vivaldi-stable", null, true, false, true, true, "Video") ===
+        pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("google-chrome", null, true, false, true, false, "Video") === null
+);
+console.assert(
+    Common.pictureInPictureWindowRole(
+        "org.gnome.Nautilus",
+        "PictureInPicture",
+        true,
+        true,
+        true,
+        true,
+        "Video"
+    ) === null
 );
 
 function assertScore(sw, query, want_score) {
@@ -469,6 +500,31 @@ assertMatchingSavedWindow(
     1,
     { title: "Bild-in-Bild", occupied: false, window_role: "firefox-picture-in-picture" },
     pictureInPictureRole
+);
+
+console.assert(
+    Common.hasSavedPictureInPictureTitle(
+        {
+            firefox: [
+                { title: "Mozilla Firefox", occupied: true },
+                { title: "Bild-im-Bild", occupied: false, window_role: pictureInPictureRole },
+            ],
+        },
+        "firefox",
+        "Bild-im-Bild"
+    )
+);
+console.assert(
+    !Common.hasSavedPictureInPictureTitle(
+        {
+            firefox: [
+                { title: "Mozilla Firefox", occupied: true },
+                { title: "Bild-im-Bild", occupied: false, window_role: pictureInPictureRole },
+            ],
+        },
+        "firefox",
+        "Library"
+    )
 );
 
 function createStringSetting(initialValue) {
