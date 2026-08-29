@@ -32,6 +32,9 @@ export const STALE_SAVED_WINDOW_MS = STALE_SAVED_WINDOW_DAYS * 24 * 60 * 60 * 10
 export const STALE_SAVED_WINDOW_DAYS_MIN = 1;
 export const STALE_SAVED_WINDOW_DAYS_MAX = 365;
 
+export const WINDOW_ROLE_PICTURE_IN_PICTURE = "picture-in-picture";
+const LEGACY_WINDOW_ROLE_FIREFOX_PICTURE_IN_PICTURE = "firefox-picture-in-picture";
+
 export function parseJsonObject(value, onError = null) {
     try {
         const parsed = JSON.parse(value);
@@ -89,13 +92,80 @@ export function scoreWindow(sw, query) {
     return score;
 }
 
-export function findSavedWindow(saved_windows, wsh, query, threshold) {
+export function isFirefoxWindow(wsh) {
+    return typeof wsh === "string" && wsh.toLowerCase().includes("firefox");
+}
+
+export function isChromiumWindow(wsh) {
+    if (typeof wsh !== "string") return false;
+
+    const windowSectionHash = wsh.toLowerCase();
+    return ["chromium", "google-chrome", "brave", "microsoft-edge", "opera", "vivaldi"].some((name) =>
+        windowSectionHash.includes(name)
+    );
+}
+
+export function pictureInPictureWindowRole(wsh, nativeRole, isNormal, skipTaskbar, above, onAllWorkspaces, title) {
+    const firefoxWindow = isFirefoxWindow(wsh);
+    const chromiumWindow = isChromiumWindow(wsh);
+    if (!firefoxWindow && !chromiumWindow) return null;
+
+    const pictureInPictureRole = nativeRole === "PictureInPicture" || nativeRole === "PictureInPictureWindow";
+    const unbrandedFirefoxWindow =
+        firefoxWindow && typeof title === "string" && title.length > 0 && !title.toLowerCase().includes("firefox");
+    const firefoxPictureInPictureWindow = unbrandedFirefoxWindow && isNormal && skipTaskbar;
+    const chromiumFloatingWindow = chromiumWindow && above && onAllWorkspaces;
+    if (pictureInPictureRole || firefoxPictureInPictureWindow || chromiumFloatingWindow) {
+        return WINDOW_ROLE_PICTURE_IN_PICTURE;
+    }
+
+    return null;
+}
+
+function savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
+    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return null;
+    if (
+        savedWindow.window_role === WINDOW_ROLE_PICTURE_IN_PICTURE ||
+        savedWindow.window_role === LEGACY_WINDOW_ROLE_FIREFOX_PICTURE_IN_PICTURE
+    ) {
+        return WINDOW_ROLE_PICTURE_IN_PICTURE;
+    }
+    if (
+        pictureInPictureWindowRole(
+            wsh,
+            null,
+            false,
+            false,
+            savedWindow.above,
+            savedWindow.on_all_workspaces,
+            savedWindow.title
+        ) !== null ||
+        (useLegacyIndexFallback && savedWindowIndex > 0)
+    ) {
+        return WINDOW_ROLE_PICTURE_IN_PICTURE;
+    }
+
+    return null;
+}
+
+function matchesSavedWindowRole(wsh, windowRole, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
+    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return true;
+
+    return windowRole === savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback);
+}
+
+function usesLegacyFirefoxIndexLayout(wsh, savedWindows) {
+    return isFirefoxWindow(wsh) && !savedWindows.some((savedWindow) => Object.hasOwn(savedWindow, "window_role"));
+}
+
+export function findSavedWindow(saved_windows, wsh, query, threshold, filter = null) {
     if (!Object.hasOwn(saved_windows, wsh)) {
         return [undefined, undefined];
     }
 
     const scores = new Map();
     for (const [swi, sw] of saved_windows[wsh].entries()) {
+        if (filter !== null && !filter(sw, swi)) continue;
         const score = scoreWindow(sw, query);
         scores.set(swi, score);
     }
@@ -137,12 +207,31 @@ export function findOverride(overrides, wsh, sw, threshold) {
     return override;
 }
 
-export function matchedWindow(saved_windows, overrides, wsh, title, default_match_threshold, occupied = false) {
+export function matchedWindow(
+    saved_windows,
+    overrides,
+    wsh,
+    title,
+    default_match_threshold,
+    occupied = false,
+    windowRole = undefined
+) {
     const o = findOverride(overrides, wsh, { title: title }, 1);
 
     const threshold = o?.threshold ?? default_match_threshold;
+    const savedWindowSection = saved_windows[wsh] ?? [];
+    const useLegacyIndexFallback = usesLegacyFirefoxIndexLayout(wsh, savedWindowSection);
 
-    const [swi] = findSavedWindow(saved_windows, wsh, { title: title, occupied: occupied }, threshold);
+    const [swi] = findSavedWindow(
+        saved_windows,
+        wsh,
+        { title: title, occupied: occupied },
+        threshold,
+        windowRole === undefined
+            ? null
+            : (sw, savedWindowIndex) =>
+                  matchesSavedWindowRole(wsh, windowRole, sw, savedWindowIndex, useLegacyIndexFallback)
+    );
 
     if (swi === undefined) return [undefined, undefined];
 
@@ -151,14 +240,23 @@ export function matchedWindow(saved_windows, overrides, wsh, title, default_matc
     return [swi, sw];
 }
 
-export function matchingSavedWindow(saved_windows, wsh) {
+export function matchingSavedWindow(saved_windows, wsh, windowRole = undefined) {
     if (!Object.hasOwn(saved_windows, wsh)) {
         return [undefined, undefined];
     }
 
-    const [swi, sw] = saved_windows[wsh].entries().next().value ?? [];
+    const savedWindowSection = saved_windows[wsh];
+    const useLegacyIndexFallback = usesLegacyFirefoxIndexLayout(wsh, savedWindowSection);
+    for (const [swi, sw] of savedWindowSection.entries()) {
+        if (
+            windowRole === undefined ||
+            matchesSavedWindowRole(wsh, windowRole, sw, swi, useLegacyIndexFallback)
+        ) {
+            return [swi, sw];
+        }
+    }
 
-    return [swi, sw];
+    return [undefined, undefined];
 }
 
 export function cleanupNonOccupiedWindows(settings) {
