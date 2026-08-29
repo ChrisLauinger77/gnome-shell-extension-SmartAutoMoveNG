@@ -11,7 +11,6 @@ import St from "gi://St";
 import { Extension, InjectionManager, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as QuickSettings from "resource:///org/gnome/shell/ui/quickSettings.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
-import { PopupAnimation } from "resource:///org/gnome/shell/ui/boxpointer.js";
 import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
 
 import * as Common from "./lib/common.js";
@@ -54,7 +53,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 const settingsItem = this.menu.addAction(_("Settings"), () => {
                     extension.openPreferences();
-                    QuickSettingsMenu.menu.close(PopupAnimation.FADE);
+                    QuickSettingsMenu.menu.close({ fadeOnly: true });
                 });
 
                 settingsItem.visible = Main.sessionMode.allowSettings;
