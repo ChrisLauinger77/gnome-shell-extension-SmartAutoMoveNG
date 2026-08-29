@@ -105,7 +105,15 @@ export function isChromiumWindow(wsh) {
     );
 }
 
-export function pictureInPictureWindowRole(wsh, nativeRole, isNormal, skipTaskbar, above, onAllWorkspaces, title) {
+export function pictureInPictureWindowRole(
+    wsh,
+    nativeRole,
+    isNormal,
+    hasFirefoxPictureInPictureEvidence,
+    above,
+    onAllWorkspaces,
+    title
+) {
     const firefoxWindow = isFirefoxWindow(wsh);
     const chromiumWindow = isChromiumWindow(wsh);
     if (!firefoxWindow && !chromiumWindow) return null;
@@ -113,7 +121,7 @@ export function pictureInPictureWindowRole(wsh, nativeRole, isNormal, skipTaskba
     const pictureInPictureRole = nativeRole === "PictureInPicture" || nativeRole === "PictureInPictureWindow";
     const unbrandedFirefoxWindow =
         firefoxWindow && typeof title === "string" && title.length > 0 && !title.toLowerCase().includes("firefox");
-    const firefoxPictureInPictureWindow = unbrandedFirefoxWindow && isNormal && skipTaskbar;
+    const firefoxPictureInPictureWindow = unbrandedFirefoxWindow && isNormal && hasFirefoxPictureInPictureEvidence;
     const chromiumFloatingWindow = chromiumWindow && above && onAllWorkspaces;
     if (pictureInPictureRole || firefoxPictureInPictureWindow || chromiumFloatingWindow) {
         return WINDOW_ROLE_PICTURE_IN_PICTURE;
@@ -238,6 +246,23 @@ export function matchedWindow(
     const sw = saved_windows[wsh][swi];
 
     return [swi, sw];
+}
+
+export function hasSavedPictureInPictureTitle(saved_windows, wsh, title) {
+    for (const occupied of [false, true]) {
+        const [swi] = matchedWindow(
+            saved_windows,
+            {},
+            wsh,
+            title,
+            1,
+            occupied,
+            WINDOW_ROLE_PICTURE_IN_PICTURE
+        );
+        if (swi !== undefined) return true;
+    }
+
+    return false;
 }
 
 export function matchingSavedWindow(saved_windows, wsh, windowRole = undefined) {
