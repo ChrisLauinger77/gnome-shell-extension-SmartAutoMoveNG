@@ -108,7 +108,7 @@ export function pictureInPictureWindowRole(wsh, nativeRole, isUtility, above, on
     return null;
 }
 
-function savedWindowRole(wsh, savedWindow, savedWindowIndex) {
+function savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
     if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return null;
     if (
         savedWindow.window_role === WINDOW_ROLE_PICTURE_IN_PICTURE ||
@@ -125,7 +125,7 @@ function savedWindowRole(wsh, savedWindow, savedWindowIndex) {
             savedWindow.on_all_workspaces,
             savedWindow.title
         ) !== null ||
-        (isFirefoxWindow(wsh) && savedWindowIndex > 0)
+        (useLegacyIndexFallback && savedWindowIndex > 0)
     ) {
         return WINDOW_ROLE_PICTURE_IN_PICTURE;
     }
@@ -133,10 +133,14 @@ function savedWindowRole(wsh, savedWindow, savedWindowIndex) {
     return null;
 }
 
-function matchesSavedWindowRole(wsh, windowRole, savedWindow, savedWindowIndex) {
+function matchesSavedWindowRole(wsh, windowRole, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
     if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return true;
 
-    return windowRole === savedWindowRole(wsh, savedWindow, savedWindowIndex);
+    return windowRole === savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback);
+}
+
+function usesLegacyFirefoxIndexLayout(wsh, savedWindows) {
+    return isFirefoxWindow(wsh) && !savedWindows.some((savedWindow) => Object.hasOwn(savedWindow, "window_role"));
 }
 
 export function findSavedWindow(saved_windows, wsh, query, threshold, filter = null) {
@@ -200,6 +204,8 @@ export function matchedWindow(
     const o = findOverride(overrides, wsh, { title: title }, 1);
 
     const threshold = o?.threshold ?? default_match_threshold;
+    const savedWindowSection = saved_windows[wsh] ?? [];
+    const useLegacyIndexFallback = usesLegacyFirefoxIndexLayout(wsh, savedWindowSection);
 
     const [swi] = findSavedWindow(
         saved_windows,
@@ -208,7 +214,8 @@ export function matchedWindow(
         threshold,
         windowRole === undefined
             ? null
-            : (sw, savedWindowIndex) => matchesSavedWindowRole(wsh, windowRole, sw, savedWindowIndex)
+            : (sw, savedWindowIndex) =>
+                  matchesSavedWindowRole(wsh, windowRole, sw, savedWindowIndex, useLegacyIndexFallback)
     );
 
     if (swi === undefined) return [undefined, undefined];
@@ -223,8 +230,15 @@ export function matchingSavedWindow(saved_windows, wsh, windowRole = undefined) 
         return [undefined, undefined];
     }
 
-    for (const [swi, sw] of saved_windows[wsh].entries()) {
-        if (windowRole === undefined || matchesSavedWindowRole(wsh, windowRole, sw, swi)) return [swi, sw];
+    const savedWindowSection = saved_windows[wsh];
+    const useLegacyIndexFallback = usesLegacyFirefoxIndexLayout(wsh, savedWindowSection);
+    for (const [swi, sw] of savedWindowSection.entries()) {
+        if (
+            windowRole === undefined ||
+            matchesSavedWindowRole(wsh, windowRole, sw, swi, useLegacyIndexFallback)
+        ) {
+            return [swi, sw];
+        }
     }
 
     return [undefined, undefined];

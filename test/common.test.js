@@ -391,6 +391,32 @@ assertMatchingSavedWindow(
 assertMatchingSavedWindow(
     {
         firefox: [
+            { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+            { title: "Mozilla Firefox", occupied: false },
+        ],
+    },
+    "firefox",
+    1,
+    { title: "Mozilla Firefox", occupied: false },
+    null
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+            { title: "Mozilla Firefox", occupied: false },
+        ],
+    },
+    "firefox",
+    0,
+    { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+    pictureInPictureRole
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
             { title: "Mozilla Firefox", occupied: true },
             { title: "Bild-in-Bild", occupied: false },
         ],
