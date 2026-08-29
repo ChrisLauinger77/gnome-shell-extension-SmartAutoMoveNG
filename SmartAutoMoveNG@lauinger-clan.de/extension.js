@@ -732,7 +732,8 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._provisionalPictureInPictureWindows.has(win) || this._trackedWindows.has(win)) return;
 
         const wsh = this._windowSectionHash(win);
-        if (!Common.isFirefoxWindow(wsh) && !Common.isChromiumWindow(wsh)) return;
+        const hasResolvedWindowSection = typeof wsh === "string" && wsh.length > 0;
+        if (hasResolvedWindowSection && !Common.isFirefoxWindow(wsh) && !Common.isChromiumWindow(wsh)) return;
 
         const signals = {
             unmanagedId: null,
@@ -742,6 +743,16 @@ export default class SmartAutoMoveNG extends Extension {
             onallworkspaceschangeId: null,
         };
         const retryIfPictureInPicture = () => {
+            const currentWsh = this._windowSectionHash(win);
+            const hasResolvedCurrentWindowSection = typeof currentWsh === "string" && currentWsh.length > 0;
+            if (
+                hasResolvedCurrentWindowSection &&
+                !Common.isFirefoxWindow(currentWsh) &&
+                !Common.isChromiumWindow(currentWsh)
+            ) {
+                this._removeProvisionalPictureInPictureWindow(win);
+                return;
+            }
             if (this._windowRole(win) !== Common.WINDOW_ROLE_PICTURE_IN_PICTURE) return;
 
             this._removeProvisionalPictureInPictureWindow(win);
