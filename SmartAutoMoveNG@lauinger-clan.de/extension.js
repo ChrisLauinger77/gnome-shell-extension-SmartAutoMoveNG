@@ -824,15 +824,26 @@ export default class SmartAutoMoveNG extends Extension {
         const establishedWindowRole = this._windowRoles.get(win);
         if (establishedWindowRole !== undefined) return establishedWindowRole;
 
-        const detectedWindowRole = Common.pictureInPictureWindowRole(
+        let detectedWindowRole = Common.pictureInPictureWindowRole(
             this._windowSectionHash(win),
             win.get_role(),
             win.get_window_type() === Meta.WindowType.NORMAL,
-            win.is_skip_taskbar(),
+            win.get_transient_for() === null &&
+                (win.is_skip_taskbar() || (!win.can_maximize() && !win.can_minimize())),
             win.is_above(),
             win.is_on_all_workspaces(),
             this._windowTitle(win)
         );
+        if (
+            detectedWindowRole === null &&
+            Common.hasSavedPictureInPictureTitle(
+                this._savedWindows,
+                this._windowSectionHash(win),
+                this._windowTitle(win)
+            )
+        ) {
+            detectedWindowRole = Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
+        }
         if (detectedWindowRole !== null) this._windowRoles.set(win, detectedWindowRole);
 
         return detectedWindowRole;
