@@ -4,7 +4,7 @@ Forked from https://github.com/khimaros/smart-auto-move
 
 <div align="center">
 
-![Gnome Extensions Downloads](https://img.shields.io/gnome-extensions/dt/SmartAutoMoveNG@lauinger-clan.de) ![GNOME Shell](https://img.shields.io/badge/GNOME-45%20--%2050-blue?logo=gnome&logoColor=white) ![GitHub License](https://img.shields.io/github/license/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNg)
+![Gnome Extensions Downloads](https://img.shields.io/gnome-extensions/dt/SmartAutoMoveNG@lauinger-clan.de) ![GNOME Shell](https://img.shields.io/badge/GNOME-45%20--%2051-blue?logo=gnome&logoColor=white) ![GitHub License](https://img.shields.io/github/license/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNg)
 
 </div>
 

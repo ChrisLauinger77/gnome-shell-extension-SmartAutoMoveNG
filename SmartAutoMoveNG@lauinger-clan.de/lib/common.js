@@ -32,6 +32,19 @@ export const STALE_SAVED_WINDOW_MS = STALE_SAVED_WINDOW_DAYS * 24 * 60 * 60 * 10
 export const STALE_SAVED_WINDOW_DAYS_MIN = 1;
 export const STALE_SAVED_WINDOW_DAYS_MAX = 365;
 
+export function parseJsonObject(value, onError = null) {
+    try {
+        const parsed = JSON.parse(value);
+        if (parsed === null || Array.isArray(parsed) || typeof parsed !== "object") {
+            throw new TypeError("Expected a JSON object");
+        }
+        return parsed;
+    } catch (error) {
+        onError?.(error);
+        return {};
+    }
+}
+
 function levensteinDistance(a, b) {
     const m = [],
         min = Math.min;
@@ -149,7 +162,12 @@ export function matchingSavedWindow(saved_windows, wsh) {
 }
 
 export function cleanupNonOccupiedWindows(settings) {
-    const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
+    let parseFailed = false;
+    const saved_windows = parseJsonObject(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS), () => {
+        parseFailed = true;
+    });
+    if (parseFailed) return;
+
     for (const wsh of Object.keys(saved_windows)) {
         const sws = saved_windows[wsh];
         saved_windows[wsh] = sws.filter((sw) => sw.occupied);
@@ -167,7 +185,11 @@ export function cleanupStaleSavedWindows(settings, maxAgeDays = settings.get_int
     maxAgeDays = Math.min(Math.max(maxAgeDays, STALE_SAVED_WINDOW_DAYS_MIN), STALE_SAVED_WINDOW_DAYS_MAX);
 
     const cutoff = now - maxAgeDays * 24 * 60 * 60 * 1000;
-    const saved_windows = JSON.parse(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS));
+    let parseFailed = false;
+    const saved_windows = parseJsonObject(settings.get_string(SETTINGS_KEY_SAVED_WINDOWS), () => {
+        parseFailed = true;
+    });
+    if (parseFailed) return;
 
     for (const wsh of Object.keys(saved_windows)) {
         const sws = saved_windows[wsh];

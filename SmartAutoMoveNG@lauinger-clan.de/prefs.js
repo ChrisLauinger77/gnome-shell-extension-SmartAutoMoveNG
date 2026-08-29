@@ -267,22 +267,27 @@ export default class SAMPreferences extends ExtensionPreferences {
         startupdelayspin.set_numeric(true);
         this._rebuildOverrides = true; // do we need to rebuild the overrides list?
         const settings = this.getSettings();
+        const settingsSignalIds = [];
+        const timeoutIds = new Set();
         this._addResetButton(window, settings);
 
-        this._general(settings, builder);
+        this._general(settings, builder, settingsSignalIds);
         const savedwindowsRows = [];
-        const changedSavedWindowsSignal = this._savedwindows(settings, builder, savedwindowsRows, page2);
+        const changedSavedWindowsSignal = this._savedwindows(settings, builder, savedwindowsRows, page2, timeoutIds);
         const overridesRows = [];
         const [changedOverridesSignal, appChooser] = this._overrides(settings, builder, overridesRows, page3);
         window.connect("close-request", () => {
             settings.disconnect(changedSavedWindowsSignal);
             settings.disconnect(changedOverridesSignal);
+            for (const signalId of settingsSignalIds) settings.disconnect(signalId);
+            for (const timeoutId of timeoutIds) GLib.Source.remove(timeoutId);
+            timeoutIds.clear();
             appChooser.destroy();
             return false;
         });
     }
 
-    _general(settings, builder) {
+    _general(settings, builder, settingsSignalIds) {
         const generalBindings = [
             [Common.SETTINGS_KEY_DEBUG_LOGGING, "debug-logging-switch", "active"],
             [Common.SETTINGS_KEY_QUICKSETTINGS, "quicksettings-switch", "active"],
@@ -308,16 +313,18 @@ export default class SAMPreferences extends ExtensionPreferences {
                     settings.set_enum(key, widget[property]);
                 });
 
-                settings.connect(`changed::${key}`, () => {
-                    widget[property] = settings.get_enum(key);
-                });
+                settingsSignalIds.push(
+                    settings.connect(`changed::${key}`, () => {
+                        widget[property] = settings.get_enum(key);
+                    })
+                );
             } else {
                 settings.bind(key, widget, property, Gio.SettingsBindFlags.DEFAULT);
             }
         }
     }
 
-    _saveSettings(settings, builder, adwrowSaveButton) {
+    _saveSettings(settings, builder, adwrowSaveButton, timeoutIds) {
         const saved_windows_editor_workspace_widget = builder.get_object("saved-windows-editor-workspace-spin");
         settings.set_int(Common.SETTINGS_KEY_MAX_WORKSPACE, saved_windows_editor_workspace_widget.get_value());
         const saved_windows_editor_monitor_widget = builder.get_object("saved-windows-editor-monitor-spin");
@@ -335,14 +342,16 @@ export default class SAMPreferences extends ExtensionPreferences {
         adwrowSaveButton.set_title(_("Preferences Saved"));
 
         // Reset status after a delay
-        GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3, () => {
+        const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3, () => {
+            timeoutIds.delete(timeoutId);
             adwrowSaveButton.set_title(_("Save Preferences"));
             adwrowSaveButton.set_sensitive(true);
             return GLib.SOURCE_REMOVE;
         });
+        timeoutIds.add(timeoutId);
     }
 
-    _savedwindows(settings, builder, list_rows, page) {
+    _savedwindows(settings, builder, list_rows, page, timeoutIds) {
         const saved_windows_editor_workspace_widget = builder.get_object("saved-windows-editor-workspace-spin");
         saved_windows_editor_workspace_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_WORKSPACE));
         const saved_windows_editor_monitor_widget = builder.get_object("saved-windows-editor-monitor-spin");
@@ -357,7 +366,7 @@ export default class SAMPreferences extends ExtensionPreferences {
         saved_windows_editor_height_widget.set_value(settings.get_int(Common.SETTINGS_KEY_MAX_HEIGHT));
         const saved_windows_editor_save_widget = builder.get_object("saved-windows-editor-save-button");
         saved_windows_editor_save_widget.connect("activated", () => {
-            this._saveSettings(settings, builder, saved_windows_editor_save_widget);
+            this._saveSettings(settings, builder, saved_windows_editor_save_widget, timeoutIds);
         });
         const saved_windows_list_widget = builder.get_object("saved-windows-listbox");
         const saved_windows_list_objects = [];
@@ -383,7 +392,12 @@ export default class SAMPreferences extends ExtensionPreferences {
 
     _override(settings, wsh, swtitle) {
         const o = { query: { title: swtitle }, action: 0 };
-        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        let parseFailed = false;
+        const overrides = this._readJsonSetting(settings, Common.SETTINGS_KEY_OVERRIDES, () => {
+            parseFailed = true;
+        });
+        if (parseFailed) return;
+
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].unshift(o);
         settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
@@ -394,7 +408,12 @@ export default class SAMPreferences extends ExtensionPreferences {
             action: 0,
             threshold: settings.get_double(Common.SETTINGS_KEY_MATCH_THRESHOLD),
         };
-        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        let parseFailed = false;
+        const overrides = this._readJsonSetting(settings, Common.SETTINGS_KEY_OVERRIDES, () => {
+            parseFailed = true;
+        });
+        if (parseFailed) return;
+
         if (!Object.hasOwn(overrides, wsh)) overrides[wsh] = [];
         overrides[wsh].push(o);
         settings.set_string(Common.SETTINGS_KEY_OVERRIDES, JSON.stringify(overrides));
@@ -453,7 +472,7 @@ export default class SAMPreferences extends ExtensionPreferences {
             this._rebuildOverrides = true;
             return;
         }
-        const overrides = JSON.parse(settings.get_string(Common.SETTINGS_KEY_OVERRIDES));
+        const overrides = this._readJsonSetting(settings, Common.SETTINGS_KEY_OVERRIDES);
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(overrides)) {
             const adwexprow = new Adw.ExpanderRow();
@@ -543,7 +562,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _edit_window(settings, wsh, page) {
-        const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
+        const saved_windows = this._readJsonSetting(settings, Common.SETTINGS_KEY_SAVED_WINDOWS);
         const sws = saved_windows[wsh];
         const sw = sws.find((window) => !window.occupied);
         if (!sw) return;
@@ -628,7 +647,7 @@ export default class SAMPreferences extends ExtensionPreferences {
     }
 
     _loadSavedWindowsSetting(settings, list_widget, list_objects, list_rows, page) {
-        const saved_windows = JSON.parse(settings.get_string(Common.SETTINGS_KEY_SAVED_WINDOWS));
+        const saved_windows = this._readJsonSetting(settings, Common.SETTINGS_KEY_SAVED_WINDOWS);
         this._clearListWidget(list_widget, list_objects, list_rows);
         for (const wsh of Object.keys(saved_windows)) {
             const sws = saved_windows[wsh];
@@ -676,6 +695,13 @@ export default class SAMPreferences extends ExtensionPreferences {
         } else if (settings.is_writable(strKey)) {
             settings.reset(strKey);
         }
+    }
+
+    _readJsonSetting(settings, key, onError = null) {
+        return Common.parseJsonObject(settings.get_string(key), (error) => {
+            this.getLogger().error(`Invalid JSON in ${key}; using an empty object: ${error.message}`);
+            onError?.(error);
+        });
     }
 
     _findWidgetByType(parent, type) {
