@@ -2,6 +2,49 @@
 
 import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 
+const pictureInPictureRole = Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
+
+console.assert(
+    Common.pictureInPictureWindowRole("firefox", "PictureInPicture", false, false, false, false, "Bild-in-Bild") ===
+        pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("firefox-esr", null, true, true, false, false, "Bild-in-Bild") ===
+        pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "Bild-im-Bild") ===
+        pictureInPictureRole
+);
+console.assert(Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "Mozilla Firefox") === null);
+console.assert(Common.pictureInPictureWindowRole("firefox", null, true, false, false, false, "Library") === null);
+console.assert(Common.pictureInPictureWindowRole("firefox", null, false, true, false, false, "Popup") === null);
+console.assert(Common.pictureInPictureWindowRole("firefox", null, true, true, false, false, "") === null);
+console.assert(
+    Common.pictureInPictureWindowRole("google-chrome", null, true, true, true, true, "Picture in picture") ===
+        pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("chromium", "PictureInPictureWindow", false, false, false, false, "Video") ===
+        pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("Brave-browser", null, true, true, true, true, "Video") === pictureInPictureRole
+);
+console.assert(
+    Common.pictureInPictureWindowRole("microsoft-edge-stable", null, true, true, true, true, "Video") ===
+        pictureInPictureRole
+);
+console.assert(Common.pictureInPictureWindowRole("Opera", null, true, true, true, true, "Video") === pictureInPictureRole);
+console.assert(
+    Common.pictureInPictureWindowRole("vivaldi-stable", null, true, true, true, true, "Video") === pictureInPictureRole
+);
+console.assert(Common.pictureInPictureWindowRole("google-chrome", null, true, true, true, false, "Video") === null);
+console.assert(
+    Common.pictureInPictureWindowRole("org.gnome.Nautilus", "PictureInPicture", true, true, true, true, "Video") ===
+        null
+);
+
 function assertScore(sw, query, want_score) {
     const score = Common.scoreWindow(sw, query);
     console.assert(want_score === score, {
@@ -143,7 +186,8 @@ function assertMatchedWindow(
     default_match_threshold,
     want_swi,
     want_sw,
-    occupied = false
+    occupied = false,
+    windowRole = undefined
 ) {
     const [swi, sw] = Common.matchedWindow(
         saved_windows,
@@ -151,7 +195,8 @@ function assertMatchedWindow(
         wsh,
         title,
         default_match_threshold,
-        occupied
+        occupied,
+        windowRole
     );
     console.assert(want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw), {
         want_swi: want_swi,
@@ -164,6 +209,7 @@ function assertMatchedWindow(
         title: title,
         default_match_threshold: default_match_threshold,
         occupied: occupied,
+        windowRole: windowRole,
     });
 }
 
@@ -212,8 +258,84 @@ assertMatchedWindow(
     undefined
 );
 
-function assertMatchingSavedWindow(saved_windows, wsh, want_swi, want_sw) {
-    const [swi, sw] = Common.matchingSavedWindow(saved_windows, wsh);
+assertMatchedWindow(
+    {
+        firefox: [
+            { title: "Mozilla Firefox", occupied: false },
+            { title: "Bild-in-Bild", occupied: false },
+        ],
+    },
+    { firefox: [{ action: 1, threshold: 0 }] },
+    "firefox",
+    "Bild-in-Bild",
+    0,
+    1,
+    { title: "Bild-in-Bild", occupied: false },
+    false,
+    pictureInPictureRole
+);
+
+assertMatchedWindow(
+    {
+        firefox: [{ title: "Mozilla Firefox", occupied: false }],
+    },
+    { firefox: [{ action: 1, threshold: 0 }] },
+    "firefox",
+    "Bild-in-Bild",
+    0,
+    undefined,
+    undefined,
+    false,
+    pictureInPictureRole
+);
+
+assertMatchedWindow(
+    {
+        firefox: [{ title: "Bild-in-Bild", occupied: false, window_role: pictureInPictureRole }],
+    },
+    { firefox: [{ action: 1, threshold: 0 }] },
+    "firefox",
+    "Mozilla Firefox",
+    0,
+    undefined,
+    undefined,
+    false,
+    null
+);
+
+assertMatchedWindow(
+    {
+        "google-chrome": [
+            { title: "Google Chrome", occupied: false },
+            { title: "Video", occupied: false, above: true, on_all_workspaces: true },
+        ],
+    },
+    { "google-chrome": [{ action: 1, threshold: 0 }] },
+    "google-chrome",
+    "Video",
+    0,
+    1,
+    { title: "Video", occupied: false, above: true, on_all_workspaces: true },
+    false,
+    pictureInPictureRole
+);
+
+assertMatchedWindow(
+    {
+        "google-chrome": [{ title: "Video", occupied: false, window_role: pictureInPictureRole }],
+    },
+    { "google-chrome": [{ action: 1, threshold: 0 }] },
+    "google-chrome",
+    "Google Chrome",
+    0,
+    undefined,
+    undefined,
+    false,
+    null
+);
+
+function assertMatchingSavedWindow(saved_windows, wsh, want_swi, want_sw, windowRole = undefined) {
+    const [swi, sw] = Common.matchingSavedWindow(saved_windows, wsh, windowRole);
     console.assert(want_swi === swi && JSON.stringify(want_sw) === JSON.stringify(sw), {
         want_swi: want_swi,
         swi: swi,
@@ -221,6 +343,7 @@ function assertMatchingSavedWindow(saved_windows, wsh, want_swi, want_sw) {
         sw: sw,
         saved_windows: saved_windows,
         wsh: wsh,
+        windowRole: windowRole,
     });
 }
 
@@ -258,6 +381,94 @@ assertMatchingSavedWindow(
     "firefox",
     undefined,
     undefined
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Mozilla Firefox", occupied: true },
+            { title: "Bild-in-Bild", occupied: false },
+        ],
+    },
+    "firefox",
+    1,
+    { title: "Bild-in-Bild", occupied: false },
+    pictureInPictureRole
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+            { title: "Mozilla Firefox", occupied: false },
+        ],
+    },
+    "firefox",
+    1,
+    { title: "Mozilla Firefox", occupied: false },
+    null
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+            { title: "Mozilla Firefox", occupied: false },
+        ],
+    },
+    "firefox",
+    0,
+    { title: "Bild-im-Bild", occupied: true, window_role: pictureInPictureRole },
+    pictureInPictureRole
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Mozilla Firefox", occupied: true },
+            { title: "Bild-in-Bild", occupied: false },
+        ],
+    },
+    "firefox",
+    0,
+    { title: "Mozilla Firefox", occupied: true },
+    null
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [{ title: "Mozilla Firefox", occupied: true }],
+    },
+    "firefox",
+    undefined,
+    undefined,
+    pictureInPictureRole
+);
+
+assertMatchingSavedWindow(
+    {
+        "google-chrome": [
+            { title: "Google Chrome", occupied: true },
+            { title: "Video", occupied: false, above: true, on_all_workspaces: true },
+        ],
+    },
+    "google-chrome",
+    1,
+    { title: "Video", occupied: false, above: true, on_all_workspaces: true },
+    pictureInPictureRole
+);
+
+assertMatchingSavedWindow(
+    {
+        firefox: [
+            { title: "Mozilla Firefox", occupied: true },
+            { title: "Bild-in-Bild", occupied: false, window_role: "firefox-picture-in-picture" },
+        ],
+    },
+    "firefox",
+    1,
+    { title: "Bild-in-Bild", occupied: false, window_role: "firefox-picture-in-picture" },
+    pictureInPictureRole
 );
 
 function createStringSetting(initialValue) {

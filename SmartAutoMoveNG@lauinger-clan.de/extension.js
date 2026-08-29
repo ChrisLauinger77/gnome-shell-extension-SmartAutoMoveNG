@@ -153,11 +153,13 @@ export default class SmartAutoMoveNG extends Extension {
         this._moveWindowDelays = new Map();
         this._activeRestores = new Map();
         this._restoreSaveGuards = new Map();
-        this._nonPersistentWindows = new Set();
+        this._nonPersistentWindows = new Map();
+        this._windowRoles = new WeakMap();
         this._reservedSavedWindows = new Map();
         this._pendingWindows = new Map();
         this._pendingWindowSignals = new Map();
         this._mappingWindowSignals = new Map();
+        this._provisionalPictureInPictureWindows = new Map();
         this._windowTracker = Shell.WindowTracker.get_default();
         this._startupTrackerConnected = false;
         this._timeoutSaveSignal = null;
@@ -236,6 +238,8 @@ export default class SmartAutoMoveNG extends Extension {
         this._trackedWindows = null;
         this._mappingWindowSignals.clear();
         this._mappingWindowSignals = null;
+        this._provisionalPictureInPictureWindows.clear();
+        this._provisionalPictureInPictureWindows = null;
         this._pendingWindows.clear();
         this._pendingWindows = null;
         this._pendingWindowSignals.clear();
@@ -249,6 +253,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._restoreSaveGuards = null;
         this._nonPersistentWindows.clear();
         this._nonPersistentWindows = null;
+        this._windowRoles = null;
         this._reservedSavedWindows.clear();
         this._reservedSavedWindows = null;
         this._windowTracker = null;
@@ -271,6 +276,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._cleanupMappingWindowSignals();
         this._cleanupTrackedWindowSignals();
         this._cleanupPendingWindowSignals();
+        this._cleanupProvisionalPictureInPictureSignals();
     }
 
     _cleanupMappingWindowSignals() {
@@ -306,6 +312,22 @@ export default class SmartAutoMoveNG extends Extension {
                 this._disconnectPendingWindowSignals(win);
             }
         }
+    }
+
+    _cleanupProvisionalPictureInPictureSignals() {
+        for (const window of this._provisionalPictureInPictureWindows.keys()) {
+            this._removeProvisionalPictureInPictureWindow(window);
+        }
+    }
+
+    _removeProvisionalPictureInPictureWindow(win) {
+        const signals = this._provisionalPictureInPictureWindows?.get(win);
+        if (!signals) return;
+
+        for (const signalId of Object.values(signals)) {
+            if (signalId !== null) win.disconnect(signalId);
+        }
+        this._provisionalPictureInPictureWindows.delete(win);
     }
 
     _disconnectPendingWindowSignals(win) {
@@ -610,6 +632,8 @@ export default class SmartAutoMoveNG extends Extension {
     _trackWindow(win) {
         if (this._trackedWindows.has(win)) return;
 
+        this._removeProvisionalPictureInPictureWindow(win);
+
         const windowHash = this._windowHash(win);
         this._activeWindows.set(windowHash, Date.now());
 
@@ -655,15 +679,24 @@ export default class SmartAutoMoveNG extends Extension {
         });
         signals.titlechangeId = win.connect("notify::title", () => {
             // try restore when a generic title becomes matchable, then save if no restore applies
+            if (this._windowRole(win) === Common.WINDOW_ROLE_PICTURE_IN_PICTURE) {
+                this._nonPersistentWindows.delete(win);
+            }
             this._syncWindowWithErrorLogging(win, "title change handler");
         });
         signals.wmclasschangeId = win.connect("notify::wm-class", () => {
-            // update saved window data when WM_CLASS is populated or corrected after mapping
-            this._ensureSavedWindow(win);
+            // retry role-aware matching when WM_CLASS is populated or corrected after mapping
+            if (this._windowRole(win) === Common.WINDOW_ROLE_PICTURE_IN_PICTURE) {
+                this._nonPersistentWindows.delete(win);
+            }
+            this._syncWindowWithErrorLogging(win, "WM_CLASS change handler");
         });
         signals.abovechangeId = win.connect("notify::above", () => {
-            // update saved window data when Always on Top changes
-            this._ensureSavedWindow(win);
+            // PiP may only become identifiable after its Always on Top state is set
+            if (this._windowRole(win) === Common.WINDOW_ROLE_PICTURE_IN_PICTURE) {
+                this._nonPersistentWindows.delete(win);
+            }
+            this._syncWindowWithErrorLogging(win, "Always on Top change handler");
         });
         signals.fullscreenchangeId = win.connect("notify::fullscreen", () => {
             this._ensureSavedWindow(win);
@@ -675,6 +708,12 @@ export default class SmartAutoMoveNG extends Extension {
             this._ensureSavedWindow(win);
         });
         signals.onallworkspaceschangeId = win.connect("notify::on-all-workspaces", () => {
+            // Chromium PiP may only become identifiable after its sticky state is set
+            if (this._windowRole(win) === Common.WINDOW_ROLE_PICTURE_IN_PICTURE) {
+                this._nonPersistentWindows.delete(win);
+                this._syncWindowWithErrorLogging(win, "All workspaces change handler");
+                return;
+            }
             this._ensureSavedWindow(win);
         });
         signals.provisionalTimeoutId = this._addTimeout(
@@ -687,6 +726,47 @@ export default class SmartAutoMoveNG extends Extension {
             }
         );
         this._trackedWindows.set(win, signals);
+    }
+
+    _trackProvisionalPictureInPictureWindow(win) {
+        if (this._provisionalPictureInPictureWindows.has(win) || this._trackedWindows.has(win)) return;
+
+        const wsh = this._windowSectionHash(win);
+        const hasResolvedWindowSection = typeof wsh === "string" && wsh.length > 0;
+        if (hasResolvedWindowSection && !Common.isFirefoxWindow(wsh) && !Common.isChromiumWindow(wsh)) return;
+
+        const signals = {
+            unmanagedId: null,
+            titlechangeId: null,
+            wmclasschangeId: null,
+            abovechangeId: null,
+            onallworkspaceschangeId: null,
+        };
+        const retryIfPictureInPicture = () => {
+            const currentWsh = this._windowSectionHash(win);
+            const hasResolvedCurrentWindowSection = typeof currentWsh === "string" && currentWsh.length > 0;
+            if (
+                hasResolvedCurrentWindowSection &&
+                !Common.isFirefoxWindow(currentWsh) &&
+                !Common.isChromiumWindow(currentWsh)
+            ) {
+                this._removeProvisionalPictureInPictureWindow(win);
+                return;
+            }
+            if (this._windowRole(win) !== Common.WINDOW_ROLE_PICTURE_IN_PICTURE) return;
+
+            this._removeProvisionalPictureInPictureWindow(win);
+            this._syncWindowWithErrorLogging(win, "provisional PiP state change handler");
+        };
+        signals.unmanagedId = win.connect("unmanaged", () => {
+            signals.unmanagedId = null;
+            this._removeProvisionalPictureInPictureWindow(win);
+        });
+        signals.titlechangeId = win.connect("notify::title", retryIfPictureInPicture);
+        signals.wmclasschangeId = win.connect("notify::wm-class", retryIfPictureInPicture);
+        signals.abovechangeId = win.connect("notify::above", retryIfPictureInPicture);
+        signals.onallworkspaceschangeId = win.connect("notify::on-all-workspaces", retryIfPictureInPicture);
+        this._provisionalPictureInPictureWindows.set(win, signals);
     }
 
     _windowTitle(win) {
@@ -704,7 +784,7 @@ export default class SmartAutoMoveNG extends Extension {
     // https://mutter.gnome.org/meta/class.Window.html
     _windowData(win) {
         const win_rect = win.get_frame_rect();
-        return {
+        const data = {
             id: win.get_id(),
             hash: this._windowHash(win),
             sequence: win.get_stable_sequence(),
@@ -726,6 +806,10 @@ export default class SmartAutoMoveNG extends Extension {
             occupied: true,
             last_seen: Date.now(),
         };
+        const windowRole = this._windowRole(win);
+        if (windowRole !== null) data.window_role = windowRole;
+
+        return data;
     }
 
     _windowRepr(win) {
@@ -734,6 +818,24 @@ export default class SmartAutoMoveNG extends Extension {
 
     _windowSectionHash(win) {
         return win.get_wm_class();
+    }
+
+    _windowRole(win) {
+        const establishedWindowRole = this._windowRoles.get(win);
+        if (establishedWindowRole !== undefined) return establishedWindowRole;
+
+        const detectedWindowRole = Common.pictureInPictureWindowRole(
+            this._windowSectionHash(win),
+            win.get_role(),
+            win.get_window_type() === Meta.WindowType.NORMAL,
+            win.is_skip_taskbar(),
+            win.is_above(),
+            win.is_on_all_workspaces(),
+            this._windowTitle(win)
+        );
+        if (detectedWindowRole !== null) this._windowRoles.set(win, detectedWindowRole);
+
+        return detectedWindowRole;
     }
 
     _windowHash(win) {
@@ -812,6 +914,8 @@ export default class SmartAutoMoveNG extends Extension {
         sw.hash = current.hash;
         sw.sequence = current.sequence;
         sw.title = current.title;
+        if (Object.hasOwn(current, "window_role")) sw.window_role = current.window_role;
+        else delete sw.window_role;
         sw.occupied = true;
         sw.last_seen = current.last_seen;
         this._queueSaveSettings();
@@ -837,29 +941,49 @@ export default class SmartAutoMoveNG extends Extension {
         }
     }
 
-    _matchedWindow(wsh, title, occupied) {
+    _matchedWindow(wsh, title, occupied, windowRole) {
         const reserved = this._reservedSavedWindows.get(wsh);
         if (reserved?.size) {
             const savedWindows = {
                 ...this._savedWindows,
                 [wsh]: this._savedWindows[wsh].map((sw, swi) => (reserved.has(swi) ? { ...sw, occupied: true } : sw)),
             };
-            return Common.matchedWindow(savedWindows, this._overrides, wsh, title, this._matchThreshold, occupied);
+            return Common.matchedWindow(
+                savedWindows,
+                this._overrides,
+                wsh,
+                title,
+                this._matchThreshold,
+                occupied,
+                windowRole
+            );
         }
 
-        return Common.matchedWindow(this._savedWindows, this._overrides, wsh, title, this._matchThreshold, occupied);
+        return Common.matchedWindow(
+            this._savedWindows,
+            this._overrides,
+            wsh,
+            title,
+            this._matchThreshold,
+            occupied,
+            windowRole
+        );
     }
 
-    _matchedUnreservedWindow(wsh, title) {
-        return this._matchedWindow(wsh, title, false);
+    _matchedUnreservedWindow(wsh, title, windowRole) {
+        return this._matchedWindow(wsh, title, false, windowRole);
     }
 
-    _matchedOccupiedWindow(wsh, title) {
-        return this._matchedWindow(wsh, title, true);
+    _matchedOccupiedWindow(wsh, title, windowRole) {
+        return this._matchedWindow(wsh, title, true, windowRole);
     }
 
     _matchingSavedWindow(win) {
-        return Common.matchingSavedWindow(this._savedWindows, this._windowSectionHash(win));
+        return Common.matchingSavedWindow(
+            this._savedWindows,
+            this._windowSectionHash(win),
+            this._windowRole(win)
+        );
     }
 
     _ensureSavedWindow(win) {
@@ -1055,15 +1179,19 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _restoreWindow(win) {
-        if (this._nonPersistentWindows.has(win)) return true;
-
         const wsh = this._windowSectionHash(win);
+        const windowRole = this._windowRole(win);
+        if (this._nonPersistentWindows.has(win)) {
+            if (this._nonPersistentWindows.get(win) === windowRole) return true;
+            this._nonPersistentWindows.delete(win);
+        }
+
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
         if (swi !== undefined) return false;
-        let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win));
+        let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole);
         let nonPersistent = false;
         if (swiNew === undefined) {
-            [swiNew, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win));
+            [swiNew, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
             nonPersistent = swiNew !== undefined;
         }
         swi = swiNew;
@@ -1121,7 +1249,9 @@ export default class SmartAutoMoveNG extends Extension {
 
             this._debug("restoreWindow() - moved: " + pWinRepr + " => " + JSON.stringify(nsw));
             if (nonPersistent) {
-                this._nonPersistentWindows.add(win);
+                const currentWindowRole = this._windowRole(win);
+                if (currentWindowRole !== windowRole) return false;
+                this._nonPersistentWindows.set(win, windowRole);
             } else {
                 this._occupySavedWindow(win, swi);
             }
@@ -1177,7 +1307,9 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _shouldSkipWindow(win) {
-        const shouldSkip = win.is_skip_taskbar() || win.get_window_type() !== Meta.WindowType.NORMAL;
+        const pictureInPictureWindow = this._windowRole(win) === Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
+        const supportedWindowType = win.get_window_type() === Meta.WindowType.NORMAL || pictureInPictureWindow;
+        const shouldSkip = (!pictureInPictureWindow && win.is_skip_taskbar()) || !supportedWindowType;
         this._debug(`_shouldSkipWindow() ${this._windowTitle(win)} - skip: ${shouldSkip}`);
         return shouldSkip;
     }
@@ -1195,6 +1327,7 @@ export default class SmartAutoMoveNG extends Extension {
             if (index >= windows.length) return;
             const win = windows[index];
             if (this._shouldSkipWindow(win)) {
+                this._trackProvisionalPictureInPictureWindow(win);
                 await processWindow(index + 1);
                 return;
             }
@@ -1210,7 +1343,10 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _syncWindow(win) {
-        if (this._shouldSkipWindow(win)) return true;
+        if (this._shouldSkipWindow(win)) {
+            this._trackProvisionalPictureInPictureWindow(win);
+            return true;
+        }
         if (this._activeRestores.has(win)) return true;
         const restored = await this._restoreWindow(win);
         if (restored === null) return this._activeRestores !== null;
