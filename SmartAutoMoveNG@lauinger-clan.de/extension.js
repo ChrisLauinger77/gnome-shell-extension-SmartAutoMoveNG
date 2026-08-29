@@ -154,6 +154,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._activeRestores = new Map();
         this._restoreSaveGuards = new Map();
         this._nonPersistentWindows = new Map();
+        this._windowRoles = new WeakMap();
         this._reservedSavedWindows = new Map();
         this._pendingWindows = new Map();
         this._pendingWindowSignals = new Map();
@@ -252,6 +253,7 @@ export default class SmartAutoMoveNG extends Extension {
         this._restoreSaveGuards = null;
         this._nonPersistentWindows.clear();
         this._nonPersistentWindows = null;
+        this._windowRoles = null;
         this._reservedSavedWindows.clear();
         this._reservedSavedWindows = null;
         this._windowTracker = null;
@@ -808,7 +810,10 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     _windowRole(win) {
-        return Common.pictureInPictureWindowRole(
+        const establishedWindowRole = this._windowRoles.get(win);
+        if (establishedWindowRole !== undefined) return establishedWindowRole;
+
+        const detectedWindowRole = Common.pictureInPictureWindowRole(
             this._windowSectionHash(win),
             win.get_role(),
             win.get_window_type() === Meta.WindowType.UTILITY,
@@ -816,6 +821,9 @@ export default class SmartAutoMoveNG extends Extension {
             win.is_on_all_workspaces(),
             this._windowTitle(win)
         );
+        if (detectedWindowRole !== null) this._windowRoles.set(win, detectedWindowRole);
+
+        return detectedWindowRole;
     }
 
     _windowHash(win) {
