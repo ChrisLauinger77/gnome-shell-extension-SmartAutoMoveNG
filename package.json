@@ -1,6 +1,6 @@
 {
     "name": "gnome-shell-extension-smart-auto-move-ng",
-    "version": "1.0.0",
+    "version": "50.18.0",
     "description": "Smart Auto Move learns the position, size, and workspace of your application windows and restores them on subsequent launches. Supports Wayland.",
     "main": "SmartAutoMoveNG@lauinger-clan.de/extension.js",
     "scripts": {
@@ -25,8 +25,8 @@
     "homepage": "https://github.com/ChrisLauinger77/gnome-shell-extension-SmartAutoMoveNG#readme",
     "devDependencies": {
         "eslint": "^10.0.0",
-    "@eslint/js": "^10.0.0",
-    "@microsoft/eslint-formatter-sarif": "3.1.0"
+        "@eslint/js": "^10.0.0",
+        "@microsoft/eslint-formatter-sarif": "3.1.0"
     },
     "type": "module"
 }
