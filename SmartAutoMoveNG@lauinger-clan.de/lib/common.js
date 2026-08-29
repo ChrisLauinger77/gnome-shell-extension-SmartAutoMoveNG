@@ -259,6 +259,8 @@ export function matchedWindow(
 }
 
 export function hasSavedPictureInPictureTitle(saved_windows, wsh, title) {
+    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return false;
+
     for (const occupied of [false, true]) {
         const [swi] = matchedWindow(
             saved_windows,
@@ -273,6 +275,28 @@ export function hasSavedPictureInPictureTitle(saved_windows, wsh, title) {
     }
 
     return false;
+}
+
+export function cleanupInvalidPictureInPictureRoles(saved_windows) {
+    let changed = false;
+
+    for (const [wsh, savedWindows] of Object.entries(saved_windows)) {
+        if (isFirefoxWindow(wsh) || isChromiumWindow(wsh)) continue;
+
+        for (const savedWindow of savedWindows) {
+            if (
+                savedWindow.window_role !== WINDOW_ROLE_PICTURE_IN_PICTURE &&
+                savedWindow.window_role !== LEGACY_WINDOW_ROLE_FIREFOX_PICTURE_IN_PICTURE
+            ) {
+                continue;
+            }
+
+            delete savedWindow.window_role;
+            changed = true;
+        }
+    }
+
+    return changed;
 }
 
 export function matchingSavedWindow(saved_windows, wsh, windowRole = undefined) {
