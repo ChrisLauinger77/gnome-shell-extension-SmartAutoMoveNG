@@ -53,7 +53,7 @@ const SmartAutoMoveNGMenuToggle = GObject.registerClass(
                 this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 const settingsItem = this.menu.addAction(_("Settings"), () => {
                     extension.openPreferences();
-                    QuickSettingsMenu.menu.close({ fadeOnly: true });
+                    Main.panel.closeQuickSettings();
                 });
 
                 settingsItem.visible = Main.sessionMode.allowSettings;
