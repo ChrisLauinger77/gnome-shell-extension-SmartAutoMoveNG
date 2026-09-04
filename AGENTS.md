@@ -41,7 +41,7 @@ inside the directory with that exact name.
 
 ## Useful Commands
 
-- `npm install`: install local JavaScript tooling.
+- `./smartautomoveng.sh install-dependencies`: install the locked JavaScript dependencies.
 - `npm run lint`: run ESLint across the repository.
 - `./smartautomoveng.sh zip`: build
   `SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip`.
@@ -49,6 +49,9 @@ inside the directory with that exact name.
   extension locally.
 - `./smartautomoveng.sh translate`: update `po/SmartAutoMoveNG.pot` and merge
   existing `.po` files after user-visible string changes.
+
+Run `./smartautomoveng.sh install-dependencies` after pulling or rebasing remote
+changes that modify `package-lock.json`, particularly Renovate updates.
 
 Notes:
 
