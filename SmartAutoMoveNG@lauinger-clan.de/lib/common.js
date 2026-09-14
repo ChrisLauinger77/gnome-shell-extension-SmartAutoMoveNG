@@ -79,7 +79,7 @@ export function scoreWindow(sw, query) {
         const value = query[key];
         if (key === "title") {
             const dist = levensteinDistance(value, sw[key]);
-            let title_score = (value.length - dist) / value.length;
+            let title_score = value.length === 0 && sw[key].length === 0 ? 1 : (value.length - dist) / value.length;
             if (title_score < 0) title_score = -0.3;
             match_parts += title_score;
         } else if (sw[key] === value) {
