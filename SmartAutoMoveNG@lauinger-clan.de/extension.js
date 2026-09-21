@@ -935,7 +935,7 @@ export default class SmartAutoMoveNG extends Extension {
         sw.id = current.id;
         sw.hash = current.hash;
         sw.sequence = current.sequence;
-        sw.title = current.title;
+        if (!this._freezeSaves) sw.title = current.title;
         if (Object.hasOwn(current, "window_role")) sw.window_role = current.window_role;
         else delete sw.window_role;
         sw.occupied = true;
