@@ -1209,7 +1209,7 @@ export default class SmartAutoMoveNG extends Extension {
         }
 
         let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
-        if (swi !== undefined) return false;
+        if (swi !== undefined && this._activeWindows.has(this._windowHash(win))) return false;
         let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole);
         let nonPersistent = false;
         if (swiNew === undefined && win.get_transient_for() === null) {
