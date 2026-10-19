@@ -104,8 +104,9 @@ $ gnome-extensions enable SmartAutoMoveNG@lauinger-clan.de
 
 ## Behavior
 
-Because there is no way to uniquely distinguish individual windows from an application across restarts, SmartAutoMoveNG
-uses a heuristic to uniquely identify them. This is primarily based on startup order and title. In cases where there are multiple windows with the same title, they are restored based on relative startup sequence.
+SmartAutoMoveNG saves one normal window slot per application identity (`WM_CLASS`). Additional matching windows restore from that slot without overwriting it. Browser picture-in-picture windows have a separate slot.
+
+Renaming an autostart `.desktop` file does not give its windows a separate identity if the application still reports the same `WM_CLASS`.
 
 Titles are matched using Levenstein distance. The match bonus for title is calculated based on `(title length - distance) / title length`.
 
