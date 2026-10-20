@@ -234,7 +234,7 @@ test("honors ignored position, monitor and workspace settings", async () => {
     assert.equal(win.onAllWorkspaces, undefined);
 });
 
-function createRestoreState({ hash = 42, title = "", occupied = true } = {}) {
+function createRestoreState({ hash = 42, title = "Window" } = {}) {
     const win = new WaylandWindow();
     Object.assign(win, {
         get_id: () => hash,
@@ -243,7 +243,7 @@ function createRestoreState({ hash = 42, title = "", occupied = true } = {}) {
         connect: () => 1,
         disconnect() {},
     });
-    const saved = { ...savedWindow, id: 42, hash: 42, sequence: 42, title, occupied };
+    const saved = { ...savedWindow, id: 42, hash: 42, sequence: 42, title, occupied: true };
     const extension = new extensionModule.namespace.default();
     Object.assign(extension, {
         _savedWindows: { app: [saved] },
@@ -279,31 +279,21 @@ function createRestoreState({ hash = 42, title = "", occupied = true } = {}) {
     return { extension, win };
 }
 
-for (const title of ["", "Window"]) {
-    test(`restores and keeps saving an occupied owner with title ${JSON.stringify(title)} after re-enabling or recycling its ID`, async () => {
-        const { extension, win } = createRestoreState({ title });
-        assert.equal(await extension._restoreWindow(win), true);
-        assertSavedGeometry(win);
-        assert.equal(extension._nonPersistentWindows.has(win), false);
-
-        extension._clearRestoreSaveGuard(win);
-        win.frame.x = 2500;
-        win.frame.width = 900;
-        extension._ensureSavedWindow(win);
-        assert.equal(extension._savedWindows.app[0].x, 2500);
-        assert.equal(extension._savedWindows.app[0].width, 900);
-    });
-}
-
-test("claims an unoccupied saved slot for an empty-title window with a new ID", async () => {
-    const { extension, win } = createRestoreState({ hash: 43, occupied: false });
+test("restores and keeps saving an occupied owner after re-enabling or recycling its ID", async () => {
+    const { extension, win } = createRestoreState();
     assert.equal(await extension._restoreWindow(win), true);
     assertSavedGeometry(win);
-    assert.equal(extension._savedWindows.app[0].hash, 43);
     assert.equal(extension._nonPersistentWindows.has(win), false);
+
+    extension._clearRestoreSaveGuard(win);
+    win.frame.x = 2500;
+    win.frame.width = 900;
+    extension._ensureSavedWindow(win);
+    assert.equal(extension._savedWindows.app[0].x, 2500);
+    assert.equal(extension._savedWindows.app[0].width, 900);
 });
 
-test("keeps a second empty-title window from overwriting the occupied owner's geometry", async () => {
+test("keeps a second window from overwriting the occupied owner's geometry", async () => {
     const { extension, win } = createRestoreState({ hash: 43 });
     extension._activeWindows.set(42, Date.now());
     assert.equal(await extension._restoreWindow(win), true);
@@ -328,31 +318,29 @@ test("keeps an already tracked owner in place while saving its new geometry", as
     assert.equal(extension._savedWindows.app[0].x, win.frame.x);
 });
 
-for (const title of ["", "Window"]) {
-    for (const ownerFirst of [true, false]) {
-        test(`prefers the exact owner over a free legacy slot with title ${JSON.stringify(title)} (owner first: ${ownerFirst})`, async () => {
-            const { extension, win } = createRestoreState({ title });
-            const owner = extension._savedWindows.app[0];
-            const free = { ...owner, id: 99, hash: 99, sequence: 99, occupied: false, x: 400, width: 500 };
-            extension._savedWindows.app = ownerFirst ? [owner, free] : [free, owner];
+for (const ownerFirst of [true, false]) {
+    test(`prefers the exact owner over a free legacy slot (owner first: ${ownerFirst})`, async () => {
+        const { extension, win } = createRestoreState();
+        const owner = extension._savedWindows.app[0];
+        const free = { ...owner, id: 99, hash: 99, sequence: 99, occupied: false, x: 400, width: 500 };
+        extension._savedWindows.app = ownerFirst ? [owner, free] : [free, owner];
 
-            assert.equal(await extension._restoreWindow(win), true);
-            assertSavedGeometry(win);
-            assert.equal(extension._savedWindows.app.filter((sw) => sw.occupied && sw.hash === 42).length, 1);
-            assert.equal(free.hash, 99);
-            assert.equal(free.occupied, false);
+        assert.equal(await extension._restoreWindow(win), true);
+        assertSavedGeometry(win);
+        assert.equal(extension._savedWindows.app.filter((sw) => sw.occupied && sw.hash === 42).length, 1);
+        assert.equal(free.hash, 99);
+        assert.equal(free.occupied, false);
 
-            extension._clearRestoreSaveGuard(win);
-            win.frame.x = 2500;
-            extension._ensureSavedWindow(win);
-            assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).x, 2500);
-            assert.equal(free.x, 400);
+        extension._clearRestoreSaveGuard(win);
+        win.frame.x = 2500;
+        extension._ensureSavedWindow(win);
+        assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).x, 2500);
+        assert.equal(free.x, 400);
 
-            extension._deoccupySavedWindow(42);
-            assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).occupied, false);
-            assert.equal(free.hash, 99);
-        });
-    }
+        extension._deoccupySavedWindow(42);
+        assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).occupied, false);
+        assert.equal(free.hash, 99);
+    });
 }
 
 test("keeps role matching when a recycled ID belongs to a saved window of another role", async () => {

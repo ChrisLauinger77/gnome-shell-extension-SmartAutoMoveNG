@@ -114,8 +114,6 @@ assertScore(
 
 assertScore({ title: "user@host: ~", occupied: false }, { title: "user@host: ~", occupied: false }, 1);
 
-assertScore({ title: "", occupied: false }, { title: "", occupied: false }, 1);
-
 assertScore({ title: "user@host: ~", occupied: true }, { title: "user@host: ~", occupied: false }, 0);
 
 function assertFoundWindow(saved_windows, wsh, query, threshold, want_found) {

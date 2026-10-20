@@ -1227,7 +1227,7 @@ export default class SmartAutoMoveNG extends Extension {
         let nonPersistent = false;
         if (swi === undefined && win.get_transient_for() === null) {
             [swi, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
-            nonPersistent = swi !== ownedIndex;
+            nonPersistent = swi !== undefined;
         }
         if (swi === undefined) return false;
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
