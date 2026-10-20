@@ -6,6 +6,7 @@ import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { URL } from "node:url";
 import { createContext, SourceTextModule, SyntheticModule } from "node:vm";
+import * as Common from "../SmartAutoMoveNG@lauinger-clan.de/lib/common.js";
 
 const context = createContext({
     global: {
@@ -41,7 +42,7 @@ const extensionModule = new SourceTextModule(
 );
 await extensionModule.link(async (specifier) => {
     const exports = specifier === "./lib/common.js"
-        ? await import("../SmartAutoMoveNG@lauinger-clan.de/lib/common.js")
+        ? Common
         : shellModules[specifier];
     assert.ok(exports, `Unexpected runtime import: ${specifier}`);
     return new SyntheticModule(Object.keys(exports), function () {
@@ -231,4 +232,96 @@ test("honors ignored position, monitor and workspace settings", async () => {
     assert.deepEqual(win.frame, { ...originalPosition, width: savedWindow.width, height: savedWindow.height });
     assert.equal(win.monitor, 0);
     assert.equal(win.onAllWorkspaces, undefined);
+});
+
+function createRestoreState({ hash = 42, title = "", occupied = true } = {}) {
+    const win = new WaylandWindow();
+    Object.assign(win, {
+        get_id: () => hash,
+        get_transient_for: () => null,
+        get_workspace: () => ({ index: () => 0 }),
+        connect: () => 1,
+        disconnect() {},
+    });
+    const saved = { ...savedWindow, id: 42, hash: 42, sequence: 42, title, occupied };
+    const extension = new extensionModule.namespace.default();
+    Object.assign(extension, {
+        _savedWindows: { app: [saved] },
+        _overrides: {},
+        _matchThreshold: 0.7,
+        _syncMode: Common.SYNC_MODE_RESTORE,
+        _activeWindows: new Map(),
+        _activeRestores: new Map(),
+        _nonPersistentWindows: new Map(),
+        _reservedSavedWindows: new Map(),
+        _restoreSaveGuards: new Map(),
+        _startupDelayMs: 0,
+        _freezeSaves: false,
+        _windowSectionHash: () => "app",
+        _windowRole: () => null,
+        _windowTitle: () => title,
+        _windowRepr: () => "app window",
+        _windowData: (window) => ({
+            ...savedWindow,
+            ...window.frame,
+            id: hash,
+            hash,
+            sequence: hash,
+            title,
+            occupied: true,
+        }),
+        _moveWindow: restoreGeometry,
+        _addTimeout: () => 1,
+        _removeTimeout() {},
+        _queueSaveSettings() {},
+        _debug() {},
+    });
+    return { extension, win };
+}
+
+for (const title of ["", "Window"]) {
+    test(`restores and keeps saving an occupied owner with title ${JSON.stringify(title)} after re-enabling or recycling its ID`, async () => {
+        const { extension, win } = createRestoreState({ title });
+        assert.equal(await extension._restoreWindow(win), true);
+        assertSavedGeometry(win);
+        assert.equal(extension._nonPersistentWindows.has(win), false);
+
+        extension._clearRestoreSaveGuard(win);
+        win.frame.x = 2500;
+        win.frame.width = 900;
+        extension._ensureSavedWindow(win);
+        assert.equal(extension._savedWindows.app[0].x, 2500);
+        assert.equal(extension._savedWindows.app[0].width, 900);
+    });
+}
+
+test("claims an unoccupied saved slot for an empty-title window with a new ID", async () => {
+    const { extension, win } = createRestoreState({ hash: 43, occupied: false });
+    assert.equal(await extension._restoreWindow(win), true);
+    assertSavedGeometry(win);
+    assert.equal(extension._savedWindows.app[0].hash, 43);
+    assert.equal(extension._nonPersistentWindows.has(win), false);
+});
+
+test("keeps a second empty-title window from overwriting the occupied owner's geometry", async () => {
+    const { extension, win } = createRestoreState({ hash: 43 });
+    extension._activeWindows.set(42, Date.now());
+    assert.equal(await extension._restoreWindow(win), true);
+    assertSavedGeometry(win);
+    assert.equal(extension._nonPersistentWindows.has(win), true);
+
+    extension._clearRestoreSaveGuard(win);
+    win.frame.x = 2500;
+    extension._ensureSavedWindow(win);
+    assert.equal(extension._savedWindows.app[0].hash, 42);
+    assert.equal(extension._savedWindows.app[0].x, savedWindow.x);
+});
+
+test("keeps an already tracked owner in place while saving its new geometry", async () => {
+    const { extension, win } = createRestoreState();
+    extension._activeWindows.set(42, Date.now());
+    assert.equal(await extension._restoreWindow(win), false);
+
+    extension._ensureSavedWindow(win);
+    assert.equal(extension._savedWindows.app[0].x, win.frame.x);
 });
