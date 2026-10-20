@@ -1094,6 +1094,11 @@ export default class SmartAutoMoveNG extends Extension {
     }
 
     async _moveWindow(win, sw) {
+        // Mutter 51 can resend the current geometry on redundant fullscreen exits,
+        // overwriting a pending Wayland move. Clear unwanted states before moving.
+        if (!sw.fullscreen && win.is_fullscreen()) win.unmake_fullscreen();
+        if (!sw.maximized && (win.maximized_horizontally || win.maximized_vertically)) win.unmaximize();
+
         if (!this._ignoreMonitor) {
             this._moveWindowToMonitor(win, sw.monitor);
         }
@@ -1114,8 +1119,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (sw.maximized) win.maximize();
         win.move_resize_frame(false, targetX, targetY, sw.width, sw.height);
 
-        if (sw.fullscreen) win.make_fullscreen();
-        else win.unmake_fullscreen();
+        if (sw.fullscreen && !win.is_fullscreen()) win.make_fullscreen();
 
         if (sw.above) win.make_above();
         else win.unmake_above();
