@@ -1207,20 +1207,28 @@ export default class SmartAutoMoveNG extends Extension {
     async _restoreWindow(win) {
         const wsh = this._windowSectionHash(win);
         const windowRole = this._windowRole(win);
-        if (this._nonPersistentWindows.has(win)) {
-            if (this._nonPersistentWindows.get(win) === windowRole) return true;
-            this._nonPersistentWindows.delete(win);
-        }
+        if (this._nonPersistentWindows.get(win) === windowRole) return true;
+        this._nonPersistentWindows.delete(win);
 
-        let [swi] = Common.findSavedWindow(this._savedWindows, wsh, { hash: this._windowHash(win), occupied: true }, 1);
-        if (swi !== undefined && this._activeWindows.has(this._windowHash(win))) return false;
-        let [swiNew, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole);
+        const [ownedIndex, ownedWindow] = Common.matchedWindow(
+            this._savedWindows,
+            this._overrides,
+            wsh,
+            this._windowTitle(win),
+            this._matchThreshold,
+            true,
+            windowRole,
+            this._windowHash(win)
+        );
+        if (ownedIndex !== undefined && this._activeWindows.has(this._windowHash(win))) return false;
+        let [swi, sw] = ownedIndex === undefined
+            ? this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole)
+            : [ownedIndex, ownedWindow];
         let nonPersistent = false;
-        if (swiNew === undefined && win.get_transient_for() === null) {
-            [swiNew, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
-            nonPersistent = swiNew !== swi;
+        if (swi === undefined && win.get_transient_for() === null) {
+            [swi, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
+            nonPersistent = swi !== ownedIndex;
         }
-        swi = swiNew;
         if (swi === undefined) return false;
         if (this._windowDataEqual(sw, this._windowData(win))) return true;
         const action = this._findOverrideAction(win, 1);

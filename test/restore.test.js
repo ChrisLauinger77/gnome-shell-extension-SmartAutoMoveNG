@@ -315,6 +315,8 @@ test("keeps a second empty-title window from overwriting the occupied owner's ge
     extension._ensureSavedWindow(win);
     assert.equal(extension._savedWindows.app[0].hash, 42);
     assert.equal(extension._savedWindows.app[0].x, savedWindow.x);
+    assert.equal(await extension._restoreWindow(win), true);
+    assert.equal(win.frame.x, 2500);
 });
 
 test("keeps an already tracked owner in place while saving its new geometry", async () => {
@@ -324,4 +326,53 @@ test("keeps an already tracked owner in place while saving its new geometry", as
 
     extension._ensureSavedWindow(win);
     assert.equal(extension._savedWindows.app[0].x, win.frame.x);
+});
+
+for (const title of ["", "Window"]) {
+    for (const ownerFirst of [true, false]) {
+        test(`prefers the exact owner over a free legacy slot with title ${JSON.stringify(title)} (owner first: ${ownerFirst})`, async () => {
+            const { extension, win } = createRestoreState({ title });
+            const owner = extension._savedWindows.app[0];
+            const free = { ...owner, id: 99, hash: 99, sequence: 99, occupied: false, x: 400, width: 500 };
+            extension._savedWindows.app = ownerFirst ? [owner, free] : [free, owner];
+
+            assert.equal(await extension._restoreWindow(win), true);
+            assertSavedGeometry(win);
+            assert.equal(extension._savedWindows.app.filter((sw) => sw.occupied && sw.hash === 42).length, 1);
+            assert.equal(free.hash, 99);
+            assert.equal(free.occupied, false);
+
+            extension._clearRestoreSaveGuard(win);
+            win.frame.x = 2500;
+            extension._ensureSavedWindow(win);
+            assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).x, 2500);
+            assert.equal(free.x, 400);
+
+            extension._deoccupySavedWindow(42);
+            assert.equal(extension._savedWindows.app.find((sw) => sw.hash === 42).occupied, false);
+            assert.equal(free.hash, 99);
+        });
+    }
+}
+
+test("keeps role matching when a recycled ID belongs to a saved window of another role", async () => {
+    const title = "Picture in Picture";
+    const { extension, win } = createRestoreState({ title });
+    const normal = { ...extension._savedWindows.app[0], title: "Mozilla Firefox", window_role: null };
+    const pip = {
+        ...normal,
+        id: 99,
+        hash: 99,
+        title,
+        occupied: false,
+        x: 400,
+        window_role: Common.WINDOW_ROLE_PICTURE_IN_PICTURE,
+    };
+    extension._savedWindows = { firefox: [normal, pip] };
+    extension._windowSectionHash = () => "firefox";
+    extension._windowRole = () => Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
+
+    assert.equal(await extension._restoreWindow(win), true);
+    assert.equal(win.frame.x, 400);
+    assert.equal(normal.x, savedWindow.x);
 });

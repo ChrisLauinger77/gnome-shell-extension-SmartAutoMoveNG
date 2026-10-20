@@ -232,7 +232,8 @@ export function matchedWindow(
     title,
     default_match_threshold,
     occupied = false,
-    windowRole = undefined
+    windowRole = undefined,
+    windowHash = undefined
 ) {
     const o = findOverride(overrides, wsh, { title: title }, 1);
 
@@ -243,8 +244,8 @@ export function matchedWindow(
     const [swi] = findSavedWindow(
         saved_windows,
         wsh,
-        { title: title, occupied: occupied },
-        threshold,
+        windowHash === undefined ? { title: title, occupied: occupied } : { hash: windowHash, occupied: occupied },
+        windowHash === undefined ? threshold : 1,
         windowRole === undefined
             ? null
             : (sw, savedWindowIndex) =>
