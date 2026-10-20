@@ -269,6 +269,7 @@ function createRestoreState({ hash = 42, title = "Window" } = {}) {
             sequence: hash,
             title,
             occupied: true,
+            window_role: extension._windowRole(window),
         }),
         _moveWindow: restoreGeometry,
         _addTimeout: () => 1,
@@ -343,24 +344,59 @@ for (const ownerFirst of [true, false]) {
     });
 }
 
-test("keeps role matching when a recycled ID belongs to a saved window of another role", async () => {
-    const title = "Picture in Picture";
-    const { extension, win } = createRestoreState({ title });
-    const normal = { ...extension._savedWindows.app[0], title: "Mozilla Firefox", window_role: null };
-    const pip = {
-        ...normal,
-        id: 99,
-        hash: 99,
-        title,
-        occupied: false,
-        x: 400,
-        window_role: Common.WINDOW_ROLE_PICTURE_IN_PICTURE,
-    };
-    extension._savedWindows = { firefox: [normal, pip] };
-    extension._windowSectionHash = () => "firefox";
-    extension._windowRole = () => Common.WINDOW_ROLE_PICTURE_IN_PICTURE;
+for (const windowRole of [null, Common.WINDOW_ROLE_PICTURE_IN_PICTURE]) {
+    for (const staleFirst of [true, false]) {
+        test(`preserves both roles through restore, save and close when an ID is reused (role: ${windowRole}, stale first: ${staleFirst})`, async () => {
+            const { extension, win } = createRestoreState();
+            const stale = {
+                ...extension._savedWindows.app[0],
+                window_role: windowRole === null ? Common.WINDOW_ROLE_PICTURE_IN_PICTURE : null,
+            };
+            const target = { ...stale, id: 99, hash: 99, occupied: false, x: 400, window_role: windowRole };
+            const staleGeometry = { x: stale.x, width: stale.width };
+            extension._savedWindows = { firefox: staleFirst ? [stale, target] : [target, stale] };
+            extension._windowSectionHash = () => "firefox";
+            extension._windowRole = () => windowRole;
 
-    assert.equal(await extension._restoreWindow(win), true);
-    assert.equal(win.frame.x, 400);
-    assert.equal(normal.x, savedWindow.x);
-});
+            assert.equal(await extension._restoreWindow(win), true);
+            assert.equal(win.frame.x, 400);
+            assert.equal(extension._savedWindows.firefox.filter((sw) => sw.hash === 42).length, 1);
+            assert.equal(stale.occupied, false);
+
+            extension._clearRestoreSaveGuard(win);
+            win.frame.x = 600;
+            win.frame.width = 700;
+            extension._ensureSavedWindow(win);
+            const saved = extension._savedWindows.firefox.find((sw) => sw.hash === 42);
+            assert.equal(saved.x, 600);
+            assert.equal(saved.width, 700);
+            assert.equal(saved.window_role, windowRole);
+            assert.deepEqual({ x: stale.x, width: stale.width }, staleGeometry);
+
+            extension._deoccupySavedWindow(42);
+            assert.equal(saved.occupied, false);
+            const [staleIndex] = Common.matchedWindow(
+                extension._savedWindows, {}, "firefox", stale.title, 0.7, false, stale.window_role
+            );
+            assert.equal(extension._savedWindows.firefox[staleIndex], stale);
+        });
+    }
+}
+
+for (const freeSlot of [false, true]) {
+    test(`does not move or save a transient with an occupied owner's recycled ID (free slot: ${freeSlot})`, async () => {
+        const { extension, win } = createRestoreState();
+        if (freeSlot) extension._savedWindows.app.push({ ...extension._savedWindows.app[0], hash: 99, occupied: false });
+        const before = globalThis.structuredClone(extension._savedWindows);
+        const frame = { ...win.frame };
+        win.get_transient_for = () => ({});
+
+        await extension._restoreWindow(win);
+        assert.deepEqual(win.frame, frame);
+        assert.equal(extension._nonPersistentWindows.has(win), true);
+        extension._clearRestoreSaveGuard(win);
+        win.frame.x = 600;
+        extension._ensureSavedWindow(win);
+        assert.deepEqual(extension._savedWindows, before);
+    });
+}

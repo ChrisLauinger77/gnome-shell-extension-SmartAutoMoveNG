@@ -932,6 +932,13 @@ export default class SmartAutoMoveNG extends Extension {
         const sw = this._savedWindows[wsh][swi];
         const current = this._windowData(win);
 
+        for (const other of this._savedWindows[wsh]) {
+            if (other !== sw && other.hash === current.hash) {
+                delete other.hash;
+                other.occupied = false;
+            }
+        }
+
         sw.id = current.id;
         sw.hash = current.hash;
         sw.sequence = current.sequence;
@@ -1210,7 +1217,7 @@ export default class SmartAutoMoveNG extends Extension {
         if (this._nonPersistentWindows.get(win) === windowRole) return true;
         this._nonPersistentWindows.delete(win);
 
-        const [ownedIndex, ownedWindow] = Common.matchedWindow(
+        let [swi, sw] = Common.matchedWindow(
             this._savedWindows,
             this._overrides,
             wsh,
@@ -1220,10 +1227,15 @@ export default class SmartAutoMoveNG extends Extension {
             windowRole,
             this._windowHash(win)
         );
-        if (ownedIndex !== undefined && this._activeWindows.has(this._windowHash(win))) return false;
-        let [swi, sw] = ownedIndex === undefined
-            ? this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole)
-            : [ownedIndex, ownedWindow];
+        if (swi !== undefined) {
+            if (this._activeWindows.has(this._windowHash(win))) return false;
+            if (win.get_transient_for() !== null) {
+                this._nonPersistentWindows.set(win, windowRole);
+                return true;
+            }
+        } else {
+            [swi, sw] = this._matchedUnreservedWindow(wsh, this._windowTitle(win), windowRole);
+        }
         let nonPersistent = false;
         if (swi === undefined && win.get_transient_for() === null) {
             [swi, sw] = this._matchedOccupiedWindow(wsh, this._windowTitle(win), windowRole);
