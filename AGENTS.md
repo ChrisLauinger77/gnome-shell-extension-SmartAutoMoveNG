@@ -11,6 +11,15 @@ later launches. It supports Wayland and targets recent GNOME Shell versions.
 The extension UUID is `SmartAutoMoveNG@lauinger-clan.de`; extension source lives
 inside the directory with that exact name.
 
+The GNOME Shell compatibility badge in `README.md` lists every GNOME Shell
+major version supported by any SmartAutoMoveNG release. It currently covers
+GNOME 45 through 51 inclusive. The `shell-version` field in
+`SmartAutoMoveNG@lauinger-clan.de/metadata.json` lists only the versions the
+current extension release supports. When updating the README badge, include
+versions that older releases still support, even if they are outside the
+current release's `shell-version` list. Do not narrow the badge to match
+`metadata.json`.
+
 ## Repository Layout
 
 - `SmartAutoMoveNG@lauinger-clan.de/extension.js`: GNOME Shell runtime code,
