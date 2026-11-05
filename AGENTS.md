@@ -28,14 +28,17 @@ inside the directory with that exact name.
   `prefs.js`.
 - `SmartAutoMoveNG@lauinger-clan.de/metadata.json`: extension metadata,
   supported shell versions, release version, gettext domain, and schema id.
-- `test/common.test.js`: lightweight assertion
-  coverage for the pure helpers in `lib/common.js`.
+- `test/common.test.js`: lightweight `console.assert` coverage for the pure
+  helpers in `lib/common.js`.
+- `test/restore.test.js`: Node test-runner coverage for restore behavior in
+  `extension.js`, loaded with stubbed GNOME Shell modules.
 - `po/`: gettext template and translations.
 - `examples/`: example dconf configurations.
 - `docs/`: screenshots used by the README.
-- `.github/workflows/`: CI, release, and stale issue automation.
-- `$review-gnome-shell-extension`: shared review workflow for changes intended
-  for extensions.gnome.org.
+- `.github/workflows/`: CI (ESLint, Shexli, version consistency), release,
+  `@claude` mention, and stale issue automation.
+- `.githooks/`: optional Git hooks that keep `package.json` version in sync with
+  `metadata.json` `version-name`.
 - `smartautomoveng.sh`: helper script for packaging, installing, uploading, and
   updating translations.
 
@@ -49,6 +52,14 @@ inside the directory with that exact name.
   extension locally.
 - `./smartautomoveng.sh translate`: update `po/SmartAutoMoveNG.pot` and merge
   existing `.po` files after user-visible string changes.
+- `./smartautomoveng.sh cleanup`: remove the generated extension zip.
+- `./smartautomoveng.sh check-version` / `update-version`: check or sync the
+  `package.json` version against `metadata.json` `version-name` (requires `jq`).
+- `./smartautomoveng.sh setup-hooks`: enable the hooks in `.githooks/`.
+- `node test/common.test.js` (or `gjs -m test/common.test.js`): run the common
+  helper assertions; failures are printed as `Assertion failed` without a
+  non-zero exit code.
+- `node --experimental-vm-modules test/restore.test.js`: run the restore tests.
 
 Run `./smartautomoveng.sh install-dependencies` after pulling or rebasing remote
 changes that modify `package-lock.json`, particularly Renovate updates.
@@ -80,9 +91,10 @@ Notes:
 
 ## Runtime Behavior To Handle Carefully
 
-- `extension.js` schedules recurring GLib timeouts for window sync and settings
-  saves. When adding new timers or signal connections, disconnect/remove them in
-  `disable()`.
+- `extension.js` syncs windows from window signals and uses one-shot GLib
+  timeouts (via `_addTimeout()`) for startup, restore retries, and debounced
+  settings saves. When adding new timers or signal connections,
+  disconnect/remove them in `disable()`.
 - Window identity is heuristic. Matching uses window section hash
   (`get_wm_class()`), title similarity, occupied state, and override thresholds.
 - The intended model is one saved window slot per app/window section hash. Do
@@ -104,9 +116,8 @@ Notes:
 Before finishing changes, run the validations that match the edit:
 
 - JavaScript changes: `npm run lint`.
-- Shared matching logic: run or extend
-  `test/common.test.js` with the available GJS
-  setup, or explain if local GJS execution is not available.
+- Shared matching logic: run or extend `test/common.test.js`.
+- Restore behavior in `extension.js`: run or extend `test/restore.test.js`.
 - Schema, metadata, packaging, icon, UI, or translation changes:
   `./smartautomoveng.sh zip`.
 - User-visible strings: `./smartautomoveng.sh translate`.
@@ -116,8 +127,12 @@ that clearly in the final response.
 
 ## Release Notes For Agents
 
-- Version metadata is in `metadata.json` (`version` and `version-name`).
-- Tags matching `v*` trigger the release workflow.
+- The release version is `version-name` in `metadata.json`; `version` stays at
+  the placeholder `999`. `package.json` `version` must match `version-name`
+  (normalized to `major.minor.patch`); CI and the pre-commit hook enforce this,
+  and `./smartautomoveng.sh update-version` fixes it.
+- Tags matching `v*` trigger the release workflow, which creates a GitHub
+  release and uploads to extensions.gnome.org.
 - The release artifact name is
   `SmartAutoMoveNG@lauinger-clan.de.shell-extension.zip`.
 - Do not commit generated extension zip files unless the maintainer explicitly

@@ -66,7 +66,7 @@ The first step is to choose your **Default Synchronization Mode**: `IGNORE` or `
 
 Next is to choose your global **Match Threshold**, the default works well for most use cases. a number closer to `0.0` will match windows with less similar attributes, whereas `1.0` requires an exact match.
 
-Advanced users can also tune extension resource usage. adjust **Sync Frequency** (memory and CPU) and **Save Frequency** (disk I/O).
+Advanced users can also adjust the **Startup Delay** (how long a new window is observed before it is saved) and the **Stale Window Threshold** (days without seeing a saved window before **Cleanup Stale Windows** removes it).
 
 After you've dialed in your overrides, the learning apparatus can be paused. enable **Freeze Saves** to prevent changes to Saved Windows. N.B. this lose track of windows if their titles change.
 
@@ -144,7 +144,7 @@ $ dconf write /org/gnome/shell/extensions/SmartAutoMoveNG/overrides '{"firefox":
 Show all saved firefox windows (N.B. `jq` will fail if window title contains `\`):
 
 ```
-$ dconf read /org/gnome/shell/extensions/SmartAutoMoveNG/saved-windows | sed "s/^'//; s/'$//" | jq -C .Firefox | less -SR
+$ dconf read /org/gnome/shell/extensions/SmartAutoMoveNG/saved-windows | sed "s/^'//; s/'$//" | jq -C .firefox | less -SR
 ```
 
 There are example configs in the `examples/` dir which can be loaded (N.B. while extension is disabled) with:
