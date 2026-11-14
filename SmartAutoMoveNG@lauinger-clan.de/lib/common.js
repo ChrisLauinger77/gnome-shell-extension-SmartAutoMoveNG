@@ -96,6 +96,14 @@ export function isFirefoxWindow(wsh) {
     return typeof wsh === "string" && wsh.toLowerCase().includes("firefox");
 }
 
+export function isCiderWindow(wsh) {
+    return typeof wsh === "string" && wsh.toLowerCase() === "cider";
+}
+
+export function supportsPictureInPicture(wsh) {
+    return isFirefoxWindow(wsh) || isChromiumWindow(wsh) || isCiderWindow(wsh);
+}
+
 export function isChromiumWindow(wsh) {
     if (typeof wsh !== "string") return false;
 
@@ -124,6 +132,11 @@ export function pictureInPictureWindowRole(
     onAllWorkspaces,
     title
 ) {
+    if (isCiderWindow(wsh)) {
+        return typeof title === "string" && /^Cider - Mini\s*Player$/i.test(title)
+            ? WINDOW_ROLE_PICTURE_IN_PICTURE
+            : null;
+    }
     const firefoxWindow = isFirefoxWindow(wsh);
     const chromiumWindow = isChromiumWindow(wsh);
     if (!firefoxWindow && !chromiumWindow) return null;
@@ -141,7 +154,7 @@ export function pictureInPictureWindowRole(
 }
 
 function savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
-    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return null;
+    if (!supportsPictureInPicture(wsh)) return null;
     if (
         savedWindow.window_role === WINDOW_ROLE_PICTURE_IN_PICTURE ||
         savedWindow.window_role === LEGACY_WINDOW_ROLE_FIREFOX_PICTURE_IN_PICTURE
@@ -167,7 +180,7 @@ function savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallb
 }
 
 function matchesSavedWindowRole(wsh, windowRole, savedWindow, savedWindowIndex, useLegacyIndexFallback) {
-    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return true;
+    if (!supportsPictureInPicture(wsh)) return true;
 
     return windowRole === savedWindowRole(wsh, savedWindow, savedWindowIndex, useLegacyIndexFallback);
 }
@@ -259,7 +272,7 @@ export function matchedWindow(
 }
 
 export function hasSavedPictureInPictureTitle(saved_windows, wsh, title) {
-    if (!isFirefoxWindow(wsh) && !isChromiumWindow(wsh)) return false;
+    if (!supportsPictureInPicture(wsh)) return false;
 
     for (const occupied of [false, true]) {
         const [swi] = matchedWindow(
@@ -281,7 +294,7 @@ export function cleanupInvalidPictureInPictureRoles(saved_windows) {
     let changed = false;
 
     for (const [wsh, savedWindows] of Object.entries(saved_windows)) {
-        if (isFirefoxWindow(wsh) || isChromiumWindow(wsh)) continue;
+        if (supportsPictureInPicture(wsh)) continue;
 
         for (const savedWindow of savedWindows) {
             if (

@@ -739,7 +739,7 @@ export default class SmartAutoMoveNG extends Extension {
 
         const wsh = this._windowSectionHash(win);
         const hasResolvedWindowSection = typeof wsh === "string" && wsh.length > 0;
-        if (hasResolvedWindowSection && !Common.isFirefoxWindow(wsh) && !Common.isChromiumWindow(wsh)) return;
+        if (hasResolvedWindowSection && !Common.supportsPictureInPicture(wsh)) return;
 
         const signals = {
             unmanagedId: null,
@@ -751,11 +751,7 @@ export default class SmartAutoMoveNG extends Extension {
         const retryIfPictureInPicture = () => {
             const currentWsh = this._windowSectionHash(win);
             const hasResolvedCurrentWindowSection = typeof currentWsh === "string" && currentWsh.length > 0;
-            if (
-                hasResolvedCurrentWindowSection &&
-                !Common.isFirefoxWindow(currentWsh) &&
-                !Common.isChromiumWindow(currentWsh)
-            ) {
+            if (hasResolvedCurrentWindowSection && !Common.supportsPictureInPicture(currentWsh)) {
                 this._removeProvisionalPictureInPictureWindow(win);
                 return;
             }

@@ -679,3 +679,33 @@ function createStringSetting(initialValue) {
         settings.get_string()
     );
 }
+
+
+// Cider's miniplayer uses the PiP slot without relying on floating/sticky state.
+for (const title of ["Cider - Mini Player", "Cider - Miniplayer"]) {
+    console.assert(Common.pictureInPictureWindowRole("cider", null, true, false, false, false, title) === pictureInPictureRole);
+    console.assert(Common.pictureInPictureWindowRole("Cider", null, false, false, true, false, title) === pictureInPictureRole);
+    console.assert(Common.pictureInPictureWindowRole("other-app", null, true, true, true, true, title) === null);
+}
+for (const title of ["Cider", "Cider Settings", "", null]) {
+    console.assert(Common.pictureInPictureWindowRole("cider", null, true, true, true, true, title) === null);
+}
+{
+    const savedWindows = {
+        cider: [
+            { title: "Cider", occupied: false },
+            { title: "Cider - Mini Player", occupied: false, window_role: pictureInPictureRole },
+        ],
+    };
+    console.assert(!Common.cleanupInvalidPictureInPictureRoles(savedWindows));
+    console.assert(Common.hasSavedPictureInPictureTitle(savedWindows, "cider", "Cider - Mini Player"));
+    console.assert(!Common.hasSavedPictureInPictureTitle(savedWindows, "cider", "Cider"));
+    // A zero title threshold must still never cross the normal/miniplayer boundary.
+    console.assert(Common.matchedWindow(savedWindows, {}, "cider", "Cider", 0, false, pictureInPictureRole)[0] === 1);
+    console.assert(Common.matchedWindow(savedWindows, {}, "cider", "Cider - Mini Player", 0, false, null)[0] === 0);
+    console.assert(Common.matchingSavedWindow(savedWindows, "cider", null)[0] === 0);
+    console.assert(Common.matchingSavedWindow(savedWindows, "cider", pictureInPictureRole)[0] === 1);
+    // Recognize an older miniplayer entry even if it has no explicit role yet.
+    delete savedWindows.cider[1].window_role;
+    console.assert(Common.matchingSavedWindow(savedWindows, "cider", pictureInPictureRole)[0] === 1);
+}

@@ -104,7 +104,7 @@ $ gnome-extensions enable SmartAutoMoveNG@lauinger-clan.de
 
 ## Behavior
 
-SmartAutoMoveNG saves one normal window slot per application identity (`WM_CLASS`). Additional matching windows restore from that slot without overwriting it. Browser picture-in-picture windows have a separate slot.
+SmartAutoMoveNG saves one normal window slot per application identity (`WM_CLASS`). Additional matching windows restore from that slot without overwriting it. Browser picture-in-picture windows and the Cider miniplayer each have a separate slot from their application’s normal window.
 
 Renaming an autostart `.desktop` file does not give its windows a separate identity if the application still reports the same `WM_CLASS`.
 
