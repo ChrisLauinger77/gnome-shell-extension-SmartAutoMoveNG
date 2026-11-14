@@ -17,7 +17,7 @@ const context = createContext({
     },
 });
 const shellModules = {
-    "gi://Meta": { default: {} },
+    "gi://Meta": { default: { WindowType: { NORMAL: 0, UTILITY: 1 } } },
     "gi://GLib": { default: { PRIORITY_DEFAULT: 0, SOURCE_REMOVE: false } },
     "gi://Gio": { default: {} },
     "gi://GObject": { default: { registerClass: (klass) => klass } },
@@ -231,4 +231,114 @@ test("honors ignored position, monitor and workspace settings", async () => {
     assert.deepEqual(win.frame, { ...originalPosition, width: savedWindow.width, height: savedWindow.height });
     assert.equal(win.monitor, 0);
     assert.equal(win.onAllWorkspaces, undefined);
+});
+
+
+function ciderWindow(id, title, { skipTaskbar = false, type = 0 } = {}) {
+    const handlers = new Map();
+    return {
+        title,
+        data: { hash: id, title, occupied: true, x: 100, y: 100, width: 352, height: 152 },
+        get_id: () => id,
+        get_wm_class: () => "cider",
+        get_title() { return this.title; },
+        get_role: () => null,
+        get_window_type: () => type,
+        is_skip_taskbar: () => skipTaskbar,
+        can_maximize: () => false,
+        can_minimize: () => false,
+        get_transient_for: () => null,
+        is_above: () => false,
+        is_on_all_workspaces: () => false,
+        get_workspace: () => ({}),
+        connect(signal, callback) { handlers.set(signal, callback); return signal; },
+        disconnect(signal) { handlers.delete(signal); },
+        emit(signal) { handlers.get(signal)?.(); },
+        handlers,
+    };
+}
+
+function ciderExtension(savedWindows = {}) {
+    const extension = new extensionModule.namespace.default();
+    Object.assign(extension, {
+        _savedWindows: savedWindows,
+        _windowRoles: new Map(),
+        _nonPersistentWindows: new Map(),
+        _activeRestores: new Map(),
+        _restoreSaveGuards: new Map(),
+        _reservedSavedWindows: new Map(),
+        _provisionalPictureInPictureWindows: new Map(),
+        _trackedWindows: new Map(),
+        _overrides: {},
+        _matchThreshold: 0.5,
+        _syncMode: 1,
+        _startupDelayMs: 0,
+        _windowNewerThan: () => false,
+        _debug() {},
+        _queueSaveSettings() {},
+        _trackWindow() {},
+        _setRestoreSaveGuard() {},
+        _windowData(win) {
+            const data = { ...win.data, title: win.title };
+            const role = this._windowRole(win);
+            if (role !== null) data.window_role = role;
+            return data;
+        },
+        async _moveWindow(win, saved) {
+            win.restored = saved;
+            return saved;
+        },
+    });
+    return extension;
+}
+
+for (const miniFirst of [false, true]) {
+    test(`saves Cider windows separately with miniplayer opening ${miniFirst ? "first" : "second"}`, async () => {
+        const extension = ciderExtension();
+        const main = ciderWindow(1, "Cider");
+        const mini = ciderWindow(2, "Cider - Mini Player");
+        await extension._syncWindow(miniFirst ? mini : main);
+        await extension._syncWindow(miniFirst ? main : mini);
+        assert.equal(extension._savedWindows.cider.length, 2);
+        assert.equal(extension._matchingSavedWindow(main)[1].title, "Cider");
+        assert.equal(extension._matchingSavedWindow(mini)[1].window_role, "picture-in-picture");
+        assert.equal(extension._nonPersistentWindows.size, 0);
+        // Further normal Cider windows still share the single normal slot.
+        await extension._syncWindow(ciderWindow(3, "Cider"));
+        assert.equal(extension._savedWindows.cider.length, 2);
+    });
+}
+
+test("restores Cider miniplayer geometry without using or occupying the main window slot", async () => {
+    const mainSaved = { ...savedWindow, title: "Cider", occupied: true, hash: 1 };
+    const miniSaved = {
+        ...savedWindow, title: "Cider - Mini Player", occupied: false,
+        x: 500, y: 200, width: 352, height: 152, window_role: "picture-in-picture",
+    };
+    const extension = ciderExtension({ cider: [mainSaved, miniSaved] });
+    const mini = ciderWindow(2, "Cider - Mini Player");
+    await extension._syncWindow(mini);
+    assert.equal(mini.restored, miniSaved);
+    assert.equal(mainSaved.hash, 1);
+    assert.equal(miniSaved.hash, 2);
+    assert.equal(miniSaved.occupied, true);
+    assert.equal(extension._nonPersistentWindows.size, 0);
+    assert.equal(extension._activeRestores.size, 0);
+    assert.equal(extension._reservedSavedWindows.size, 0);
+});
+
+test("retries a skipped Cider popup when its miniplayer title arrives and removes provisional signals", () => {
+    const extension = ciderExtension();
+    const mini = ciderWindow(2, "", { skipTaskbar: true, type: 1 });
+    assert.equal(extension._shouldSkipWindow(mini), true);
+    extension._trackProvisionalPictureInPictureWindow(mini);
+    assert.equal(extension._provisionalPictureInPictureWindows.size, 1);
+    let retried;
+    extension._syncWindowWithErrorLogging = (win) => { retried = win; };
+    mini.title = "Cider - Mini Player";
+    mini.emit("notify::title");
+    assert.equal(retried, mini);
+    assert.equal(extension._shouldSkipWindow(mini), false);
+    assert.equal(extension._provisionalPictureInPictureWindows.size, 0);
+    assert.equal(mini.handlers.size, 0);
 });
